@@ -15,7 +15,7 @@ public class Category {
     @JoinColumn(name = "supplierId")
     private Supplier supplier;
 
-    private  Integer status;
+    private Integer status;
     public void setSupplier(Supplier supplier) {
         this.supplier = supplier;
     }

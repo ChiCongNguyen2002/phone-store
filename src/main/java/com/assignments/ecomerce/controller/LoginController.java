@@ -16,6 +16,11 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
+    @GetMapping("/indexCustomer")
+    public String pageIndexCustomer() {
+        return "indexUser";
+    }
+
     @GetMapping("/fragments")
     public String page() {
         return "fragments";
