@@ -183,49 +183,6 @@
     </div>
     <!-- /container -->
 
-    <!--<div class="col-md-12">
-        <div class="section-title">
-            <h3 class="title">Sản phẩm mới</h3>
-            <div class="section-nav">
-                <ul class="section-tab-nav tab-nav">
-                    <li class="active"><a data-toggle="tab" href="#tab1">Smartphones</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>-->
-
-   <!--  Start Products
-    <div class="col-md-12">
-        <div class="row">
-            <div class="products-tabs">
-                &lt;!&ndash; tab &ndash;&gt;
-                <div id="tab1" class="tab-pane active">
-                    <div class="products-slick" data-nav="#slick-nav-1">
-                        <div class="col-lg-3 col-md-6 special-grid" th:each="product : ${listProducts}">
-                            <form th:action="@{/add-to-cart}" method="post">
-                                <div class="product">
-                                    <div class="product-img">
-                                        <a th:href="@{/product-details/{id}(id=${product.id})}">
-                                            <img class="edit-image product-image"
-                                                 th:src="@{'./img/' + ${product.image}}" alt="Product Image">
-                                        </a>
-                                    </div>
-                                    <div class="product-body">
-                                        <h4 th:text="${product.name}"></h4>
-                                        <h5 th:text="${product.price}"></h5>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                        <div id="slick-nav-1" class="products-slick-nav"></div>
-                    </div>
-                    &lt;!&ndash; /tab &ndash;&gt;
-                </div>
-            </div>
-        </div>
-    </div>-->
-
-
     <!-- HOT DEAL SECTION -->
     <div id="hot-deal" class="section">
         <!-- container -->
@@ -285,7 +242,7 @@
     </div>
 
      <!--Start Products-->
-     <div class="col-md-12">
+    <!-- <div class="col-md-12">
          <div class="row">
              <div class="products-tabs">
                  <div id="tab1" class="tab-pane active">
@@ -316,7 +273,44 @@
                  </div>
              </div>
          </div>
-     </div>
+     </div>-->
+    <!-- Start Products  -->
+    <div class="col-md-12">
+        <div class="row">
+            <div class="products-tabs">
+                <!-- tab -->
+                <div class="tab-pane active">
+                    <div class="products-slick" data-nav="#slick-nav-1">
+                        <div class="col-lg-3 col-md-6 special-grid" th:each="product : ${listProducts}">
+                            <form th:action="@{/add-to-cart}" method="post">
+                                <div class="product">
+                                    <div class="thumbnail">
+                                        <div th:if="${product.quantity <= 0}" class="icon-new-label new-right">
+                                            Hết hàng
+                                        </div>
+                                        <div th:else class="icon-hot-label new-right">Mới</div>
+
+                                        <img class="edit-image product-image"
+                                             th:src="@{'../img/' + ${product.image}}">
+                                    </div>
+                                    <div class="product-body">
+                                        <h4 th:text="${product.name}"></h4>
+                                        <div class="item-price">
+                                            <div class="price-box"><span class="regular-price"> <span
+                                                    class="price" th:text="${product.price}"><span></span></span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="products-slick-nav"></div>
+                    </div>
+                    <!-- /tab -->
+                </div>
+            </div>
+        </div>
+    </div>
 
 
     <!-- section title -->
@@ -342,11 +336,14 @@
                         <div class="col-lg-3 col-md-6 special-grid" th:each="product : ${top10Products}">
                             <form th:action="@{/add-to-cart}" method="post">
                                 <div class="product">
-                                    <div class="product-img">
-                                        <a th:href="@{/product-details/{id}(id=${product.id})}">
-                                            <img class="edit-image product-image"
-                                                 th:src="@{'./img/' + ${product.image}}" alt="Product Image">
-                                        </a>
+                                    <div class="thumbnail">
+                                        <div th:if="${product.quantity <= 0}" class="icon-new-label new-right">
+                                            Hết hàng
+                                        </div>
+                                        <div th:else class="icon-hot-label new-right">Mới</div>
+
+                                        <img class="edit-image product-image"
+                                             th:src="@{'../img/' + ${product.image}}">
                                     </div>
                                     <div class="product-body">
                                         <h4 th:text="${product.name}"></h4>
