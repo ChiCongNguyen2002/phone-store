@@ -66,8 +66,6 @@ public class CategoryController {
     public String update(Category category, RedirectAttributes attributes,Model model) {
         try {
             categoryService.update(category);
-            List<Supplier> suppliers = supplierService.getAllSuppliers();
-            model.addAttribute("suppliers", suppliers);
             attributes.addFlashAttribute("success", "Updated successfully");
         } catch (DataIntegrityViolationException e) {
             e.printStackTrace();

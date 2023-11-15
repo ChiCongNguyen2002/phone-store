@@ -1,7 +1,11 @@
 package com.assignments.ecomerce.controller;
 
+import com.assignments.ecomerce.model.Category;
 import com.assignments.ecomerce.model.Coupon;
+import com.assignments.ecomerce.model.Product;
+import com.assignments.ecomerce.service.CategoryService;
 import com.assignments.ecomerce.service.CouponService;
+import com.assignments.ecomerce.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -11,9 +15,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 public class CouponController {
+    @Autowired
+    private ProductService productService;
+    @Autowired
+    private CategoryService categoryService;
     @Autowired
     private CouponService couponService;
     @GetMapping("/coupon/{pageNo}")
@@ -24,6 +33,32 @@ public class CouponController {
         model.addAttribute("totalPages", listCoupon.getTotalPages());
         model.addAttribute("couponNew", new Coupon());
         return "coupon";
+    }
+
+    @GetMapping("/couponCustomer/{pageNo}")
+    public String getAllCouponCustomer(@PathVariable("pageNo") int pageNo,Model model) {
+        List<Product> listProducts = productService.getAllProducts();
+        List<Category> categories = categoryService.getAllCategory();
+        //List<Coupon> listCoupon = couponService.getAllCoupons();
+
+        Page<Coupon> listCoupon = couponService.pageCoupon(pageNo);
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", listCoupon.getTotalPages());
+        model.addAttribute("listCoupon", listCoupon);
+        model.addAttribute("listProducts", listProducts);
+        model.addAttribute("categories", categories);
+        return "couponCustomer";
+    }
+
+    @GetMapping("/detailCoupon/{id}")
+    public String getDetailCouponCustomer(@PathVariable("id") Integer id,Model model) {
+        List<Product> listProducts = productService.getAllProducts();
+        List<Category> categories = categoryService.getAllCategory();
+        Coupon coupon = couponService.findById(id);
+        model.addAttribute("coupon", coupon);
+        model.addAttribute("listProducts", listProducts);
+        model.addAttribute("categories", categories);
+        return "detailCoupon";
     }
 
     @PostMapping("/add-coupon")

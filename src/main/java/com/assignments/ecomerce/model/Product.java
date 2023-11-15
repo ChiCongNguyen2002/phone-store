@@ -83,5 +83,14 @@ public class Product {
         this.description = description;
         this.color = color;
     }
+
+    public Product(String name, Double price, Integer quantity, String description, String color,String image) {
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+        this.description = description;
+        this.color = color;
+        this.image = image;
+    }
 }
 

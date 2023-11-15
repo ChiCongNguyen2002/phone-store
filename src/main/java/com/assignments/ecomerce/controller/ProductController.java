@@ -23,10 +23,50 @@ public class ProductController {
     @Autowired
     private CategoryService categoryService;
 
+    @GetMapping("/product-details/{id}")
+    public String DetailProduct(@PathVariable("id") Integer id, Model model) {
+        Product product = productService.findById(id);
+        List<Product> productDtoList = productService.findAllByCategory(product.getCategory().getName());
+        List<Category> categories = categoryService.getAllCategory();
+        model.addAttribute("products", productDtoList);
+        model.addAttribute("productDetail", product);
+        model.addAttribute("categories", categories);
+        return "product-detail";
+    }
+
+    @GetMapping("/ViewByCategory/{pageNo}")
+    public String ViewByCategory(@PathVariable("pageNo") int pageNo,
+                                 @RequestParam("categoryId") Integer categoryId, Model model) {
+        List<Category> categories = categoryService.getAllCategory();
+        Category category = categoryService.findById(categoryId);
+        Page<Product> listProducts = productService.pageProductByCategory(pageNo, categoryId);
+        model.addAttribute("categories", categories);
+        model.addAttribute("category", category);
+        model.addAttribute("size", listProducts.getSize());
+        model.addAttribute("listProducts", listProducts);
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", listProducts.getTotalPages());
+        return "subcategory";
+    }
+
+    @GetMapping("/indexCustomer")
+    public String pageIndexCustomer(Model model) {
+        List<Product> listProducts = productService.getAllProducts();
+        List<Category> categories = categoryService.getAllCategory();
+        List<Product> topProducts = productService.getData();
+
+        model.addAttribute("top10Products", topProducts);
+        model.addAttribute("listProducts", listProducts);
+        model.addAttribute("categories", categories);
+        return "indexUser";
+    }
+
     @GetMapping("/product")
     public String getAllProducts(Model model) {
+        List<Category> categories = categoryService.getAllCategory();
         List<Product> listProducts = productService.getAllProducts();
         model.addAttribute("listProducts", listProducts);
+        model.addAttribute("categories", categories);
         return "product";
     }
 
@@ -63,13 +103,6 @@ public class ProductController {
         return "product";
     }
 
-    @GetMapping("/top-products")
-    public String findTopSellingProducts(Model model) {
-        List<Product> topProducts = productService.getTopSellingProducts();
-        model.addAttribute("topProducts", topProducts);
-        return "statistical";
-    }
-
     @GetMapping("/detail-product/{id}")
     public String DetailProducts(@PathVariable("id") Integer id, Model model) {
         Product newProduct = productService.getById(id);
@@ -103,7 +136,8 @@ public class ProductController {
     public String updateProduct(@PathVariable("id") Integer id, Model model) {
         Product product = productService.getById(id);
         String productImage = product.getImage();
-
+        List<Category> categories = categoryService.getAllCategory();
+        model.addAttribute("categories", categories);
         model.addAttribute("newProduct", product);
         model.addAttribute("productImage", productImage);
         return "update-product";
@@ -111,25 +145,13 @@ public class ProductController {
 
     @PostMapping("/update-product/{id}")
     public String processUpdateProduct(@PathVariable("id") Integer id, @ModelAttribute("newProduct")
-    Product product,@RequestParam("photo_file") MultipartFile photo_file, RedirectAttributes attributes) {
+    Product product, @RequestParam("photo_file") MultipartFile photo_file, RedirectAttributes attributes) {
         try {
             productService.update(photo_file, product);
             attributes.addFlashAttribute("success", "Update successfully");
         } catch (Exception e) {
             e.printStackTrace();
             attributes.addFlashAttribute("error", "Failed to update");
-        }
-        return "redirect:/product/0";
-    }
-
-    @RequestMapping(value = "/enable-product", method = {RequestMethod.PUT, RequestMethod.GET})
-    public String enabledProduct(Integer id, RedirectAttributes redirectAttributes, Principal principal) {
-        try {
-            productService.enableById(id);
-            redirectAttributes.addFlashAttribute("success", "Enabled successfully!");
-        } catch (Exception e) {
-            e.printStackTrace();
-            redirectAttributes.addFlashAttribute("error", "Enabled failed!");
         }
         return "redirect:/product/0";
     }

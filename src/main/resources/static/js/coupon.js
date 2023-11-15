@@ -49,10 +49,10 @@ function saveCoupon(event) {
 function saveCouponEdit(event) {
   event.preventDefault();
 
-  var code = document.getElementById("code").value;
-   var count = document.getElementById("countAdd").value;
-   var promotion = document.getElementById("promotionAdd").value;
-   var description = document.getElementById("descriptionAdd").value;
+  var code = document.getElementById("codeEdit").value;
+   var count = document.getElementById("countEdit").value;
+   var promotion = document.getElementById("promotionEdit").value;
+   var description = document.getElementById("descriptionEdit").value;
 
    if (code === "" || count === "" || promotion === "" || description === "") {
      alert("Vui lòng điền đầy đủ thông tin");

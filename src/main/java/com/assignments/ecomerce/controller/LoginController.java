@@ -11,15 +11,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.security.Principal;
+
 @Controller
 public class LoginController {
     @Autowired
     private UserService userService;
-
-    @GetMapping("/indexCustomer")
-    public String pageIndexCustomer() {
-        return "indexUser";
-    }
 
     @GetMapping("/fragments")
     public String page() {
@@ -32,7 +29,7 @@ public class LoginController {
     }
 
     @GetMapping("/index")
-    public String pageIndex() {
+    public String pageIndex(Principal principal) {
         return "index";
     }
 

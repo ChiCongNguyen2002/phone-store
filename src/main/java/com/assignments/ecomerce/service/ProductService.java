@@ -48,7 +48,7 @@ public class ProductService {
     public Product save(MultipartFile photo, Product product) {
         try {
             Product newProduct = new Product();
-            Path uploadPath = Paths.get("src","main", "resources", "static", "img");
+            Path uploadPath = Paths.get("src", "main", "resources", "static", "img");
 
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
@@ -95,7 +95,7 @@ public class ProductService {
     public Product update(MultipartFile photo, Product product) {
         Product productUpdate = null;
         try {
-            Path uploadPath = Paths.get("src","main", "resources", "static", "img");
+            Path uploadPath = Paths.get("src", "main", "resources", "static", "img");
 
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
@@ -137,8 +137,13 @@ public class ProductService {
     }
 
     public Page<Product> pageProducts(int pageNo) {
-        Pageable pageable = PageRequest.of(pageNo, 5);
+        Pageable pageable = PageRequest.of(pageNo, 3);
         return productRepository.pageProduct(pageable);
+    }
+
+    public Page<Product> pageProductByCategory(int pageNo,Integer categoryId) {
+        Pageable pageable = PageRequest.of(pageNo, 4);
+        return productRepository.pageProductByCategory(pageable,categoryId);
     }
 
     public Page<Product> searchProducts(int pageNo, String keyword) {
@@ -184,5 +189,23 @@ public class ProductService {
     public void enableById(Integer id) {
         Product product = productRepository.getById(id);
         productRepository.save(product);
+    }
+
+    public List<Product> getData() {
+        List<Object[]> resultProduct = productRepository.getTop10ProductsWithSumQuantity();
+        List<Product> products = new ArrayList<>();
+
+        for (Object[] result : resultProduct) {
+            String name = (String) result[0];
+            Double price = (Double) result[1];
+            Integer quantity = (Integer) result[3];
+            String description = (String) result[2];
+            String color = (String) result[4];
+            String image = (String) result[5];
+
+            Product product = new Product(name, price, quantity, description, color,image);
+            products.add(product);
+        }
+        return products;
     }
 }

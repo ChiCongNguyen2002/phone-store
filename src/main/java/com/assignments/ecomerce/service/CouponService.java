@@ -27,7 +27,7 @@ public class CouponService {
     }
 
     public Page<Coupon> pageCoupon(int pageNo) {
-        Pageable pageable = PageRequest.of(pageNo, 5);
+        Pageable pageable = PageRequest.of(pageNo, 4);
         return couponRepository.pageCoupon(pageable);
     }
 

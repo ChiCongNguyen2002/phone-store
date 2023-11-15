@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:fragment="header">
@@ -87,6 +86,7 @@
                         </form>
                     </div>
                 </div>
+
                 <!-- /SEARCH BAR -->
                 <!-- ACCOUNT -->
                 <div class="col-md-3 clearfix">
@@ -112,6 +112,22 @@
     <!-- /MAIN HEADER -->
 </header>
 
+<nav th:fragment="navigation" id="navigation">
+    <div class="container">
+        <div id="responsive-nav">
+            <ul class="main-nav nav navbar-nav">
+                <li class="active"><a th:href="@{/indexCustomer}">Trang chủ</a></li>
+                <li th:each="category : ${categories}">
+                    <a th:href="@{/ViewByCategory/0(categoryId=${category.id})}"
+                       class="btn btn-primary btn-edit"
+                       th:text="${category.name}"></a>
+                </li>
+                <li><a th:href="@{/couponCustomer/0}">Khuyến mãi</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
 <!-- SECTION -->
 <div class="section">
     <!-- container -->
@@ -123,7 +139,7 @@
                 <div class="shop">
                     <div class="shop-img">
                         <img style="width:260px; height:300px; margin-left: 50px; margin-top: 30px; margin-bottom:30px"
-                             src="/images/14pro-tim-600x600-8.png" alt="">
+                             th:src="@{../img/14pro-tim-600x600-8.png}" alt="">
                     </div>
                     <div class="shop-body">
                         <h3>iPhone<br></h3>
@@ -166,46 +182,49 @@
         <!-- /row -->
     </div>
     <!-- /container -->
-</div>
-<!-- /SECTION -->
 
-<nav th:fragment="navigation" id="navigation">
-    <div class="container">
-        <div id="responsive-nav">
-            <ul class="main-nav nav navbar-nav">
-                <li class="active"><a href="/index">Trang chủ</a></li>
-                <li th:each="category : ${categories}">
-                    <a th:href="@{/ViewByCategory/{categoryId}(categoryId=${category.id})}" class="btn btn-primary"
-                       th:text="${category.name}"></a>
-                </li>
-            </ul>
+    <!--<div class="col-md-12">
+        <div class="section-title">
+            <h3 class="title">Sản phẩm mới</h3>
+            <div class="section-nav">
+                <ul class="section-tab-nav tab-nav">
+                    <li class="active"><a data-toggle="tab" href="#tab1">Smartphones</a></li>
+                </ul>
+            </div>
         </div>
-    </div>
-</nav>
+    </div>-->
 
-<!-- Start Products  -->
-<div class="products-box">
-    <div class="row special-list">
-        <div class="col-lg-3 col-md-6 special-grid" th:each="product : ${listProducts}">
-            <form th:action="@{/add-to-cart}" method="post">
-                <div class="products-single fix">
-                    <div class="box-img-hover">
-                        <a th:href="@{/product-details/{id}(id=${product.id})}">
-                            <img  style="height: 260.9px; width: 260.9px;" class="product-image" th:src="@{'/img/' + ${product.image}}" alt="Product Image">
-                            <div class="mask-icon">
-                                <input type="hidden" th:value="${product.id}" name="id" class="form-control">
-                                <input type="submit" class="btn hvr-hover" value="Add to cart">
-                            </div>
-                        </a>
+   <!--  Start Products
+    <div class="col-md-12">
+        <div class="row">
+            <div class="products-tabs">
+                &lt;!&ndash; tab &ndash;&gt;
+                <div id="tab1" class="tab-pane active">
+                    <div class="products-slick" data-nav="#slick-nav-1">
+                        <div class="col-lg-3 col-md-6 special-grid" th:each="product : ${listProducts}">
+                            <form th:action="@{/add-to-cart}" method="post">
+                                <div class="product">
+                                    <div class="product-img">
+                                        <a th:href="@{/product-details/{id}(id=${product.id})}">
+                                            <img class="edit-image product-image"
+                                                 th:src="@{'./img/' + ${product.image}}" alt="Product Image">
+                                        </a>
+                                    </div>
+                                    <div class="product-body">
+                                        <h4 th:text="${product.name}"></h4>
+                                        <h5 th:text="${product.price}"></h5>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div id="slick-nav-1" class="products-slick-nav"></div>
                     </div>
-                    <div class="why-text">
-                        <h4 th:text="${product.name}"></h4>
-                        <h5 th:text="${product.price}"></h5>
-                    </div>
+                    &lt;!&ndash; /tab &ndash;&gt;
                 </div>
-            </form>
+            </div>
         </div>
-    </div>
+    </div>-->
+
 
     <!-- HOT DEAL SECTION -->
     <div id="hot-deal" class="section">
@@ -253,27 +272,129 @@
     </div>
     <!-- /HOT DEAL SECTION -->
 
-    <!-- NEWSLETTER -->
-    <div id="newsletter" class="section">
+
+    <div class="col-md-12">
+        <div class="section-title">
+            <h3 class="title">Sản phẩm mới</h3>
+            <div class="section-nav">
+                <ul class="section-tab-nav tab-nav">
+                    <li class="active"><a data-toggle="tab" href="#tab1">Smartphones</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+     <!--Start Products-->
+     <div class="col-md-12">
+         <div class="row">
+             <div class="products-tabs">
+                 <div id="tab1" class="tab-pane active">
+                     <div class="products-slick" data-nav="#slick-nav-1">
+                         <div class="col-lg-3 col-md-6 special-grid" th:each="product : ${listProducts}">
+                             <form th:action="@{/add-to-cart}" method="post">
+                                     <div class="thumbnail">
+                                         <div th:if="${product.quantity <= 0}" class="icon-new-label new-right">
+                                             Hết hàng
+                                         </div>
+                                         <div th:else class="icon-hot-label new-right">Mới</div>
+
+                                         <img class="edit-image product-image"
+                                              th:src="@{'../img/' + ${product.image}}">
+                                     </div>
+                                     <div class="product-body">
+                                         <h4 th:text="${product.name}"></h4>
+                                         <div class="item-price">
+                                             <div class="price-box"><span class="regular-price"> <span
+                                                     class="price" th:text="${product.price}"><span></span></span></span>
+                                             </div>
+                                         </div>
+                                     </div>
+                             </form>
+                         </div>
+                         <div id="slick-nav-1" class="products-slick-nav"></div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </div>
+
+
+    <!-- section title -->
+    <div class="col-md-12">
+        <div class="section-title">
+            <h3 class="title">Bán chạy</h3>
+            <div class="section-nav">
+                <ul class="section-tab-nav tab-nav">
+                    <li><a data-toggle="tab" href="#tab2">Smartphones</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /section title -->
+
+    <!-- Start Products  -->
+    <div class="col-md-12">
+        <div class="row">
+            <div class="products-tabs">
+                <!-- tab -->
+                <div class="tab-pane active">
+                    <div class="products-slick" data-nav="#slick-nav-1">
+                        <div class="col-lg-3 col-md-6 special-grid" th:each="product : ${top10Products}">
+                            <form th:action="@{/add-to-cart}" method="post">
+                                <div class="product">
+                                    <div class="product-img">
+                                        <a th:href="@{/product-details/{id}(id=${product.id})}">
+                                            <img class="edit-image product-image"
+                                                 th:src="@{'./img/' + ${product.image}}" alt="Product Image">
+                                        </a>
+                                    </div>
+                                    <div class="product-body">
+                                        <h4 th:text="${product.name}"></h4>
+                                        <div class="item-price">
+                                            <div class="price-box"><span class="regular-price"> <span
+                                                    class="price" th:text="${product.price}"><span></span></span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="products-slick-nav"></div>
+                    </div>
+                    <!-- /tab -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
         <!-- container -->
         <div class="container">
             <!-- row -->
             <div class="row">
-                <div class="col-md-12">
-                    <div class="newsletter">
-                        <ul class="newsletter-follow">
-                            <li>
-                                <a href="https://www.facebook.com/congkhpro/"><i class="fa fa-facebook"></i></a>
-                            </li>
-                            <li>
-                                <a href="https://twitter.com/Cristiano?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor"><i
-                                        class="fa fa-twitter"></i></a>
-                            </li>
-                            <li>
-                                <a href="https://www.instagram.com/conglovedark/?hl=en"><i class="fa fa-instagram"></i></a>
-                            </li>
-                        </ul>
+                <!-- NEWSLETTER -->
+                <div id="newsletter" class="section">
+                    <!-- container -->
+                    <div class="container">
+                        <!-- row -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="newsletter">
+                                    <ul class="newsletter-follow">
+                                        <li><a href="https://www.facebook.com/congkhpro/"><i class="fa fa-facebook"></i></a>
+                                        </li>
+                                        <li><a href="https://twitter.com/Cristiano?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor"><i
+                                                    class="fa fa-twitter"></i></a>
+                                        </li>
+                                        <li><a href="https://www.instagram.com/conglovedark/?hl=en"><i class="fa fa-instagram"></i></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /row -->
                     </div>
+                    <!-- /container -->
                 </div>
             </div>
             <!-- /row -->
@@ -293,12 +414,15 @@
                     <div class="col-md-3 col-xs-6">
                         <div class="footer">
                             <h3 class="footer-title">Về chúng tôi</h3>
-                            <p>Hệ thống bán lẻ điện thoại di động, smartphone, iPad, laptop, phụ kiện chính hãng, giá
+                            <p>Hệ thống bán lẻ điện thoại di động, smartphone, iPad, laptop, phụ kiện chính
+                                hãng, giá
                                 tốt nhất.</p>
                             <ul class="footer-links">
-                                <li><a href="#"><i class="fa fa-map-marker"></i>99 An Dương Vương P.16 Q.8</a></li>
+                                <li><a href="#"><i class="fa fa-map-marker"></i>99 An Dương Vương P.16
+                                    Q.8</a></li>
                                 <li><a href="#"><i class="fa fa-phone"></i>0386431800</a></li>
-                                <li><a href="#"><i class="fa fa-envelope-o"></i>congnguyen29102002@gmail.com</a></li>
+                                <li><a href="#"><i class="fa fa-envelope-o"></i>congnguyen29102002@gmail.com</a>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -348,18 +472,20 @@
         </div>
         <!-- /top footer -->
     </footer>
+</div>
+<!-- /SECTION -->
 
-    <script src="/js/jquery.min.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
-    <script src="/js/slick.min.js"></script>
-    <script src="/js/nouislider.min.js"></script>
-    <script src="/js/jquery.zoom.min.js"></script>
-    <script src="/js/main.js"></script>
-    <script src="/js/site.js"></script>
-    <script src="/js/cart.js"></script>
-    <script>
-        var siteController = new SiteController();
-        siteController.initialize();
-    </script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/slick.min.js"></script>
+<script src="/js/nouislider.min.js"></script>
+<script src="/js/jquery.zoom.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/site.js"></script>
+<script src="/js/cart.js"></script>
+<script>
+    var siteController = new SiteController();
+    siteController.initialize();
+</script>
 </body>
 </html>
