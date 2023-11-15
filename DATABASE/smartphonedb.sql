@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 14, 2023 at 06:41 PM
+-- Generation Time: Nov 15, 2023 at 08:05 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -62,11 +62,10 @@ CREATE TABLE `coupon` (
 --
 
 INSERT INTO `coupon` (`id`, `code`, `count`, `promotion`, `description`, `status`) VALUES
-(1, 'CM3', 40, '25', 'Khuyến mãi 25%', 1),
-(2, 'CM4', 30, '20', 'Khuyến mãi 20%', 1),
-(3, '1', 1, '1', '1', 1),
-(4, 'CM3', 3, '1', '1', 1),
-(5, 'CM3', 3, '1', '1', 1);
+(1, 'CM3', 40, '3', 'Khuyến mãi 3%', 1),
+(2, 'CM4', 30, '10', 'Khuyến mãi 10%', 1),
+(3, 'CM5', 5, '5', 'Khuyến mãi 5%', 1),
+(4, 'CM6', 6, '6', 'Khuyến mãi 6%', 1);
 
 -- --------------------------------------------------------
 
@@ -139,6 +138,17 @@ CREATE TABLE `orderdetail` (
   `quantity` int(11) DEFAULT NULL,
   `unitPrice` double DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `orderdetail`
+--
+
+INSERT INTO `orderdetail` (`id`, `orderId`, `productId`, `employeeId`, `quantity`, `unitPrice`) VALUES
+(17, 4, 131, 4, 10, 20000),
+(18, 5, 132, 2, 4, 30000),
+(19, 4, 131, 3, 2, 230000),
+(20, 4, 134, 6, 10, 20000),
+(21, 5, 135, 7, 5, 12200000);
 
 -- --------------------------------------------------------
 
@@ -220,8 +230,13 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`id`, `name`, `price`, `Image`, `description`, `categoryId`, `quantity`, `color`, `status`) VALUES
-(131, 'IPHONE', 20000000, 'CAT CAT.jpg', 'xanh đẹp', 30, 2, 'xa', 1),
-(132, 'IPHONE2', 2, 'CAT CUTE.jpg', '2', 30, 2, 'xanh', 1);
+(131, 'IPHONE', 20000000, 'IPhone_1.jpeg', 'xanh đẹp', 30, 2, 'xa', 1),
+(132, 'IPHONE2', 2, 'IPhone_2.jpeg', '2', 30, 2, 'xanh', 1),
+(133, 'IPHONE 15 PROMAX', 18900000, 'IPhone_3.jpeg', 'Đẹp Xanh', 30, 2, 'Trắng', 1),
+(134, 'SAM SUNG GALAXY ULTRA S23', 25400000, 'SamSung_1.jpeg', 'Đen Đẹp', 31, 3, 'Đen', 1),
+(135, 'SAM SUNG GALAXY S21', 9490000, 'SamSung_3.jpeg', 'Đen Đẹp Ngầu', 31, 3, 'Đen', 1),
+(136, 'IPHONE 13 PROMAX', 35000000, 'IPhone_4.jpeg', 'Đen Đep Ngầu', 30, 3, 'Đen', 1),
+(137, 'IPHONE 14', 25000000, 'IPhone_2.jpeg', 'Xanh Đen', 30, 5, 'xanh', 1);
 
 -- --------------------------------------------------------
 
@@ -466,7 +481,7 @@ ALTER TABLE `employee`
 -- AUTO_INCREMENT for table `orderdetail`
 --
 ALTER TABLE `orderdetail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `orders`
@@ -484,7 +499,7 @@ ALTER TABLE `permissions`
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=133;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=138;
 
 --
 -- AUTO_INCREMENT for table `rolepermissions`
