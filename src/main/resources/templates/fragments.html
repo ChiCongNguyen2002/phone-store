@@ -56,21 +56,15 @@
     </li>
 
     <li class="nav-item">
-        <a class="nav-link" th:href="@{/category/0}">
+        <a th:href="@{/search-category/0?keyword=}" class="nav-link">
             <i class="fas fa-list-ul"></i>
             <span>Danh mục</span></a>
     </li>
 
     <li class="nav-item">
-        <a class="nav-link"  th:href="@{/customer/0}">
+        <a th:href="@{/search-customer/0?keyword=}" class="nav-link">
             <i class="fas fa-address-book"></i>
             <span>Khách Hàng</span></a>
-    </li>
-
-    <li class="nav-item">
-        <a class="nav-link"  th:href="@{/employee/0}">
-            <i class="fas fa-users"></i>
-            <span>Nhân Viên</span></a>
     </li>
 
     <li class="nav-item">
@@ -81,20 +75,20 @@
 
     <!-- Nav Item - Charts -->
     <li class="nav-item">
-        <a class="nav-link" th:href="@{/order/0}">
+        <a th:href="@{/search-order/0?keyword=}" class="nav-link">
             <i class="fa fa-shopping-cart"></i>
             <span>Đơn Hàng</span></a>
     </li>
 
     <!-- Nav Item - Tables -->
     <li class="nav-item">
-        <a class="nav-link" th:href="@{/coupon/0}">
+        <a th:href="@{/search-coupon/0?keyword=}" class="nav-link">
             <i class="fa fa-credit-card"></i>
             <span>Khuyến Mãi</span></a>
     </li>
 
     <li class="nav-item">
-        <a class="nav-link" th:href="@{/supplier/0}">
+        <a th:href="@{/search-supplier/0?keyword=}" class="nav-link">
             <i class="fas fa-truck"></i>
             <span>Nhà cung cấp</span></a>
     </li>

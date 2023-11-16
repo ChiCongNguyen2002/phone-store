@@ -99,6 +99,7 @@ public class SupplierController {
         model.addAttribute("listSupplier", listSupplier);
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", listSupplier.getTotalPages());
+        model.addAttribute("supplierNew", new Supplier());
         return "supplier";
     }
 }

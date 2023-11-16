@@ -53,7 +53,7 @@
                     <tr th:each="category : ${listCategory}">
                         <td scope="row" th:text="${category.Id}"></td>
                         <td th:text="${category.Name}"></td>
-                        <td th:text="${category.supplier.getName()}"></td>
+                      <td th:text="${category.supplier.getName()}"></td>
                         <td>
                             <a id="editButton" th:href="@{/findByIdCategory/{id}(id=${category.id})}"
                                class="btn btn-primary">Update</a>
@@ -66,15 +66,21 @@
                 <nav aria-label="...">
                     <ul class="pagination">
                         <li th:if="${currentPage != 0}" class="page-item ">
-                            <a th:href="@{'/category/' + ${currentPage - 1}}" class="page-link">Previous</a>
+                            <a th:href="@{/search-category/{pageNo}(pageNo=${currentPage - 1}, keyword=${keyword})}" class="page-link">Previous</a>
                         </li>
-                        <li th:each="i : ${#numbers.sequence(1, totalPages)}"
-                            th:classappend="${currentPage == i - 1 ? 'active' : ''}" class="page-item">
-                            <a th:href="@{'/category/' + ${i - 1}}" class="page-link" href="#">
-				     <span th:text="${i}">
-				     </span></a></li>
+
+                        <th:block th:if="${totalPages > 1}">
+                            <li th:each="i : ${#numbers.sequence(0, totalPages-1)}"
+                                th:classappend="${currentPage == i ? 'active' : ''}" class="page-item">
+                                <a th:href="@{/search-category/{pageNo}(pageNo=${i}, keyword=${keyword})}" class="page-link">
+                                    <span th:text="${i + 1}"></span>
+                                </a>
+                            </li>
+                        </th:block>
+
                         <li th:if="${currentPage + 1 != totalPages}" class="page-item">
-                            <a th:href="@{'/category/' + ${currentPage + 1}}" class="page-link" href="#">Next</a>
+                            <a th:href="@{/search-category/{pageNo}(pageNo=${currentPage + 1},
+                                 keyword=${keyword})}" class="page-link">Next</a>
                         </li>
                     </ul>
                 </nav>

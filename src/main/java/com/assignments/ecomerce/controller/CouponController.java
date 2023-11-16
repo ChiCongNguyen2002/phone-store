@@ -132,6 +132,7 @@ public class CouponController {
         model.addAttribute("listCoupon", listCoupon);
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", listCoupon.getTotalPages());
+        model.addAttribute("couponNew", new Coupon());
         return "coupon";
     }
 }

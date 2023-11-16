@@ -4,6 +4,7 @@ import com.assignments.ecomerce.model.Category;
 import com.assignments.ecomerce.model.Supplier;
 import com.assignments.ecomerce.service.CategoryService;
 import com.assignments.ecomerce.service.SupplierService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -22,6 +23,7 @@ public class CategoryController {
 
     @Autowired
     private SupplierService supplierService;
+
     @GetMapping("/category/{pageNo}")
     public String getAllCategory(@PathVariable("pageNo") int pageNo, Model model, Principal principal) {
         Page<Category> listCategory = categoryService.pageCategory(pageNo);
@@ -39,9 +41,9 @@ public class CategoryController {
         try {
             String name = category.getName();
             Category categ = categoryService.findByName(category.getName());
-            if(categ == null) {
+            if (categ == null) {
                 categoryService.save(category);
-            }else{
+            } else {
                 categoryService.updateStatus(categ.getId());
             }
             model.addAttribute("categoryNew", category);
@@ -63,7 +65,7 @@ public class CategoryController {
     }
 
     @GetMapping("/update-category")
-    public String update(Category category, RedirectAttributes attributes,Model model) {
+    public String update(Category category, RedirectAttributes attributes, Model model) {
         try {
             categoryService.update(category);
             attributes.addFlashAttribute("success", "Updated successfully");
@@ -89,15 +91,18 @@ public class CategoryController {
         return "redirect:/category/0";
     }
 
-        @GetMapping("/search-category/{pageNo}")
+    @GetMapping("/search-category/{pageNo}")
     public String searchCategory(@PathVariable("pageNo") int pageNo,
-                                @RequestParam("keyword") String keyword,
-                                Model model, Principal principal) {
+                                 @RequestParam("keyword") String keyword,
+                                 Model model, Principal principal, HttpSession session) {
         Page<Category> listCategory = categoryService.searchCategory(pageNo, keyword);
+        session.setAttribute("keyword", keyword);
+        model.addAttribute("keyword", keyword);
         model.addAttribute("size", listCategory.getSize());
         model.addAttribute("listCategory", listCategory);
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", listCategory.getTotalPages());
+        model.addAttribute("categoryNew", new Category());
         return "category";
     }
 

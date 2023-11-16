@@ -91,6 +91,7 @@ public class CategoryService {
             Category newCategory = new Category();
             newCategory.setId(category.getId());
             newCategory.setName(category.getName());
+            newCategory.setSupplier(category.getSupplier());
             categoryList.add(newCategory);
         }
         return categoryList;

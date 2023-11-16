@@ -107,6 +107,7 @@ public class CustomerController {
         model.addAttribute("listCustomer", listCustomer);
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", listCustomer.getTotalPages());
+        model.addAttribute("customerNew", new Customer());
         return "customer";
     }
 }

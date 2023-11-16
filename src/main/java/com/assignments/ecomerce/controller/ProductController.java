@@ -98,14 +98,17 @@ public class ProductController {
                                 Model model, Principal principal,HttpSession session) {
 
         Page<Product> listProducts = productService.searchProducts(pageNo, keyword);
+
         List<Category> categories = categoryService.getAllCategory();
         session.setAttribute("keyword", keyword);
         model.addAttribute("keyword", keyword);
         model.addAttribute("categories", categories);
+
         model.addAttribute("size", listProducts.getSize());
         model.addAttribute("listProducts", listProducts);
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", listProducts.getTotalPages());
+        model.addAttribute("productNew", new Product());
         return "product";
     }
 
