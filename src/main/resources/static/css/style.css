@@ -2820,3 +2820,40 @@ textarea.input {
     .minimal-price-link {
         display: inline
     }
+
+    .toolbar__search {
+
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+    }
+
+    .toolbar__search-left {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+    }
+
+    .toolbar__search-title {
+      margin-right: 10px;
+    }
+
+    .toolbar__search-filter,
+    .toolbar__search-range-title {
+      margin-right: 10px;
+    }
+
+    .price-range {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-left: 20px;
+    }
+
+    .price-range input {
+      margin-right: 10px;
+    }
+
+    .toolbar__search-icon {
+      margin-left: 10px;
+    }

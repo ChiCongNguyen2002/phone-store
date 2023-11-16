@@ -6,10 +6,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
 @EqualsAndHashCode
 @AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "Employee")
 public class Employee {
@@ -57,5 +55,35 @@ public class Employee {
         this.address = address;
         this.email = email;
         this.salary = salary;
+    }
+
+    public Employee(){}
+
+    public Integer getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public Double getSalary() {
+        return salary;
+    }
+
+    public Integer getStatus() {
+        return status;
     }
 }

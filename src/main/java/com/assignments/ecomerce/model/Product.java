@@ -2,8 +2,6 @@ package com.assignments.ecomerce.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-
-@Getter
 @Entity
 @Table(name = "Product")
 public class Product {
@@ -60,6 +58,42 @@ public class Product {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public Integer getStatus() {
+        return status;
     }
 
     public Product() {

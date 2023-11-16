@@ -147,8 +147,8 @@ public class ProductService {
     }
 
     public Page<Product> searchProducts(int pageNo, String keyword) {
-        Pageable pageable = PageRequest.of(pageNo, 5);
-        List<Product> products = transfer(productRepository.searchProducts(keyword));
+        Pageable pageable = PageRequest.of(pageNo, 4);
+        List<Product> products = transfer(productRepository.searchByKeyword(keyword));
         Page<Product> productPages = toPage(products, pageable);
         return productPages;
     }

@@ -5,7 +5,6 @@
 </head>
 
 <body id="page-top">
-
 <!-- Page Wrapper -->
 <div id="wrapper">
     <!-- Sidebar -->
@@ -16,12 +15,10 @@
     <div id="content-wrapper" class="d-flex flex-column">
         <!-- Main Content -->
         <div id="content">
-
             <!-- Topbar -->
             <nav th:replace="~{fragments::top-navbar}">
             </nav>
             <!-- End of Topbar -->
-
             <!-- Begin Page Content -->
             <div class="container-fluid">
                 <div class="input-group" style="width: 30%; margin-bottom: 20px;">
@@ -65,7 +62,12 @@
                         <td th:text="${product.description}"></td>
                         <td th:text="${product.category.name}"></td>
                         <td th:text="${product.color}"></td>
-                        <td th:text="${product.quantity}"></td>
+                        <td th:text="${product.quantity}">
+                            <div class="btn_header" style="left: 43px;">
+                                <i class="fa-solid fa-caret-up" onclick="sortData('Amount','asc')"></i>
+                                <i class="fa fa-caret-down" onclick="sortData('Amount','desc')"></i>
+                            </div>
+                        </td>
                         <td>
                             <a id="editButton" th:href="@{/update-product/{id}(id=${product.id})}"
                                class="btn btn-primary">Update</a>
@@ -80,15 +82,21 @@
                 <nav aria-label="...">
                     <ul class="pagination">
                         <li th:if="${currentPage != 0}" class="page-item ">
-                            <a th:href="@{'/product/' + ${currentPage - 1}}" class="page-link">Previous</a>
+                            <a th:href="@{/search-products/{pageNo}(pageNo=${currentPage - 1}, keyword=${keyword})}" class="page-link">Previous</a>
                         </li>
-                        <li th:each="i : ${#numbers.sequence(1, totalPages)}"
-                            th:classappend="${currentPage == i - 1 ? 'active' : ''}" class="page-item">
-                            <a th:href="@{'/product/' + ${i - 1}}" class="page-link" href="#">
-				     <span th:text="${i}">
-				     </span></a></li>
+
+                        <th:block th:if="${totalPages > 1}">
+                            <li th:each="i : ${#numbers.sequence(0, totalPages-1)}"
+                                th:classappend="${currentPage == i ? 'active' : ''}" class="page-item">
+                                <a th:href="@{/search-products/{pageNo}(pageNo=${i}, keyword=${keyword})}" class="page-link">
+                                    <span th:text="${i + 1}"></span>
+                                </a>
+                            </li>
+                        </th:block>
+
                         <li th:if="${currentPage + 1 != totalPages}" class="page-item">
-                            <a th:href="@{'/product/' + ${currentPage + 1}}" class="page-link" href="#">Next</a>
+                            <a th:href="@{/search-products/{pageNo}(pageNo=${currentPage + 1},
+                                 keyword=${keyword})}" class="page-link">Next</a>
                         </li>
                     </ul>
                 </nav>
@@ -118,7 +126,8 @@
 <!--Add Modal-->
 <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
-    <form id="productForm" th:action="@{/add-product}" method="post" enctype="multipart/form-data" th:object="${productNew}">
+    <form id="productForm" th:action="@{/add-product}" method="post" enctype="multipart/form-data"
+          th:object="${productNew}">
         <div class="modal-dialog custom-modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -127,9 +136,10 @@
                 <div class="modal-body">
 
                     <div class="form-group">
-                            <label for="nameAdd" class="col-md-8 control-label">Tên sản phẩm:</label>
+                        <label for="nameAdd" class="col-md-8 control-label">Tên sản phẩm:</label>
                         <div class="col-md-8">
-                            <input type="text" class="form-control" th:field="*{name}" id="nameAdd" name="name" required>
+                            <input type="text" class="form-control" th:field="*{name}" id="nameAdd" name="name"
+                                   required>
                         </div>
                     </div>
 
@@ -147,9 +157,9 @@
 
                     <div class="form-group">
                         <label class="col-md-8 control-label" for="color">Color:</label>
-                            <div class="col-md-8">
-                                <input type="text" id="color" name="color" required>
-                            </div>
+                        <div class="col-md-8">
+                            <input type="text" id="color" name="color" required>
+                        </div>
                     </div>
 
                     <div class="form-group">
@@ -215,9 +225,9 @@
   overflow-y: auto;
   }
 </style>
-    <!-- Bootstrap core JavaScript-->
-    <div th:replace="~{fragments::script}"></div>
-    <script th:src="@{/js/product.js}"></script>
+<!-- Bootstrap core JavaScript-->
+<div th:replace="~{fragments::script}"></div>
+<script th:src="@{/js/product.js}"></script>
 </body>
 
 </html>

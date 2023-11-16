@@ -26,7 +26,9 @@
 <!-- /BREADCRUMB -->
 
 <div class="div_form">
-    <form class="toolbar__search" onsubmit="return false" style="margin-bottom: 30px;justify-content: center;">
+    <form class="toolbar__search" onsubmit="return false" style="
+    margin-bottom: 30px;
+    justify-content: center;">
         <div class="toolbar__search-left">
             <span class="toolbar__search-title" style=" width: 229px;">Sắp xếp theo</span>
 
@@ -101,36 +103,30 @@
                         </ul>
                     </div>
 
-                    <!--Pagination  -->
+                    <!-- Pagination -->
                     <nav aria-label="...">
                         <ul class="pagination" style="display: flex;justify-content: center;">
                             <li th:if="${currentPage != 0}" class="page-item">
-                                <a th:href="@{/ViewByCategory/{pageNo}(pageNo=${currentPage - 1},
-                                    categoryId=${category.id})}"
-                                   class="page-link">
-                                    Previous
-                                </a>
+                                <a th:href="@{/search-productByKeyword/{pageNo}(pageNo=${currentPage - 1}, keyword=${keyword})}" class="page-link">Previous</a>
                             </li>
 
                             <th:block th:if="${totalPages > 1}">
-                                <li th:each="i : ${#numbers.sequence(1, totalPages)}"
-                                    th:classappend="${currentPage == i - 1 ? 'active' : ''}" class="page-item">
-                                    <a th:href="@{/ViewByCategory/{pageNo}(pageNo=${i - 1}, categoryId=${category.id})}"
-                                       class="page-link">
-                                        <span th:text="${i}"></span>
+                                <li th:each="i : ${#numbers.sequence(0, totalPages-1)}"
+                                    th:classappend="${currentPage == i ? 'active' : ''}" class="page-item">
+                                    <a th:href="@{/search-productByKeyword/{pageNo}(pageNo=${i}, keyword=${keyword})}" class="page-link">
+                                        <span th:text="${i + 1}"></span>
                                     </a>
                                 </li>
                             </th:block>
 
+
                             <li th:if="${currentPage + 1 != totalPages}" class="page-item">
-                                <a th:href="@{/ViewByCategory/{pageNo}(pageNo=${currentPage + 1}, categoryId=${category.id})}"
-                                   class="page-link">
-                                    Next
-                                </a>
+                                <a th:href="@{/search-productByKeyword/{pageNo}(pageNo=${currentPage + 1},
+                                 keyword=${keyword})}" class="page-link">Next</a>
                             </li>
                         </ul>
                     </nav>
-                    <!--Pagination  -->
+                    <!-- Pagination -->
 
                 </div>
             </div>

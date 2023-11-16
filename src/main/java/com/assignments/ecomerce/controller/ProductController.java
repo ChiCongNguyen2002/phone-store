@@ -4,6 +4,7 @@ import com.assignments.ecomerce.model.Category;
 import com.assignments.ecomerce.model.Product;
 import com.assignments.ecomerce.service.CategoryService;
 import com.assignments.ecomerce.service.ProductService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -38,10 +39,10 @@ public class ProductController {
     public String ViewByCategory(@PathVariable("pageNo") int pageNo,
                                  @RequestParam("categoryId") Integer categoryId, Model model) {
         List<Category> categories = categoryService.getAllCategory();
-        Category category = categoryService.findById(categoryId);
         Page<Product> listProducts = productService.pageProductByCategory(pageNo, categoryId);
-        model.addAttribute("categories", categories);
+        Category category = categoryService.findById(categoryId);
         model.addAttribute("category", category);
+        model.addAttribute("categories", categories);
         model.addAttribute("size", listProducts.getSize());
         model.addAttribute("listProducts", listProducts);
         model.addAttribute("currentPage", pageNo);
@@ -94,13 +95,35 @@ public class ProductController {
     @GetMapping("/search-products/{pageNo}")
     public String searchProduct(@PathVariable("pageNo") int pageNo,
                                 @RequestParam("keyword") String keyword,
-                                Model model, Principal principal) {
+                                Model model, Principal principal,HttpSession session) {
+
         Page<Product> listProducts = productService.searchProducts(pageNo, keyword);
+        List<Category> categories = categoryService.getAllCategory();
+        session.setAttribute("keyword", keyword);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("categories", categories);
         model.addAttribute("size", listProducts.getSize());
         model.addAttribute("listProducts", listProducts);
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", listProducts.getTotalPages());
         return "product";
+    }
+
+    @GetMapping("/search-productByKeyword/{pageNo}")
+    public String searchProductByCategory(@PathVariable("pageNo") int pageNo,
+                                          @RequestParam("keyword") String keyword,
+                                          Model model, Principal principal, HttpSession session) {
+
+        Page<Product> listProducts = productService.searchProducts(pageNo, keyword);
+        List<Category> categories = categoryService.getAllCategory();
+        session.setAttribute("keyword", keyword);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("categories", categories);
+        model.addAttribute("size", listProducts.getSize());
+        model.addAttribute("listProducts", listProducts);
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", listProducts.getTotalPages());
+        return "searchCategory";
     }
 
     @GetMapping("/detail-product/{id}")

@@ -28,8 +28,10 @@ public interface ProductRepository extends JpaRepository<Product,Integer> {
     @Query("SELECT p FROM Product p JOIN p.category c WHERE p.status = 1 AND c.id = :categoryId")
     Page<Product> pageProductByCategory(Pageable pageable,@Param("categoryId") Integer categoryId);
 
-    @Query("SELECT p from Product p where CONCAT(p.name,p.price,p.quantity,p.description,p.color) like %?1%")
-    List<Product> searchProducts(String keyword);
+    @Query("SELECT p FROM Product p JOIN p.category c " +
+            "WHERE p.status = 1 AND c.status = 1 " +
+            "AND CONCAT(p.name, p.price, p.quantity, p.description, p.color) LIKE %:keyword%")
+    List<Product> searchByKeyword(@Param("keyword") String keyword);
 
     @Query("select p from Product p inner join Category c ON c.id = p.category.id" +
             " where p.category.name = ?1")

@@ -6,7 +6,6 @@ import lombok.Getter;
 import java.util.Date;
 import java.util.List;
 
-@Getter
 @Entity
 @Table(name="Orders")
 public class Orders {
@@ -86,4 +85,48 @@ public class Orders {
     }
 
     public Orders(){}
+
+    public Integer getId() {
+        return id;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public Date getOrderDate() {
+        return orderDate;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public Integer getCouponId() {
+        return couponId;
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public Double getTotal() {
+        return total;
+    }
+
+    public String getShipName() {
+        return ShipName;
+    }
+
+    public String getShipAddress() {
+        return ShipAddress;
+    }
+
+    public String getShipPhoneNumber() {
+        return ShipPhoneNumber;
+    }
+
+    public List<OrderDetail> getOrderDetails() {
+        return orderDetails;
+    }
 }

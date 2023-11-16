@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 
 @Entity
-@Getter
 @Table(name="Supplier")
 public class Supplier {
     @Id
@@ -49,6 +48,26 @@ public class Supplier {
     }
 
     public Supplier() {
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public Integer getStatus() {
+        return status;
     }
 }
 

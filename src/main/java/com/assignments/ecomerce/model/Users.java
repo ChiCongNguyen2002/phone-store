@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 
 import java.util.List;
-@Getter
 @Entity
 @Table(name = "Users")
 public class Users {
@@ -58,6 +57,29 @@ public class Users {
         this.roles = roles;
     }
 
-
     public Users(){}
+
+    public Integer getId() {
+        return id;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public String getPassWord() {
+        return passWord;
+    }
+
+    public List<Roles> getRoles() {
+        return roles;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
 }

@@ -2,7 +2,6 @@ package com.assignments.ecomerce.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-@Getter
 @Entity
 @Table(name = "Roles")
 public class Roles {
@@ -25,4 +24,12 @@ public class Roles {
     }
 
     public Roles(){}
+
+    public Integer getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
 }
