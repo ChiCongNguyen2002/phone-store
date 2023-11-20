@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 15, 2023 at 08:05 PM
+-- Generation Time: Nov 20, 2023 at 07:10 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -20,6 +20,28 @@ SET time_zone = "+00:00";
 --
 -- Database: `smartphonedb`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cartitem`
+--
+
+CREATE TABLE `cartitem` (
+  `id` int(11) NOT NULL,
+  `shoppingCartId` int(11) NOT NULL,
+  `productId` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `price` double NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `cartitem`
+--
+
+INSERT INTO `cartitem` (`id`, `shoppingCartId`, `productId`, `quantity`, `price`) VALUES
+(1, 1, 131, 2, 2000000),
+(2, 2, 132, 3, 3000000);
 
 -- --------------------------------------------------------
 
@@ -218,7 +240,7 @@ CREATE TABLE `product` (
   `name` varchar(50) NOT NULL,
   `price` double(50,0) NOT NULL,
   `Image` varchar(100) NOT NULL,
-  `description` varchar(100) NOT NULL,
+  `description` varchar(10000) NOT NULL,
   `categoryId` int(11) NOT NULL,
   `quantity` int(11) NOT NULL,
   `color` varchar(50) NOT NULL,
@@ -230,13 +252,40 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`id`, `name`, `price`, `Image`, `description`, `categoryId`, `quantity`, `color`, `status`) VALUES
-(131, 'IPHONE', 20000000, 'IPhone_1.jpeg', 'xanh đẹp', 30, 2, 'xa', 1),
-(132, 'IPHONE2', 2, 'IPhone_2.jpeg', '2', 30, 2, 'xanh', 1),
-(133, 'IPHONE 15 PROMAX', 18900000, 'IPhone_3.jpeg', 'Đẹp Xanh', 30, 2, 'Trắng', 1),
+(131, 'iPhone 15 Pro Max 256GB', 34290000, 'IPhone_1.jpeg', 'iPhone 15 Pro Max đem lại một diện mạo hoàn toàn mới và sở hữu nhiều tính năng ưu việt cùng công nghệ tiên tiến. Hãy khám phá các đánh giá chi tiết về sản phẩm về khía cạnh thiết kế, màn hình, hiệu năng, thời lượng pin và bộ camera độc đáo qua các thông tin dưới đây!', 30, 2, 'đen', 1),
+(132, 'iPhone 15 Pro Max 256GB', 34290000, 'IPhone_2.jpeg', '2', 30, 2, 'xanh', 1),
+(133, 'iPhone 15 Pro Max 256GB', 34290000, 'IPhone_3.jpeg', 'Đẹp Xanh', 30, 2, 'Trắng', 1),
 (134, 'SAM SUNG GALAXY ULTRA S23', 25400000, 'SamSung_1.jpeg', 'Đen Đẹp', 31, 3, 'Đen', 1),
 (135, 'SAM SUNG GALAXY S21', 9490000, 'SamSung_3.jpeg', 'Đen Đẹp Ngầu', 31, 3, 'Đen', 1),
 (136, 'IPHONE 13 PROMAX', 35000000, 'IPhone_4.jpeg', 'Đen Đep Ngầu', 30, 3, 'Đen', 1),
-(137, 'IPHONE 14', 25000000, 'IPhone_2.jpeg', 'Xanh Đen', 30, 5, 'xanh', 1);
+(137, 'IPHONE 14', 25000000, 'IPhone_2.jpeg', 'Xanh Đen', 30, 5, 'xanh', 1),
+(138, 'SAMSUNG GALAXY', 35000000, 'SamSung_3.jpeg', 'Đen ngầu', 31, 3, 'Đen', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `review`
+--
+
+CREATE TABLE `review` (
+  `id` int(11) NOT NULL,
+  `customerId` int(11) NOT NULL,
+  `productId` int(11) NOT NULL,
+  `rating` int(50) NOT NULL,
+  `DateReview` datetime NOT NULL,
+  `comments` varchar(2000) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `review`
+--
+
+INSERT INTO `review` (`id`, `customerId`, `productId`, `rating`, `DateReview`, `comments`) VALUES
+(3, 11, 131, 5, '2023-11-18 15:14:42', 'Sản phẩm tốt'),
+(4, 1, 131, 4, '2023-11-17 16:10:44', 'Sản Phẩm quá chất lượng'),
+(5, 2, 131, 3, '2023-11-19 15:26:18', 'Sản Phẩm bình thường'),
+(8, 2, 132, 5, '2023-11-20 12:54:12', 'Sản phẩm tốt'),
+(22, 1, 135, 4, '2023-11-20 17:22:05', 'Tốt');
 
 -- --------------------------------------------------------
 
@@ -292,6 +341,25 @@ INSERT INTO `roles` (`id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `shoppingcart`
+--
+
+CREATE TABLE `shoppingcart` (
+  `id` int(11) NOT NULL,
+  `customerId` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `shoppingcart`
+--
+
+INSERT INTO `shoppingcart` (`id`, `customerId`) VALUES
+(1, 1),
+(2, 11);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `supplier`
 --
 
@@ -336,29 +404,17 @@ INSERT INTO `users` (`id`, `fullName`, `userName`, `passWord`, `roleId`, `status
 (3, 'Nguyen Van Tien Dung', 'TienDung', '1234', 3, 1),
 (8, 'Chi Cong Vo Tu', '2', 'Chi Cong Vo Tu', 1, 1);
 
--- --------------------------------------------------------
-
---
--- Table structure for table `user_role`
---
-
-CREATE TABLE `user_role` (
-  `user_id` int(11) DEFAULT NULL,
-  `role_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `user_role`
---
-
-INSERT INTO `user_role` (`user_id`, `role_id`) VALUES
-(1, 3),
-(2, 1),
-(3, 2);
-
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `cartitem`
+--
+ALTER TABLE `cartitem`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `shopping_cart_fk` (`shoppingCartId`),
+  ADD KEY `product_fk_1` (`productId`);
 
 --
 -- Indexes for table `category`
@@ -416,6 +472,14 @@ ALTER TABLE `product`
   ADD KEY `category_fk` (`categoryId`);
 
 --
+-- Indexes for table `review`
+--
+ALTER TABLE `review`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `customer_fk_2` (`customerId`),
+  ADD KEY `product_fk_2` (`productId`);
+
+--
 -- Indexes for table `rolepermissions`
 --
 ALTER TABLE `rolepermissions`
@@ -428,6 +492,13 @@ ALTER TABLE `rolepermissions`
 --
 ALTER TABLE `roles`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `shoppingcart`
+--
+ALTER TABLE `shoppingcart`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `customer_fk_1` (`customerId`);
 
 --
 -- Indexes for table `supplier`
@@ -443,15 +514,14 @@ ALTER TABLE `users`
   ADD KEY `role_pk` (`roleId`);
 
 --
--- Indexes for table `user_role`
---
-ALTER TABLE `user_role`
-  ADD KEY `user_id` (`user_id`),
-  ADD KEY `role_id` (`role_id`);
-
---
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `cartitem`
+--
+ALTER TABLE `cartitem`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -499,7 +569,13 @@ ALTER TABLE `permissions`
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=138;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=139;
+
+--
+-- AUTO_INCREMENT for table `review`
+--
+ALTER TABLE `review`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `rolepermissions`
@@ -512,6 +588,12 @@ ALTER TABLE `rolepermissions`
 --
 ALTER TABLE `roles`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `shoppingcart`
+--
+ALTER TABLE `shoppingcart`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `supplier`
@@ -528,6 +610,13 @@ ALTER TABLE `users`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `cartitem`
+--
+ALTER TABLE `cartitem`
+  ADD CONSTRAINT `product_fk_1` FOREIGN KEY (`productId`) REFERENCES `product` (`id`),
+  ADD CONSTRAINT `shopping_cart_fk` FOREIGN KEY (`shoppingCartId`) REFERENCES `shoppingcart` (`id`);
 
 --
 -- Constraints for table `category`
@@ -557,6 +646,13 @@ ALTER TABLE `product`
   ADD CONSTRAINT `category_fk` FOREIGN KEY (`categoryId`) REFERENCES `category` (`id`);
 
 --
+-- Constraints for table `review`
+--
+ALTER TABLE `review`
+  ADD CONSTRAINT `customer_fk_2` FOREIGN KEY (`customerId`) REFERENCES `customer` (`id`),
+  ADD CONSTRAINT `product_fk_2` FOREIGN KEY (`productId`) REFERENCES `product` (`id`);
+
+--
 -- Constraints for table `rolepermissions`
 --
 ALTER TABLE `rolepermissions`
@@ -565,17 +661,16 @@ ALTER TABLE `rolepermissions`
   ADD CONSTRAINT `rolepermissions_ibfk_2` FOREIGN KEY (`permissionsid`) REFERENCES `permissions` (`id`);
 
 --
+-- Constraints for table `shoppingcart`
+--
+ALTER TABLE `shoppingcart`
+  ADD CONSTRAINT `customer_fk_1` FOREIGN KEY (`customerId`) REFERENCES `customer` (`id`);
+
+--
 -- Constraints for table `users`
 --
 ALTER TABLE `users`
   ADD CONSTRAINT `role_pk` FOREIGN KEY (`roleId`) REFERENCES `roles` (`id`);
-
---
--- Constraints for table `user_role`
---
-ALTER TABLE `user_role`
-  ADD CONSTRAINT `user_role_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-  ADD CONSTRAINT `user_role_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
