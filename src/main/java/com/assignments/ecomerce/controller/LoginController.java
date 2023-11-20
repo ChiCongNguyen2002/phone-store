@@ -45,6 +45,7 @@ public class LoginController {
         return "register";
     }
 
+
     @PostMapping("/register-new")
     public String pageRegister(@ModelAttribute("userDTO") UserDTO userDTO
             , BindingResult result, Model model) {

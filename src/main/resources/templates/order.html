@@ -32,6 +32,20 @@
                         <button type="submit" class="btn btn-outline-primary">search</button>
                     </form>
                 </div>
+
+                <h1>Xuất hóa đơn ra file Excel</h1>
+                <label>Lọc theo ngày:</label>
+                <div class="date-input">
+                    <label for="dateFrom">Từ ngày:</label>
+                    <input type="date" id="dateFrom" name="dateFrom">
+                </div>
+
+                <div class="date-input">
+                    <label for="dateTo">Đến ngày:</label>
+                    <input type="date" id="dateTo" name="dateTo">
+                </div>
+                <button onclick="filterAndExport()">Lọc và Xuất Excel</button>
+
                 <p th:if="${size == 0} ">No Products</p>
                 <div th:if="${success}" class="text-center alert alert-success">
                     <p th:text="${success}"></p>

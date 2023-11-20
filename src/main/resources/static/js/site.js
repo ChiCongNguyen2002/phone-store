@@ -9,7 +9,7 @@
             type: "GET",
             url: '/Cart/GetListItems',
             success: function (res) {
-                $('#lbl_number_of_items_header').text(res.cartItems.length);
+                $('#lbl_number_of_items_header').text(res.length);
             }
         });
     }
@@ -22,12 +22,12 @@
 
             $.ajax({  // xử lý khi click thêm Product vào Cart
                 type: "POST",
-                url: '/cart/addtocart',
+                url: '/Cart/add-to-cart',
                 data: {
                     id: id,
                 },
                 success: function (res) {
-                    $('#lbl_number_of_items_header').text(res.cartItems.length);
+                   $('#lbl_number_of_items_header').text(res.length);
                     Swal.fire({
                         position: 'top-end',
                         icon: 'success',

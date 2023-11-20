@@ -2,8 +2,11 @@ package com.assignments.ecomerce.controller;
 
 import com.assignments.ecomerce.model.Category;
 import com.assignments.ecomerce.model.Product;
+import com.assignments.ecomerce.model.Review;
 import com.assignments.ecomerce.service.CategoryService;
+import com.assignments.ecomerce.service.CustomerService;
 import com.assignments.ecomerce.service.ProductService;
+import com.assignments.ecomerce.service.ReviewService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -15,7 +18,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Controller
 public class ProductController {
@@ -23,14 +30,64 @@ public class ProductController {
     private ProductService productService;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private ReviewService reviewService;
+    @Autowired
+    private CustomerService customerService;
+    @PostMapping("/add-review")
+    public String add(@ModelAttribute("reviewNew") Review review,
+                      Model model,
+                      RedirectAttributes attributes) {
+        try {
+            boolean exists = reviewService.existsByCustomerIdAndProductId(review.getCustomer().getId(), review.getProduct().getId());
+            if (exists) {
+                attributes.addFlashAttribute("error", "Duplicate name of customerId and productId, please check again!");
+                return "redirect:/product-details/" + review.getProduct().getId();
+            }
+            reviewService.save(review);
+            model.addAttribute("reviewNew", review);
+            attributes.addFlashAttribute("success", "Added successfully");
+        } catch (DataIntegrityViolationException e1) {
+            e1.printStackTrace();
+            attributes.addFlashAttribute("error", "Duplicate name of category, please check again!");
+        } catch (Exception e2) {
+            e2.printStackTrace();
+            attributes.addFlashAttribute("error", "Error Server");
+        }
+        return "redirect:/product-details/" + review.getProduct().getId() + "#tab3";
+    }
 
     @GetMapping("/product-details/{id}")
     public String DetailProduct(@PathVariable("id") Integer id, Model model) {
         Product product = productService.findById(id);
+
         List<Product> productDtoList = productService.findAllByCategory(product.getCategory().getName());
         List<Category> categories = categoryService.getAllCategory();
+        List<Review> reviews = reviewService.getByProduct(product);
+
+        List<Product> productColor = productService.getListColorByNameProduct(product.getName());
+        int countReview = reviewService.countReviews(product);
+        Double calculateAverageRating = reviewService.calculateAverageRating(product);
+
+
+        //Format Price
+        Double price = product.getPrice();
+        DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols(Locale.getDefault());
+        decimalFormatSymbols.setGroupingSeparator('.');
+        DecimalFormat decimalFormat = new DecimalFormat("#,###", decimalFormatSymbols);
+        String formattedPrice = decimalFormat.format(price);
+
+       /* Product getProductByColorAndName = productService.getProductByColorAndName(product.getName(), product.getColor());
+        System.out.println("color:" + productColor);
+        model.addAttribute("getProductByColorAndName", getProductByColorAndName);*/
+        model.addAttribute("countReview", countReview);
+        model.addAttribute("calculateAverageRating", calculateAverageRating);
+        model.addAttribute("formattedPrice", formattedPrice);
+        model.addAttribute("reviewNew", new Review());
+        model.addAttribute("reviews", reviews);
         model.addAttribute("products", productDtoList);
         model.addAttribute("productDetail", product);
+        model.addAttribute("productColor", productColor);
         model.addAttribute("categories", categories);
         return "product-detail";
     }
@@ -44,9 +101,23 @@ public class ProductController {
         model.addAttribute("category", category);
         model.addAttribute("categories", categories);
         model.addAttribute("size", listProducts.getSize());
-        model.addAttribute("listProducts", listProducts);
+        //model.addAttribute("listProducts", listProducts);
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", listProducts.getTotalPages());
+
+        List<String> formattedPrices = new ArrayList<>();
+        DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols(Locale.getDefault());
+        decimalFormatSymbols.setGroupingSeparator('.');
+        DecimalFormat decimalFormat = new DecimalFormat("#,###", decimalFormatSymbols);
+
+        for (Product product : listProducts.getContent()) {
+            String formattedPrice = decimalFormat.format(product.getPrice());
+            formattedPrices.add(formattedPrice);
+        }
+
+        model.addAttribute("listProducts", listProducts.getContent());
+        model.addAttribute("formattedPrices", formattedPrices);
+
         return "subcategory";
     }
 
@@ -95,7 +166,7 @@ public class ProductController {
     @GetMapping("/search-products/{pageNo}")
     public String searchProduct(@PathVariable("pageNo") int pageNo,
                                 @RequestParam("keyword") String keyword,
-                                Model model, Principal principal,HttpSession session) {
+                                Model model, Principal principal, HttpSession session) {
 
         Page<Product> listProducts = productService.searchProducts(pageNo, keyword);
 
@@ -112,6 +183,50 @@ public class ProductController {
         return "product";
     }
 
+    @GetMapping("/search-productByOption/{pageNo}")
+    public String searchProductByOption(@PathVariable("pageNo") int pageNo,
+                                        @RequestParam(value = "category") String category,
+                                        @RequestParam("sortOption") String sortOption,
+                                        @RequestParam("color") String color,
+                                        @RequestParam(value = "minPrice", required = false) Double minPrice,
+                                        @RequestParam(value = "maxPrice", required = false) Double maxPrice,
+                                        Model model, Principal principal) {
+        if (minPrice == null) {
+            minPrice = 0.0;
+        }
+
+        if (maxPrice == null) {
+            maxPrice = Double.MAX_VALUE;
+        }
+        List<Category> categories = categoryService.getAllCategory();
+        Page<Product> listProducts = productService.searchProductByOption(pageNo, category, sortOption, color, minPrice, maxPrice);
+        model.addAttribute("color", color);
+        model.addAttribute("minPrice", minPrice);
+        model.addAttribute("maxPrice", maxPrice);
+        model.addAttribute("sortOption", sortOption);
+        model.addAttribute("category", category);
+        model.addAttribute("categories", categories);
+        model.addAttribute("size", listProducts.getSize());
+        //model.addAttribute("listProducts", listProducts);
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", listProducts.getTotalPages());
+        model.addAttribute("productNew", new Product());
+
+        List<String> formattedPrices = new ArrayList<>();
+        DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols(Locale.getDefault());
+        decimalFormatSymbols.setGroupingSeparator('.');
+        DecimalFormat decimalFormat = new DecimalFormat("#,###", decimalFormatSymbols);
+
+        for (Product product : listProducts.getContent()) {
+            String formattedPrice = decimalFormat.format(product.getPrice());
+            formattedPrices.add(formattedPrice);
+        }
+
+        model.addAttribute("listProducts", listProducts.getContent());
+        model.addAttribute("formattedPrices", formattedPrices);
+        return "searchByOption";
+    }
+
     @GetMapping("/search-productByKeyword/{pageNo}")
     public String searchProductByCategory(@PathVariable("pageNo") int pageNo,
                                           @RequestParam("keyword") String keyword,
@@ -123,9 +238,22 @@ public class ProductController {
         model.addAttribute("keyword", keyword);
         model.addAttribute("categories", categories);
         model.addAttribute("size", listProducts.getSize());
-        model.addAttribute("listProducts", listProducts);
+        //model.addAttribute("listProducts", listProducts);
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", listProducts.getTotalPages());
+
+        List<String> formattedPrices = new ArrayList<>();
+        DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols(Locale.getDefault());
+        decimalFormatSymbols.setGroupingSeparator('.');
+        DecimalFormat decimalFormat = new DecimalFormat("#,###", decimalFormatSymbols);
+
+        for (Product product : listProducts.getContent()) {
+            String formattedPrice = decimalFormat.format(product.getPrice());
+            formattedPrices.add(formattedPrice);
+        }
+
+        model.addAttribute("listProducts", listProducts.getContent());
+        model.addAttribute("formattedPrices", formattedPrices);
         return "searchCategory";
     }
 

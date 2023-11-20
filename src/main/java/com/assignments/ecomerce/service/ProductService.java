@@ -31,6 +31,19 @@ public class ProductService {
         return productRepository.findById(id).get();
     }
 
+    public List<Product> getListColorByNameProduct(String name) {
+        List<Object[]> resultProduct = productRepository.getListColorByNameProduct(name);
+        List<Product> products = new ArrayList<>();
+
+        for (Object[] result : resultProduct) {
+            String color = (String) result[0];
+            String image = (String) result[1];
+            Product product = new Product(color, image);
+            products.add(product);
+        }
+        return products;
+    }
+
     public List<Product> getTopSellingProducts() {
         return productRepository.findTop10ByQuantitySold();
     }
@@ -87,6 +100,10 @@ public class ProductService {
         return product;
     }
 
+    public Product getProductByColorAndName(String name, String color) {
+        return productRepository.getProductByColorAndName(name, color);
+    }
+
     public Product getProductById(Integer id) {
         Optional<Product> optionalOrder = productRepository.findById(id);
         return optionalOrder.orElse(null);
@@ -141,14 +158,27 @@ public class ProductService {
         return productRepository.pageProduct(pageable);
     }
 
-    public Page<Product> pageProductByCategory(int pageNo,Integer categoryId) {
+    public Page<Product> pageProductByCategory(int pageNo, Integer categoryId) {
         Pageable pageable = PageRequest.of(pageNo, 4);
-        return productRepository.pageProductByCategory(pageable,categoryId);
+        return productRepository.pageProductByCategory(pageable, categoryId);
     }
 
     public Page<Product> searchProducts(int pageNo, String keyword) {
         Pageable pageable = PageRequest.of(pageNo, 4);
         List<Product> products = transfer(productRepository.searchByKeyword(keyword));
+        Page<Product> productPages = toPage(products, pageable);
+        return productPages;
+    }
+
+    public Page<Product> searchProductByOption(int pageNo, String category, String sortOption, String color, Double minPrice, Double maxPrice) {
+        Pageable pageable = PageRequest.of(pageNo, 4);
+        List<Product> products;
+
+        if ("ASC".equals(sortOption)) {
+            products = transfer(productRepository.searchProductByOptionAscending(category, color, minPrice, maxPrice));
+        } else {
+            products = transfer(productRepository.searchProductByOptionDescending(category, color, minPrice, maxPrice));
+        }
         Page<Product> productPages = toPage(products, pageable);
         return productPages;
     }
@@ -173,6 +203,7 @@ public class ProductService {
             newProduct.setDescription(product.getDescription());
             newProduct.setCategory(product.getCategory());
             newProduct.setPrice(product.getPrice());
+            newProduct.setColor(product.getColor());
             newProduct.setQuantity(product.getQuantity());
             newProduct.setImage(product.getImage());
             productList.add(newProduct);
@@ -196,14 +227,15 @@ public class ProductService {
         List<Product> products = new ArrayList<>();
 
         for (Object[] result : resultProduct) {
-            String name = (String) result[0];
-            Double price = (Double) result[1];
-            Integer quantity = (Integer) result[3];
-            String description = (String) result[2];
-            String color = (String) result[4];
-            String image = (String) result[5];
+            Integer id = (Integer) result[0];
+            String name = (String) result[1];
+            Double price = (Double) result[2];
+            String description = (String) result[3];
+            Integer quantity = (Integer) result[4];
+            String color = (String) result[5];
+            String image = (String) result[6];
 
-            Product product = new Product(name, price, quantity, description, color,image);
+            Product product = new Product(id, name, price, quantity, description, color, image);
             products.add(product);
         }
         return products;

@@ -100,6 +100,7 @@ public class CustomerService {
             newCustomer.setPhoneNumber(customer.getPhoneNumber());
             newCustomer.setAddress(customer.getAddress());
             newCustomer.setEmail(customer.getEmail());
+            newCustomer.setStatus(customer.getStatusCustomer());
             productList.add(newCustomer);
         }
         return productList;

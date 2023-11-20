@@ -70,7 +70,7 @@
             <div class="row">
                 <div class="col-md-3">
                     <div class="header-logo">
-                        <a href="/" class="logo">
+                        <a href="/indexCustomer" class="logo">
                             <img src="/img/phone.png" alt="">
                         </a>
                     </div>
@@ -81,7 +81,7 @@
                     <div class="header-search">
                         <form th:action="@{/search-productByKeyword/0}" method="get">
                             <input type="text" name="keyword" class="input" placeholder="Tìm kiếm ở đây"
-                                   style="border-radius: 20px 0px 0px 20px ;"  th:value="${keyword}"/>
+                                   style="border-radius: 20px 0px 0px 20px ;" th:value="${keyword}"/>
                             <button type="submit" class="search-btn">Tìm</button>
                         </form>
                     </div>
@@ -93,7 +93,7 @@
                     <div class="header-ctn">
                         <!-- Cart -->
                         <div class="dropdown">
-                            <a th:href="@{/cart}">
+                            <a th:href="@{/Cart/GetListItems}">
                                 <i class="fa fa-shopping-cart"></i>
                                 <span>Giỏ hàng</span>
                                 <div class="qty" id="lbl_number_of_items_header">0</div>
@@ -344,23 +344,40 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="newsletter">
-                                    <ul class="newsletter-follow">
-                                        <li><a href="https://www.facebook.com/congkhpro/"><i class="fa fa-facebook"></i></a>
-                                        </li>
-                                        <li>
-                                            <a href="https://twitter.com/Cristiano?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor"><i
-                                                    class="fa fa-twitter"></i></a>
-                                        </li>
-                                        <li><a href="https://www.instagram.com/conglovedark/?hl=en"><i
-                                                class="fa fa-instagram"></i></a>
-                                        </li>
-                                    </ul>
                                 </div>
                             </div>
                         </div>
                         <!-- /row -->
                     </div>
                     <!-- /container -->
+                </div>
+            </div>
+            <!-- /row -->
+        </div>
+        <!-- /container -->
+    </div>
+    <!-- /NEWSLETTER -->
+
+    <!-- NEWSLETTER -->
+    <div th:fragment="connection" id="newsletter1" class="section">
+        <!-- container -->
+        <div class="container">
+            <!-- row -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="newsletter">
+                        <ul class="newsletter-follow">
+                            <li><a href="https://www.facebook.com/congkhpro/"><i class="fa fa-facebook"></i></a>
+                            </li>
+                            <li>
+                                <a href="https://twitter.com/Cristiano?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor"><i
+                                        class="fa fa-twitter"></i></a>
+                            </li>
+                            <li><a href="https://www.instagram.com/conglovedark/?hl=en"><i
+                                    class="fa fa-instagram"></i></a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
             <!-- /row -->

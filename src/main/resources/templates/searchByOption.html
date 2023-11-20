@@ -25,6 +25,47 @@
 </div>
 <!-- /BREADCRUMB -->
 
+<div class="div_form">
+    <form th:action="@{/search-productByOption/0}" method="get" class="toolbar__search" style="margin-bottom: 30px;justify-content: center;">
+        <div class="toolbar__search-left">
+            <span class="toolbar__search-title" style=" width: 229px;">Sắp xếp theo</span>
+            <select id="category" name="category" class="form-control">
+                <option value="">Tất cả</option>
+                <option th:each="category : ${categories}"
+                        th:value="${category.name}"
+                        th:text="${category.name}"
+                ></option>
+            </select>
+        </div>
+
+        <div>
+            <select class="toolbar__search-range-title" name="sortOption">
+                <option class="toolbar__search-range-item-up" value="ASC">
+                    Thấp đến Cao<i class="fa-solid fa-check"></i>
+                </option>
+                <option class="toolbar__search-range-item-down" value="DESC">
+                    Cao đến Thấp<i class="fa-solid fa-check"></i>
+                </option>
+            </select>
+        </div>
+
+        <div class="price-range">
+            <span class="toolbar__search-title">Màu</span>
+            <input placeholder="" type="text" name="color"/>
+        </div>
+
+        <div class="price-range">
+            <span class="toolbar__search-title">Khoảng Giá</span>
+            <input placeholder="Thấp" type="number" name="minPrice" step="10000"/>
+            <span style="width: 18px;"> - </span>
+            <input placeholder="Cao" type="number" name="maxPrice" step="10000"/>
+        </div>
+
+        <button type="submit" class="toolbar__search-icon">Lọc</button>
+    </form>
+
+</div>
+
 <div class="main-container col1-layout">
     <div class="container">
         <div class="row">
@@ -33,7 +74,7 @@
                     <div class="product-grid-area">
                         <ul class="thumbnails">
                             <li class="span3 item col-lg-3 col-md-4 col-sm-6 col-xs-6"
-                                th:each="product,index  : ${listProducts}">
+                                th:each="product,index : ${listProducts}">
                                 <div class="product-item">
                                     <div class="item-inner">
                                         <a th:href="@{/product-details/{id}(id=${product.id})}">
@@ -50,7 +91,6 @@
                                                     <div class="item-title">
                                                         <h5 th:text="${product.name}"></h5>
                                                     </div>
-
                                                     <div class="item-content">
                                                         <div class="item-price">
                                                             <div class="price-box">
@@ -69,37 +109,28 @@
                         </ul>
                     </div>
 
-                    <!--Pagination  -->
+                    <!--Pagination-->
                     <nav aria-label="...">
                         <ul class="pagination" style="display: flex;justify-content: center;">
                             <li th:if="${currentPage != 0}" class="page-item">
-                                <a th:href="@{/ViewByCategory/{pageNo}(pageNo=${currentPage - 1},
-                                    categoryId=${category.id})}"
-                                   class="page-link">
-                                    Previous
-                                </a>
+                                <a th:href="@{/search-productByOption/{pageNo}(pageNo=${currentPage - 1}, category=${category},color = ${color}, sortOption=${sortOption}, minPrice=${minPrice}, maxPrice=${maxPrice})}" class="page-link">Previous</a>
                             </li>
 
                             <th:block th:if="${totalPages > 1}">
-                                <li th:each="i : ${#numbers.sequence(1, totalPages)}"
-                                    th:classappend="${currentPage == i - 1 ? 'active' : ''}" class="page-item">
-                                    <a th:href="@{/ViewByCategory/{pageNo}(pageNo=${i - 1}, categoryId=${category.id})}"
-                                       class="page-link">
-                                        <span th:text="${i}"></span>
+                                <li th:each="i : ${#numbers.sequence(0, totalPages-1)}"
+                                    th:classappend="${currentPage == i ? 'active' : ''}" class="page-item">
+                                    <a th:href="@{/search-productByOption/{pageNo}(pageNo=${i}, category=${category}, color = ${color}, sortOption=${sortOption}, minPrice=${minPrice}, maxPrice=${maxPrice})}" class="page-link">
+                                        <span th:text="${i + 1}"></span>
                                     </a>
                                 </li>
                             </th:block>
 
                             <li th:if="${currentPage + 1 != totalPages}" class="page-item">
-                                <a th:href="@{/ViewByCategory/{pageNo}(pageNo=${currentPage + 1}, categoryId=${category.id})}"
-                                   class="page-link">
-                                    Next
-                                </a>
+                                <a th:href="@{/search-productByOption/{pageNo}(pageNo=${currentPage + 1}, category=${category},color = ${color}, sortOption=${sortOption}, minPrice=${minPrice}, maxPrice=${maxPrice})}" class="page-link">Next</a>
                             </li>
                         </ul>
                     </nav>
-                    <!--Pagination  -->
-
+                   <!--  Pagination -->
                 </div>
             </div>
         </div>

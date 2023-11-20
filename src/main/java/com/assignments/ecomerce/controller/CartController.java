@@ -17,20 +17,17 @@ public class CartController {
     private ProductService productService;
     @Autowired
     private CustomerService customerService;
-    @GetMapping("/cart")
+    @GetMapping("/Cart/GetListItems")
     public String pageHome(Model model, Principal principal, HttpSession session) {
-        if (principal == null) {
-            return "redirect:/login";
-        }
         return "cart";
     }
 
-    @GetMapping("/cart/checkout")
+    @GetMapping("/Cart/checkout")
     public String pageCheckOut(Model model) {
         return "checkout";
     }
 
-    @PostMapping("/cart/add-to-cart")
+    @PostMapping("/Cart/add-to-cart")
     public String pageAddToCart(Model model, HttpSession session, Principal principal) {
       /*  if (principal == null) {
             return "redirect:/login";
