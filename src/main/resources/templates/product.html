@@ -59,7 +59,7 @@
                         <td>
                             <img class="product-image" th:src="@{'../../img/' + ${product.image}}" alt="Product Image">
                         </td>
-                        <td th:text="${product.description}"></td>
+                        <td><textarea class="description_text" th:text="${product.description}"></textarea></td>
                         <td th:text="${product.category.name}"></td>
                         <td th:text="${product.color}"></td>
                         <td th:text="${product.quantity}">

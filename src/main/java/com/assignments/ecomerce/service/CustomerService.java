@@ -14,116 +14,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class CustomerService {
-    @Autowired
-    private CustomerRepository customerRepository;
+public interface CustomerService {
 
-    public List<Customer> getAllCustomers() {
-        List<Customer> customers = customerRepository.findAll();
-        List<Customer> customerList = transfer(customers);
-        return customerList;
-    }
+    List<Customer> getAllCustomers();
 
-    public Page<Customer> pageCustomer(int pageNo) {
-        Pageable pageable = PageRequest.of(pageNo, 5);
-        return customerRepository.pageCustomer(pageable);
-    }
+    Page<Customer> pageCustomer(int pageNo);
 
-    public int countCustomers(){
-        return customerRepository.countCustomers();
-    }
+    int countCustomers();
 
-    public Customer save(CustomerDTO customer) {
-        Customer CustomerSave = new Customer();
-        CustomerSave.setName(customer.getName());
-        CustomerSave.setPhoneNumber(customer.getPhoneNumber());
-        CustomerSave.setAddress(customer.getAddress());
-        CustomerSave.setEmail(customer.getEmail());
-        CustomerSave.setStatus(1);
-        return customerRepository.save(CustomerSave);
-    }
+    Customer save(CustomerDTO customer) ;
 
-    public Customer findById(Integer id) {
-        return customerRepository.findById(id).get();
-    }
+    Customer findById(Integer id);
 
-    public Customer update(CustomerDTO customer) {
-        Customer CustomerUpdate = null;
-        try {
-            CustomerUpdate = customerRepository.findById(customer.getId()).get();
-            CustomerUpdate.setName(customer.getName());
-            CustomerUpdate.setPhoneNumber(customer.getPhoneNumber());
-            CustomerUpdate.setAddress(customer.getAddress());
-            CustomerUpdate.setEmail(customer.getEmail());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return customerRepository.save(CustomerUpdate);
-    }
+    Customer update(CustomerDTO customer);
 
-    public void deleteById(Integer id) {
-        Customer customer = customerRepository.getById(id);
-        customer.setStatus(1);
-        customerRepository.save(customer);
-    }
+    void deleteById(Integer id);
 
-    public void enableById(Integer id) {
-        Customer customer = customerRepository.getById(id);
-        customer.setStatus(0);
-        customerRepository.save(customer);
-    }
+    void enableById(Integer id);
 
-    public Page<Customer> searchCustomer(int pageNo, String keyword) {
-        Pageable pageable = PageRequest.of(pageNo, 5);
-        List<Customer> customer = transfer(customerRepository.searchCustomers(keyword));
-        Page<Customer> customerPages = toPage(customer, pageable);
-        return customerPages;
-    }
+    Page<Customer> searchCustomer(int pageNo, String keyword);
 
-    private Page toPage(List<Customer> list, Pageable pageable) {
-        if (pageable.getOffset() >= list.size()) {
-            return Page.empty();
-        }
-        int startIndex = (int) pageable.getOffset();
-        int endIndex = ((pageable.getOffset() + pageable.getPageSize()) > list.size())
-                ? list.size() : (int) (pageable.getOffset() + pageable.getPageSize());
-        List subList = list.subList(startIndex, endIndex);
-        return new PageImpl(subList, pageable, list.size());
-    }
+    public Page toPage(List<Customer> list, Pageable pageable);
 
-    public List<Customer> transfer(List<Customer> customers) {
-        List<Customer> productList = new ArrayList<>();
-        for (Customer customer : customers) {
-            Customer newCustomer = new Customer();
-            newCustomer.setId(customer.getId());
-            newCustomer.setName(customer.getName());
-            newCustomer.setPhoneNumber(customer.getPhoneNumber());
-            newCustomer.setAddress(customer.getAddress());
-            newCustomer.setEmail(customer.getEmail());
-            newCustomer.setStatus(customer.getStatusCustomer());
-            productList.add(newCustomer);
-        }
-        return productList;
-    }
+    List<Customer> transfer(List<Customer> customers);
 
-    public Customer updateStatus(Integer id) {
-        Customer customerUpdate = null;
-        try {
-            customerUpdate = customerRepository.findById(id).get();
-            customerUpdate.setStatus(1);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return customerRepository.save(customerUpdate);
-    }
+    Customer updateStatus(Integer id) ;
 
-    public boolean checkIfEmailExists(String email) {
-        Customer customer = customerRepository.findByEmail(email);
-        return customer != null;
-    }
+    boolean checkIfEmailExists(String email);
 
-    public boolean checkIfPhoneExists(String phone) {
-        Customer customer = customerRepository.findByPhone(phone);
-        return customer != null;
-    }
+    boolean checkIfPhoneExists(String phone);
 }

@@ -3,6 +3,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -17,4 +20,11 @@ public class ShoppingCart {
     @OneToOne
     @JoinColumn(name = "customerId")
     private Customer customer;
+
+    @OneToMany(cascade = CascadeType.DETACH, mappedBy = "shoppingCart")
+    private List<CartItem> cartItems;
+
+    public ShoppingCart() {
+        this.cartItems = new ArrayList<>();
+    }
 }

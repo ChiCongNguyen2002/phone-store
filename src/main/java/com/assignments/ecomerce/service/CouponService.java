@@ -13,81 +13,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class CouponService {
-    @Autowired
-    private CouponRepository couponRepository;
+public interface CouponService {
 
-    public List<Coupon> getAllCoupons() {
-        return (List<Coupon>) couponRepository.findAll();
-    }
+    List<Coupon> getAllCoupons();
 
-    public Coupon save(Coupon coupon) {
-        coupon.setStatus(1);
-        return couponRepository.save(coupon);
-    }
+    Coupon save(Coupon coupon);
 
-    public Page<Coupon> pageCoupon(int pageNo) {
-        Pageable pageable = PageRequest.of(pageNo, 4);
-        return couponRepository.pageCoupon(pageable);
-    }
+    Page<Coupon> pageCoupon(int pageNo);
 
-    public Coupon findById(Integer id) {
-        return couponRepository.findById(id).get();
-    }
+    Coupon findById(Integer id);
 
-    public Coupon update(Coupon coupon) {
-        Coupon couponSave = null;
-        try {
-            couponSave = couponRepository.findById(coupon.getId()).get();
-            couponSave.setCode(coupon.getCode());
-            couponSave.setCount(coupon.getCount());
-            couponSave.setPromotion(coupon.getPromotion());
-            couponSave.setDescription(coupon.getDescription());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return couponRepository.save(couponSave);
-    }
+    Coupon update(Coupon coupon);
 
-    public void deleteById(Integer id) {
-        Coupon coupon = couponRepository.getById(id);
-        couponRepository.save(coupon);
-    }
+    void deleteById(Integer id);
 
-    public void enableById(Integer id) {
-        Coupon coupon = couponRepository.getById(id);
-        couponRepository.save(coupon);
-    }
+    void enableById(Integer id);
 
-    public Page<Coupon> searchCoupon(int pageNo, String keyword) {
-        Pageable pageable = PageRequest.of(pageNo, 5);
-        List<Coupon> Coupons = transfer(couponRepository.searchCoupon(keyword));
-        Page<Coupon> couponPages = toPage(Coupons, pageable);
-        return couponPages;
-    }
+    Page<Coupon> searchCoupon(int pageNo, String keyword);
 
-    private Page toPage(List<Coupon> list, Pageable pageable) {
-        if (pageable.getOffset() >= list.size()) {
-            return Page.empty();
-        }
-        int startIndex = (int) pageable.getOffset();
-        int endIndex = ((pageable.getOffset() + pageable.getPageSize()) > list.size())
-                ? list.size() : (int) (pageable.getOffset() + pageable.getPageSize());
-        List subList = list.subList(startIndex, endIndex);
-        return new PageImpl(subList, pageable, list.size());
-    }
+    Page toPage(List<Coupon> list, Pageable pageable);
 
-    public List<Coupon> transfer(List<Coupon> coupons) {
-        List<Coupon> CouponList = new ArrayList<>();
-        for (Coupon coupon : coupons) {
-            Coupon newCoupon = new Coupon();
-            newCoupon.setId(coupon.getId());
-            newCoupon.setCode(coupon.getCode());
-            newCoupon.setCount(coupon.getCount());
-            newCoupon.setPromotion(coupon.getPromotion());
-            newCoupon.setDescription(coupon.getDescription());
-            CouponList.add(newCoupon);
-        }
-        return CouponList;
-    }
+    List<Coupon> transfer(List<Coupon> coupons);
 }

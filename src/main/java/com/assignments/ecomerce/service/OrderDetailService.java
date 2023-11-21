@@ -8,15 +8,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class OrderDetailService {
-    @Autowired
-    private OrderDetailRepository orderDetailRepository;
+public interface OrderDetailService {
 
-    public List<OrderDetail> getAllOrderDetail() {
-        return (List<OrderDetail>) orderDetailRepository.findAll();
-    }
+    List<OrderDetail> getAllOrderDetail();
 
-    public List<OrderDetail> findAllByOrderId(Integer orderId) {
-        return orderDetailRepository.findAllByOrderId(orderId);
-    }
+    List<OrderDetail> findAllByOrderId(Integer orderId) ;
 }

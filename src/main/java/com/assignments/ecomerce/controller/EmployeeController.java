@@ -16,6 +16,7 @@ import java.security.Principal;
 public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
+
     @GetMapping("/employee/{pageNo}")
     public String getAllEmployee(@PathVariable("pageNo") int pageNo, Model model, Principal principal) {
         Page<Employee> listEmployee = employeeService.pageEmployee(pageNo);

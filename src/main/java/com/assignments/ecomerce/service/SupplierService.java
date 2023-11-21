@@ -14,91 +14,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class SupplierService {
-    @Autowired
-    private  SupplierRepository supplierRepository;
+public interface SupplierService {
 
-    public List<Supplier> getAllSuppliers() {
-        return (List<Supplier>) supplierRepository.findAll();
-    }
+     List<Supplier> getAllSuppliers();
 
-    public Supplier save(Supplier supplier) {
-        supplier.setStatus(1);
-        return supplierRepository.save(supplier);
-    }
+     Supplier save(Supplier supplier);
 
-    public Page<Supplier> pageSupplier(int pageNo) {
-        Pageable pageable = PageRequest.of(pageNo, 5);
-        return supplierRepository.pageSupplier(pageable);
-    }
+     Page<Supplier> pageSupplier(int pageNo);
 
-    public Supplier findById(Integer id) {
-        return supplierRepository.findById(id).get();
-    }
+     Supplier findById(Integer id);
 
-    public Supplier update(Supplier supplier) {
-        Supplier supplierUpdate = null;
-        try {
-            supplierUpdate = supplierRepository.findById(supplier.getId()).get();
-            supplierUpdate.setName(supplier.getName());
-            supplierUpdate.setPhoneNumber(supplier.getPhoneNumber());
-            supplierUpdate.setAddress(supplier.getAddress());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return supplierRepository.save(supplierUpdate);
-    }
+     Supplier update(Supplier supplier);
 
-    public void deleteById(Integer id) {
-        Supplier supplier = supplierRepository.getById(id);
-        supplierRepository.save(supplier);
-    }
+     void deleteById(Integer id);
 
-    public void enableById(Integer id) {
-        Supplier supplier = supplierRepository.getById(id);
-        supplierRepository.save(supplier);
-    }
+     void enableById(Integer id);
 
-    public Page<Supplier> searchSuppliers(int pageNo, String keyword) {
-        Pageable pageable = PageRequest.of(pageNo, 5);
-        List<Supplier> supplier = transfer(supplierRepository.searchSupplier(keyword));
-        Page<Supplier> supplierPages = toPage(supplier, pageable);
-        return supplierPages;
-    }
+     Page<Supplier> searchSuppliers(int pageNo, String keyword);
 
-    private Page toPage(List<Supplier> list, Pageable pageable) {
-        if (pageable.getOffset() >= list.size()) {
-            return Page.empty();
-        }
-        int startIndex = (int) pageable.getOffset();
-        int endIndex = ((pageable.getOffset() + pageable.getPageSize()) > list.size())
-                ? list.size() : (int) (pageable.getOffset() + pageable.getPageSize());
-        List subList = list.subList(startIndex, endIndex);
-        return new PageImpl(subList, pageable, list.size());
-    }
+    Page toPage(List<Supplier> list, Pageable pageable);
 
-    public List<Supplier> transfer(List<Supplier> suppliers) {
-        List<Supplier> supplierList = new ArrayList<>();
-        for (Supplier supplier : suppliers) {
-            Supplier newSupplier = new Supplier();
-            newSupplier.setId(supplier.getId());
-            newSupplier.setName(supplier.getName());
-            newSupplier.setPhoneNumber(supplier.getPhoneNumber());
-            newSupplier.setAddress(supplier.getAddress());
-            supplierList.add(newSupplier);
-        }
-        return supplierList;
-    }
+     List<Supplier> transfer(List<Supplier> suppliers);
 
-    public Supplier updateStatus(Integer id) {
-        Supplier supplierUpdate = null;
-        try {
-            supplierUpdate = supplierRepository.findById(id).get();
-            supplierUpdate.setStatus(1);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return supplierRepository.save(supplierUpdate);
-    }
+     Supplier updateStatus(Integer id);
 }
 

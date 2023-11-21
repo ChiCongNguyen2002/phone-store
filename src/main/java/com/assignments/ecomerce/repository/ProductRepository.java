@@ -33,16 +33,17 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Query("SELECT DISTINCT p FROM Product p JOIN p.category c WHERE p.status = 1 AND c.id = :categoryId GROUP BY p.name")
     Page<Product> pageProductByCategory(Pageable pageable, @Param("categoryId") Integer categoryId);
 
-    @Query("SELECT p FROM Product p JOIN p.category c " +
+    @Query("SELECT DISTINCT p FROM Product p JOIN p.category c " +
             "WHERE p.status = 1 AND c.status = 1 " +
-            "AND CONCAT(p.name, p.price, p.quantity, p.description, p.color) LIKE %:keyword%")
+            "AND CONCAT(p.name, p.price, p.quantity, p.description, p.color) LIKE %:keyword% GROUP BY p.name")
     List<Product> searchByKeyword(@Param("keyword") String keyword);
 
-    @Query("SELECT p FROM Product p JOIN p.category c " +
+    @Query("SELECT DISTINCT p FROM Product p JOIN p.category c " +
             "WHERE p.status = 1 AND c.status = 1 " +
             "AND c.name LIKE %:category% " +
             "AND p.color LIKE %:color% " +
             "AND p.price >= :minPrice AND p.price <= :maxPrice " +
+            "GROUP BY p.name " +
             "ORDER BY p.price ASC")
     List<Product> searchProductByOptionAscending(@Param("category") String category,
                                                  @Param("color") String color,

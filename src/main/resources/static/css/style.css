@@ -2360,32 +2360,29 @@
      padding: 5px 10px;
      margin-top: 10px;
 }
-
-.star {
-  cursor: pointer;
+ .star {
+     cursor: pointer;
 }
-
  .image-radio-label {
-      display: inline-block;
-      cursor: pointer;
-    }
-
-    .image-radio-input {
-      display: none;
-    }
-
-    .image-radio-input + img {
-      width: 20px;
-      height: 20px;
-      vertical-align: middle;
-      margin-right: 5px;
-    }
-
-    .image-radio-input:checked + img {
-      border: 2px solid blue; /* Tùy chỉnh đường viền khi được chọn */
-    }
-
-     .quantity-input {
-        text-align: center; /* Căn giữa số */
-        width: 50px; /* Độ dài của input */
-      }
+     display: inline-block;
+     cursor: pointer;
+}
+ .image-radio-input {
+     display: none;
+}
+ .image-radio-input + img {
+     width: 20px;
+     height: 20px;
+     vertical-align: middle;
+     margin-right: 5px;
+}
+ .image-radio-input:checked + img {
+     border: 2px solid blue;
+    /* Tùy chỉnh đường viền khi được chọn */
+}
+ .quantity-input {
+     text-align: center;
+    /* Căn giữa số */
+     width: 50px;
+    /* Độ dài của input */
+}

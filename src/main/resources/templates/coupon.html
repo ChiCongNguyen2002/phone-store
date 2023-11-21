@@ -62,11 +62,6 @@
                         <td>
                             <a id="editButton" th:href="@{/findByIdCoupon/{id}(id=${coupon.Id})}"
                                class="btn btn-primary">Update</a>
-                            <!--<a th:if="${coupon.is_deleted} == true" th:href="@{/enable-coupon(id = ${coupon.id})}"
-                               class="btn btn-primary">Enable</a>
-                            <a th:if="${coupon.is_deleted} == false"
-                               th:href="@{/delete-coupon(id = ${coupon.id})}"
-                               class=" btn btn-danger">Delete</a>-->
                         </td>
                     </tr>
                 </table>

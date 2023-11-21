@@ -13,87 +13,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class CategoryService {
-    @Autowired
-    private CategoryRepository categoryRepository;
+public interface CategoryService {
+    List<Category> getAllCategory();
 
-    public List<Category> getAllCategory() {
-        return (List<Category>) categoryRepository.findByStatusActivated();
-    }
+    Category save(Category category);
 
-    public Category save(Category category) {
-        category.setStatus(1);
-        return categoryRepository.save(category);
-    }
+    Page<Category> pageCategory(int pageNo);
 
-    public Page<Category> pageCategory(int pageNo) {
-        Pageable pageable = PageRequest.of(pageNo, 5);
-        return categoryRepository.pageCategory(pageable);
-    }
+    Category findById(Integer id);
 
-    public Category findById(Integer id) {
-        return categoryRepository.findById(id).get();
-    }
+    Category findByName(String name);
+    Category update(Category category);
+    Category updateStatus(Integer id);
 
-    public Category findByName(String name){
-        return categoryRepository.findByName(name);
-    }
-    public Category     update(Category category) {
-        Category categoryUpdate = null;
-        try {
-            categoryUpdate = categoryRepository.findById(category.getId()).get();
-            categoryUpdate.setName(category.getName());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return categoryRepository.save(categoryUpdate);
-    }
+    public void enableById(Integer id);
 
-    public Category updateStatus(Integer id) {
+    public Page<Category> searchCategory(int pageNo, String keyword);
 
-        Category categoryUpdate = null;
-        try {
-            categoryUpdate = categoryRepository.findById(id).get();
-            categoryUpdate.setStatus(1);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return categoryRepository.save(categoryUpdate);
-    }
+    Page toPage(List<Category> list, Pageable pageable);
 
-    public void enableById(Integer id) {
-        Category category = categoryRepository.getById(id);
-        category.setStatus(0);
-        categoryRepository.save(category);
-    }
-
-    public Page<Category> searchCategory(int pageNo, String keyword) {
-        Pageable pageable = PageRequest.of(pageNo, 5);
-        List<Category> categorys = transfer(categoryRepository.searchCategory(keyword));
-        Page<Category> categoryPages = toPage(categorys, pageable);
-        return categoryPages;
-    }
-
-    private Page toPage(List<Category> list, Pageable pageable) {
-        if (pageable.getOffset() >= list.size()) {
-            return Page.empty();
-        }
-        int startIndex = (int) pageable.getOffset();
-        int endIndex = ((pageable.getOffset() + pageable.getPageSize()) > list.size())
-                ? list.size() : (int) (pageable.getOffset() + pageable.getPageSize());
-        List subList = list.subList(startIndex, endIndex);
-        return new PageImpl(subList, pageable, list.size());
-    }
-
-    public List<Category> transfer(List<Category> categories) {
-        List<Category> categoryList = new ArrayList<>();
-        for (Category category : categories) {
-            Category newCategory = new Category();
-            newCategory.setId(category.getId());
-            newCategory.setName(category.getName());
-            newCategory.setSupplier(category.getSupplier());
-            categoryList.add(newCategory);
-        }
-        return categoryList;
-    }
+    List<Category> transfer(List<Category> categories);
 }

@@ -9,31 +9,17 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ReviewService {
-    @Autowired
-    private ReviewRepository reviewRepository;
+public interface ReviewService {
 
-    public List<Review> getAllReview() {
-        return reviewRepository.findAll();
-    }
+     List<Review> getAllReview();
 
-    public List<Review> getByProduct(Product product) {
-        return reviewRepository.getByProduct(product);
-    }
+     List<Review> getByProduct(Product product);
 
-    public Review save(Review review) {
-        return reviewRepository.save(review);
-    }
+     Review save(Review review);
 
-    public int countReviews(Product product) {
-        return reviewRepository.countReviews(product);
-    }
+     int countReviews(Product product);
 
-    public Double calculateAverageRating(Product product) {
-        return reviewRepository.calculateAverageRating(product);
-    }
-    public boolean existsByCustomerIdAndProductId(Integer customerId, Integer productId) {
-        return reviewRepository.existsByCustomerIdAndProductId(customerId,productId);
-    }
+     Double calculateAverageRating(Product product);
+     boolean existsByCustomerIdAndProductId(Integer customerId, Integer productId);
 
 }
