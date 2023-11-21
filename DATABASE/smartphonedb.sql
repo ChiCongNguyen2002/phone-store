@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 20, 2023 at 07:10 PM
+-- Generation Time: Nov 21, 2023 at 03:39 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -34,14 +34,6 @@ CREATE TABLE `cartitem` (
   `quantity` int(11) NOT NULL,
   `price` double NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `cartitem`
---
-
-INSERT INTO `cartitem` (`id`, `shoppingCartId`, `productId`, `quantity`, `price`) VALUES
-(1, 1, 131, 2, 2000000),
-(2, 2, 132, 3, 3000000);
 
 -- --------------------------------------------------------
 
@@ -203,35 +195,6 @@ INSERT INTO `orders` (`id`, `customerId`, `orderDate`, `Status`, `couponId`, `pa
 -- --------------------------------------------------------
 
 --
--- Table structure for table `permissions`
---
-
-CREATE TABLE `permissions` (
-  `id` int(11) NOT NULL,
-  `name` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `permissions`
---
-
-INSERT INTO `permissions` (`id`, `name`) VALUES
-(1, 'create_product'),
-(2, 'delete_product'),
-(3, 'update_product'),
-(4, 'create_account'),
-(5, 'update_account'),
-(6, 'delete_account'),
-(7, 'view_account'),
-(8, 'view_product'),
-(9, 'view_supplier'),
-(10, 'create_supplier'),
-(11, 'update_supplier'),
-(12, 'view_supplier');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `product`
 --
 
@@ -259,7 +222,8 @@ INSERT INTO `product` (`id`, `name`, `price`, `Image`, `description`, `categoryI
 (135, 'SAM SUNG GALAXY S21', 9490000, 'SamSung_3.jpeg', 'Đen Đẹp Ngầu', 31, 3, 'Đen', 1),
 (136, 'IPHONE 13 PROMAX', 35000000, 'IPhone_4.jpeg', 'Đen Đep Ngầu', 30, 3, 'Đen', 1),
 (137, 'IPHONE 14', 25000000, 'IPhone_2.jpeg', 'Xanh Đen', 30, 5, 'xanh', 1),
-(138, 'SAMSUNG GALAXY', 35000000, 'SamSung_3.jpeg', 'Đen ngầu', 31, 3, 'Đen', 1);
+(138, 'SAMSUNG GALAXY', 35000000, 'SamSung_3.jpeg', 'Đen ngầu', 31, 3, 'Đen', 1),
+(139, 'IPhone 15 Pro Max 256GB', 2600000, 'IPhone_5.png', 'iPhone 15 Pro Max đem lại một diện mạo hoàn toàn mới và sở hữu nhiều tính năng ưu việt cùng công nghệ tiên tiến. Hãy khám phá các đánh giá chi tiết về sản phẩm về khía cạnh thiết kế, màn hình, hiệu năng, thời lượng pin và bộ camera độc đáo qua các thông tin dưới đây!', 30, 2, 'Trắng TiTan', 1);
 
 -- --------------------------------------------------------
 
@@ -286,37 +250,6 @@ INSERT INTO `review` (`id`, `customerId`, `productId`, `rating`, `DateReview`, `
 (5, 2, 131, 3, '2023-11-19 15:26:18', 'Sản Phẩm bình thường'),
 (8, 2, 132, 5, '2023-11-20 12:54:12', 'Sản phẩm tốt'),
 (22, 1, 135, 4, '2023-11-20 17:22:05', 'Tốt');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `rolepermissions`
---
-
-CREATE TABLE `rolepermissions` (
-  `id` int(11) NOT NULL,
-  `roleid` int(11) NOT NULL,
-  `permissionsid` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `rolepermissions`
---
-
-INSERT INTO `rolepermissions` (`id`, `roleid`, `permissionsid`) VALUES
-(1, 1, 1),
-(2, 1, 8),
-(3, 1, 3),
-(4, 1, 2),
-(5, 2, 8),
-(6, 3, 4),
-(7, 3, 1),
-(8, 3, 10),
-(9, 3, 6),
-(10, 3, 2),
-(11, 3, 5),
-(12, 3, 5),
-(13, 3, 3);
 
 -- --------------------------------------------------------
 
@@ -348,14 +281,6 @@ CREATE TABLE `shoppingcart` (
   `id` int(11) NOT NULL,
   `customerId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `shoppingcart`
---
-
-INSERT INTO `shoppingcart` (`id`, `customerId`) VALUES
-(1, 1),
-(2, 11);
 
 -- --------------------------------------------------------
 
@@ -459,12 +384,6 @@ ALTER TABLE `orders`
   ADD KEY `coupon_fk` (`couponId`);
 
 --
--- Indexes for table `permissions`
---
-ALTER TABLE `permissions`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `product`
 --
 ALTER TABLE `product`
@@ -478,14 +397,6 @@ ALTER TABLE `review`
   ADD PRIMARY KEY (`id`),
   ADD KEY `customer_fk_2` (`customerId`),
   ADD KEY `product_fk_2` (`productId`);
-
---
--- Indexes for table `rolepermissions`
---
-ALTER TABLE `rolepermissions`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `permission_fk` (`permissionsid`),
-  ADD KEY `role_FK` (`roleid`);
 
 --
 -- Indexes for table `roles`
@@ -560,28 +471,16 @@ ALTER TABLE `orders`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT for table `permissions`
---
-ALTER TABLE `permissions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
-
---
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=139;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=140;
 
 --
 -- AUTO_INCREMENT for table `review`
 --
 ALTER TABLE `review`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
-
---
--- AUTO_INCREMENT for table `rolepermissions`
---
-ALTER TABLE `rolepermissions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `roles`
@@ -651,14 +550,6 @@ ALTER TABLE `product`
 ALTER TABLE `review`
   ADD CONSTRAINT `customer_fk_2` FOREIGN KEY (`customerId`) REFERENCES `customer` (`id`),
   ADD CONSTRAINT `product_fk_2` FOREIGN KEY (`productId`) REFERENCES `product` (`id`);
-
---
--- Constraints for table `rolepermissions`
---
-ALTER TABLE `rolepermissions`
-  ADD CONSTRAINT `permission_fk` FOREIGN KEY (`permissionsid`) REFERENCES `permissions` (`id`),
-  ADD CONSTRAINT `role_FK` FOREIGN KEY (`roleid`) REFERENCES `roles` (`id`),
-  ADD CONSTRAINT `rolepermissions_ibfk_2` FOREIGN KEY (`permissionsid`) REFERENCES `permissions` (`id`);
 
 --
 -- Constraints for table `shoppingcart`
