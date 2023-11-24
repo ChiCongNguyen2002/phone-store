@@ -9275,3 +9275,36 @@ footer.sticky-footer .copyright{
 body.sidebar-toggled footer.sticky-footer{
     width:100%
 }
+
+.order_style{
+    display:flex;
+}
+
+.order_style_2{
+    margin-left: 20px;
+    margin-top: -7px;
+}
+
+.check_style{
+    display:flex;
+}
+
+button[type="submit"] {
+  background-color: #4e73df;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button[type="submit"]:hover {
+  background-color: #2e59d9;
+}
+
+.check_style {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}

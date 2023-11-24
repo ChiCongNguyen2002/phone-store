@@ -33,26 +33,28 @@
                     </form>
                 </div>
 
-                <form th:action="@{/search-order-by-time/0}" id="filterOrder" method="get"  onsubmit="filterAndExport(); return false;">
-                    <h1>Xuất hóa đơn ra file Excel</h1>
-                    <label>Lọc theo ngày:</label>
-                    <div class="date-input">
-                        <label for="dateFrom">Từ ngày:</label>
-                        <input type="date" id="dateFrom" name="dateFrom" >
-                    </div>
-                    <div class="date-input">
-                        <label for="dateTo">Đến ngày:</label>
-                        <input type="date" id="dateTo" name="dateTo">
-                    </div>
-                    <button type="submit">Lọc Hóa đơn</button>
-                </form>
+                <h1>Xuất hóa đơn ra file Excel</h1>
+                <div class="check_style">
+                    <form class="order_style" th:action="@{/search-order-by-time/0}" id="filterOrder" method="get"  onsubmit="filterAndExport(); return false;">
+                        <label>Lọc theo ngày </label>
+                        <div class="date-input">
+                            <label for="dateFrom">Từ ngày:</label>
+                            <input type="date" id="dateFrom" name="dateFrom" >
+                        </div>
+                        <div class="date-input">
+                            <label for="dateTo">Đến ngày:</label>
+                            <input type="date" id="dateTo" name="dateTo">
+                        </div>
+                        <button class="order_style_2" type="submit">Lọc Hóa đơn</button>
+                    </form>
 
-                <form th:action="@{/export/orders-excel/0}" id="exportForm" method="get"
-                      onsubmit="Export(); return false;">
-                    <input style="display:none" type="date" id="dateFromExcel" name="dateFromExcel">
-                    <input style="display:none" type="date" id="dateToExcel" name="dateToExcel">
-                    <button type="submit">Xuất File Excel</button>
-                </form>
+                    <form th:action="@{/export/orders-excel/0}" id="exportForm" method="get"
+                          onsubmit="Export(); return false;">
+                        <input style="display:none" type="date" id="dateFromExcel" name="dateFromExcel">
+                        <input style="display:none" type="date" id="dateToExcel" name="dateToExcel">
+                        <button type="submit">Xuất File Excel</button>
+                    </form>
+                </div>
 
                 <p th:if="${size == 0} ">No Products</p>
                 <div th:if="${success}" class="text-center alert alert-success">
