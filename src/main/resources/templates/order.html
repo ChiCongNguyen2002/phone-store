@@ -36,7 +36,7 @@
                 <h1>Xuất hóa đơn ra file Excel</h1>
                 <div class="check_style">
                     <form class="order_style" th:action="@{/search-order-by-time/0}" id="filterOrder" method="get"  onsubmit="filterAndExport(); return false;">
-                        <label>Lọc theo ngày </label>
+                        <label>Lọc theo ngày</label>
                         <div class="date-input">
                             <label for="dateFrom">Từ ngày:</label>
                             <input type="date" id="dateFrom" name="dateFrom" >
@@ -52,7 +52,7 @@
                           onsubmit="Export(); return false;">
                         <input style="display:none" type="date" id="dateFromExcel" name="dateFromExcel">
                         <input style="display:none" type="date" id="dateToExcel" name="dateToExcel">
-                        <button type="submit">Xuất File Excel</button>
+                        <button type="submit" style="background-color: green;">Xuất File Excel</button>
                     </form>
                 </div>
 

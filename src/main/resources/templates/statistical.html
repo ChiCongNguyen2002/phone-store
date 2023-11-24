@@ -75,15 +75,15 @@
                     <thead>
                     <tr>
                         <th>Top</th>
-                        <th>Email</th>
                         <th>Full Name</th>
+                        <th>Email</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="user,index : ${top5Users}">
                         <td th:text="${index.count}"></td>
-                        <td th:text="${user.email}"></td>
                         <td th:text="${user.fullname}"></td>
+                        <td th:text="${user.email}"></td>
                     </tr>
                     </tbody>
                 </table>
