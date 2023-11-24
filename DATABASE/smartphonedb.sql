@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 24, 2023 at 09:53 AM
+-- Generation Time: Nov 24, 2023 at 07:17 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -53,8 +53,9 @@ CREATE TABLE `category` (
 --
 
 INSERT INTO `category` (`id`, `name`, `supplierId`, `status`) VALUES
-(30, 'IPHONE', 1, 1),
-(31, 'SAMSUNG', 2, 1);
+(30, 'IPHONE', 4, 1),
+(31, 'SAMSUNG', 2, 1),
+(32, 'VIVO', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -80,6 +81,18 @@ INSERT INTO `coupon` (`id`, `code`, `count`, `promotion`, `description`, `status
 (2, 'CM4', 30, '10', 'Khuyến mãi 10%', 1),
 (3, 'CM5', 5, '5', 'Khuyến mãi 5%', 1),
 (4, 'CM6', 6, '6', 'Khuyến mãi 6%', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `employee`
+--
+
+CREATE TABLE `employee` (
+  `id` int(11) NOT NULL,
+  `userId` int(11) NOT NULL,
+  `salary` double NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -150,7 +163,9 @@ CREATE TABLE `orders` (
 INSERT INTO `orders` (`id`, `userId`, `orderDate`, `Status`, `couponId`, `paymentMethod`, `total`, `ShipName`, `ShipAddress`, `ShipPhoneNumber`) VALUES
 (7, 11, '2023-10-22', 1, 1, 'COD', 1500000, 'Dinh Thinh', 'Ca Mau', '0941124123'),
 (8, 8, '2023-11-24', 1, 2, 'COD', 1500000, 'Tan Duy', 'Cà Mau', '0129293493'),
-(9, 7, '2023-10-05', 1, 1, 'COD', 1500000, 'Ngoc So', 'Ca Mau', '0129294393');
+(9, 7, '2023-10-05', 1, 1, 'COD', 1500000, 'Ngoc So', 'Ca Mau', '0129294393'),
+(10, 11, '2023-08-22', 1, 1, 'COD', 1500000, 'Dinh Thinh', 'Ca Mau', '0941124123'),
+(11, 11, '2023-06-22', 1, 1, 'COD', 1500000, 'Dinh Thinh', 'Ca Mau', '0941124123');
 
 -- --------------------------------------------------------
 
@@ -233,7 +248,8 @@ CREATE TABLE `supplier` (
 
 INSERT INTO `supplier` (`Id`, `Name`, `PhoneNumber`, `Address`, `status`) VALUES
 (1, 'Apple', '0816089161', 'Ca Mau', 1),
-(2, 'Samsung', '0765433120', 'Ha Noi', 1);
+(2, 'Samsung', '0765433120', 'Ha Noi', 1),
+(4, 'IPHONE', '0386431800', 'Ca Mau', 1);
 
 -- --------------------------------------------------------
 
@@ -283,6 +299,13 @@ ALTER TABLE `category`
 --
 ALTER TABLE `coupon`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `employee`
+--
+ALTER TABLE `employee`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_fk_2` (`userId`);
 
 --
 -- Indexes for table `forgot_password_token`
@@ -352,13 +375,19 @@ ALTER TABLE `cartitem`
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `coupon`
 --
 ALTER TABLE `coupon`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `employee`
+--
+ALTER TABLE `employee`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `forgot_password_token`
@@ -376,7 +405,7 @@ ALTER TABLE `orderdetail`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `product`
@@ -400,7 +429,7 @@ ALTER TABLE `shoppingcart`
 -- AUTO_INCREMENT for table `supplier`
 --
 ALTER TABLE `supplier`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `user`
@@ -424,6 +453,12 @@ ALTER TABLE `cartitem`
 --
 ALTER TABLE `category`
   ADD CONSTRAINT `s` FOREIGN KEY (`supplierId`) REFERENCES `supplier` (`Id`);
+
+--
+-- Constraints for table `employee`
+--
+ALTER TABLE `employee`
+  ADD CONSTRAINT `user_fk_2` FOREIGN KEY (`userId`) REFERENCES `user` (`id`);
 
 --
 -- Constraints for table `orderdetail`
