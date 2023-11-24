@@ -19,14 +19,14 @@ public interface OrderRepository extends JpaRepository<Orders,Integer> {
     @Query("SELECT p from Orders p")
     Page<Orders> pageOrders(Pageable pageable);
 
-    @Query("SELECT c.name, c.phoneNumber, c.address, c.email, SUM(od.quantity) AS sumQuantity " +
+/*    @Query("SELECT c.name, c.phoneNumber, c.address, c.email, SUM(od.quantity) AS sumQuantity " +
             "FROM OrderDetail od " +
             "JOIN od.order o " +
             "JOIN o.customer c " +
             "WHERE o.orderDate BETWEEN :dateFrom AND :dateTo " +
             "GROUP BY c.name, c.phoneNumber, c.address, c.email " +
             "ORDER BY sumQuantity DESC")
-    List<Object[]> getTop5CustomersWithSumQuantity(@Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo);
+    List<Object[]> getTop5CustomersWithSumQuantity(@Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo);*/
 
     @Query("SELECT p.name, p.price, p.description, p.quantity, p.color, SUM(od.quantity) AS sumQuantity " +
             "FROM OrderDetail od " +
@@ -37,14 +37,14 @@ public interface OrderRepository extends JpaRepository<Orders,Integer> {
             "ORDER BY sumQuantity DESC")
         List<Object[]> getTop10ProductsWithSumQuantity(@Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo);
 
-    @Query("SELECT e.name, e.phoneNumber, e.address, e.email , e.salary , SUM(od.quantity) AS totalQuantity " +
+/*    @Query("SELECT e.name, e.phoneNumber, e.address, e.email , e.salary , SUM(od.quantity) AS totalQuantity " +
             "FROM OrderDetail od " +
             "JOIN od.employee e " +
             "JOIN od.order o " +
             "WHERE o.orderDate BETWEEN :dateFrom AND :dateTo " +
             "GROUP BY e.name, e.phoneNumber, e.address, e.email, e.salary " +
             "ORDER BY totalQuantity DESC")
-    List<Object[]> findTop5EmployeesByTotalQuantity(@Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo);
+    List<Object[]> findTop5EmployeesByTotalQuantity(@Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo);*/
 
     @Query("SELECT MONTH(o.orderDate) AS month, YEAR(o.orderDate) AS year, SUM(o.total) AS sumTotal " +
             "FROM Orders o " +

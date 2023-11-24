@@ -59,4 +59,8 @@ public interface ProductService {
      void enableById(Integer id) ;
 
      List<Product> getData();
+
+     public double getMinPrice(Page<Product> productList);
+
+     public double getMaxPrice(Page<Product> productList);
 }

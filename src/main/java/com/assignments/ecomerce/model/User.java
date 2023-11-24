@@ -1,24 +1,38 @@
-package com.assignments.ecomerce.dto;
+package com.assignments.ecomerce.model;
 
+import jakarta.persistence.*;
 import lombok.Getter;
 
 @Getter
-public class UserDTO {
-
+@Entity
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     private String email;
     private String password;
     private String role;
     private String fullname;
 
-    public UserDTO(String email, String password, String role, String fullname) {
-        super();
+    public User(String email, String password, String role, String fullname) {
         this.email = email;
         this.password = password;
         this.role = role;
         this.fullname = fullname;
     }
 
-    public UserDTO(){}
+    public User(String email, String password, String fullname) {
+        this.email = email;
+        this.password = password;
+        this.fullname = fullname;
+    }
+
+    public User() {
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public void setEmail(String email) {
         this.email = email;
@@ -35,4 +49,8 @@ public class UserDTO {
     public void setFullname(String fullname) {
         this.fullname = fullname;
     }
+
+
+
 }
+

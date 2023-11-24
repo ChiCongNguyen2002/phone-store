@@ -19,8 +19,8 @@ public class OrderDetail {
     private Product product;
 
     @ManyToOne
-    @JoinColumn(name = "employeeId")
-    private Employee employee;
+    @JoinColumn(name = "userId")
+    private User user;
 
     private Integer quantity;
     private Double unitPrice;
@@ -47,8 +47,8 @@ public class OrderDetail {
         this.unitPrice = unitPrice;
     }
 
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
+    public void setEmployee(User user) {
+        this.user = user;
     }
 
     public OrderDetail(Integer id, Orders order, Product product, Integer quantity, Double unitPrice) {

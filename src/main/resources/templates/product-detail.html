@@ -134,7 +134,7 @@
                                         </tr>
                                         <tr>
                                             <th>Giá:</th>
-                                            <td th:text="${product.price}"></td>
+                                            <td th:text="${formattedPrice.replace(',', '.') + ' VNĐ'}"></td>
                                         </tr>
                                         <tr>
                                             <th>Chi tiết sản phẩm:</th>
@@ -153,8 +153,7 @@
                                     <h1>ĐÁNH GIÁ SẢN PHẨM </h1>
                                     <div class="comment" th:each="review : ${reviews}">
                                         <div class="user">
-                                            <span style="font-weight:bold"
-                                                  th:text="${review.customer.getName()}">
+                                            <span style="font-weight:bold">
                                             </span>
                                         </div>
                                         <div class="time">
@@ -187,7 +186,7 @@
                                     <form th:action="@{/add-review}" method="post" th:object="${reviewNew}">
                                         <div class="form-group">
                                             <label for="name">Id người dùng</label>
-                                            <input type="text" class="form-control" th:field="*{customer}" id="name"
+                                            <input type="text" class="form-control" id="name"
                                                    name="name" required>
                                         </div>
 

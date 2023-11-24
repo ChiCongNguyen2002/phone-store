@@ -33,10 +33,12 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Query("SELECT DISTINCT p FROM Product p JOIN p.category c WHERE p.status = 1 AND c.id = :categoryId GROUP BY p.name")
     Page<Product> pageProductByCategory(Pageable pageable, @Param("categoryId") Integer categoryId);
 
-    @Query("SELECT DISTINCT p FROM Product p JOIN p.category c " +
+    @Query("SELECT DISTINCT p, (SELECT MIN(p2.price) FROM Product p2) AS min_price, (SELECT MAX(p3.price) FROM Product p3) AS max_price " +
+            "FROM Product p JOIN p.category c " +
             "WHERE p.status = 1 AND c.status = 1 " +
-            "AND CONCAT(p.name, p.price, p.quantity, p.description, p.color) LIKE %:keyword% GROUP BY p.name")
-    List<Product> searchByKeyword(@Param("keyword") String keyword);
+            "AND CONCAT(p.name, p.price, p.quantity, p.description, p.color) LIKE %:keyword% " +
+            "GROUP BY p.name")
+    List<Product> findProductsByKeywordWithMinMaxPrice(@Param("keyword") String keyword);
 
     @Query("SELECT DISTINCT p FROM Product p JOIN p.category c " +
             "WHERE p.status = 1 AND c.status = 1 " +
@@ -50,11 +52,12 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
                                                  @Param("minPrice") Double minPrice,
                                                  @Param("maxPrice") Double maxPrice);
 
-    @Query("SELECT p FROM Product p JOIN p.category c " +
+    @Query("SELECT DISTINCT p FROM Product p JOIN p.category c " +
             "WHERE p.status = 1 AND c.status = 1 " +
             "AND c.name LIKE %:category% " +
             "AND p.color LIKE %:color% " +
             "AND p.price >= :minPrice AND p.price <= :maxPrice " +
+            "GROUP BY p.name " +
             "ORDER BY p.price DESC")
     List<Product> searchProductByOptionDescending(@Param("category") String category,
                                                   @Param("color") String color,

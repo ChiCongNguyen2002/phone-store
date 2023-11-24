@@ -4,9 +4,9 @@ import com.assignments.ecomerce.model.Category;
 import com.assignments.ecomerce.model.Product;
 import com.assignments.ecomerce.model.Review;
 import com.assignments.ecomerce.service.CategoryService;
-import com.assignments.ecomerce.service.CustomerService;
 import com.assignments.ecomerce.service.ProductService;
 import com.assignments.ecomerce.service.ReviewService;
+import com.assignments.ecomerce.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -33,15 +33,15 @@ public class ProductController {
     @Autowired
     private ReviewService reviewService;
     @Autowired
-    private CustomerService customerService;
+    private UserService userService;
     @PostMapping("/add-review")
     public String add(@ModelAttribute("reviewNew") Review review,
                       Model model,
                       RedirectAttributes attributes) {
         try {
-            boolean exists = reviewService.existsByCustomerIdAndProductId(review.getCustomer().getId(), review.getProduct().getId());
+            boolean exists = reviewService.existsByUserIdAndProductId(review.getUser().getId(), review.getProduct().getId());
             if (exists) {
-                attributes.addFlashAttribute("error", "Duplicate name of customerId and productId, please check again!");
+                attributes.addFlashAttribute("error", "Duplicate name of user and productId, please check again!");
                 return "redirect:/product-details/" + review.getProduct().getId();
             }
             reviewService.save(review);
@@ -101,7 +101,7 @@ public class ProductController {
         model.addAttribute("category", category);
         model.addAttribute("categories", categories);
         model.addAttribute("size", listProducts.getSize());
-        //model.addAttribute("listProducts", listProducts);
+
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", listProducts.getTotalPages());
 
@@ -119,18 +119,6 @@ public class ProductController {
         model.addAttribute("formattedPrices", formattedPrices);
 
         return "subcategory";
-    }
-
-    @GetMapping("/indexCustomer")
-    public String pageIndexCustomer(Model model) {
-        List<Product> listProducts = productService.getAllProducts();
-        List<Category> categories = categoryService.getAllCategory();
-        List<Product> topProducts = productService.getData();
-
-        model.addAttribute("top10Products", topProducts);
-        model.addAttribute("listProducts", listProducts);
-        model.addAttribute("categories", categories);
-        return "indexUser";
     }
 
     @GetMapping("/product")
@@ -190,6 +178,8 @@ public class ProductController {
                                         @RequestParam("color") String color,
                                         @RequestParam(value = "minPrice", required = false) Double minPrice,
                                         @RequestParam(value = "maxPrice", required = false) Double maxPrice,
+                                        @RequestParam(value = "defaultMinPrice", required = false) Double defaultMinPrice,
+                                        @RequestParam(value = "defaultMaxPrice", required = false) Double defaultMaxPrice,
                                         Model model, Principal principal) {
         if (minPrice == null) {
             minPrice = 0.0;
@@ -198,30 +188,29 @@ public class ProductController {
         if (maxPrice == null) {
             maxPrice = Double.MAX_VALUE;
         }
+
         List<Category> categories = categoryService.getAllCategory();
         Page<Product> listProducts = productService.searchProductByOption(pageNo, category, sortOption, color, minPrice, maxPrice);
         model.addAttribute("color", color);
         model.addAttribute("minPrice", minPrice);
         model.addAttribute("maxPrice", maxPrice);
+        model.addAttribute("defaultMinPrice", defaultMinPrice);
+        model.addAttribute("defaultMaxPrice", defaultMaxPrice);
         model.addAttribute("sortOption", sortOption);
         model.addAttribute("category", category);
         model.addAttribute("categories", categories);
         model.addAttribute("size", listProducts.getSize());
-        //model.addAttribute("listProducts", listProducts);
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", listProducts.getTotalPages());
         model.addAttribute("productNew", new Product());
-
         List<String> formattedPrices = new ArrayList<>();
         DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols(Locale.getDefault());
         decimalFormatSymbols.setGroupingSeparator('.');
         DecimalFormat decimalFormat = new DecimalFormat("#,###", decimalFormatSymbols);
-
         for (Product product : listProducts.getContent()) {
             String formattedPrice = decimalFormat.format(product.getPrice());
             formattedPrices.add(formattedPrice);
         }
-
         model.addAttribute("listProducts", listProducts.getContent());
         model.addAttribute("formattedPrices", formattedPrices);
         return "searchByOption";
@@ -231,29 +220,33 @@ public class ProductController {
     public String searchProductByCategory(@PathVariable("pageNo") int pageNo,
                                           @RequestParam("keyword") String keyword,
                                           Model model, Principal principal, HttpSession session) {
-
         Page<Product> listProducts = productService.searchProducts(pageNo, keyword);
         List<Category> categories = categoryService.getAllCategory();
+        double minPrice = productService.getMinPrice(listProducts);
+        double maxPrice = productService.getMaxPrice(listProducts);
+        double defaultMinPrice = productService.getMinPrice(listProducts);
+        double defaultMaxPrice = productService.getMaxPrice(listProducts);
         session.setAttribute("keyword", keyword);
         model.addAttribute("keyword", keyword);
         model.addAttribute("categories", categories);
         model.addAttribute("size", listProducts.getSize());
-        //model.addAttribute("listProducts", listProducts);
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", listProducts.getTotalPages());
-
         List<String> formattedPrices = new ArrayList<>();
-        DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols(Locale.getDefault());
-        decimalFormatSymbols.setGroupingSeparator('.');
-        DecimalFormat decimalFormat = new DecimalFormat("#,###", decimalFormatSymbols);
-
+        DecimalFormatSymbols decimalFormatSymbol_2 = new DecimalFormatSymbols(Locale.getDefault());
+        decimalFormatSymbol_2.setGroupingSeparator('.');
+        DecimalFormat decimalFormat_2 = new DecimalFormat("#,###", decimalFormatSymbol_2);
         for (Product product : listProducts.getContent()) {
-            String formattedPrice = decimalFormat.format(product.getPrice());
+            String formattedPrice = decimalFormat_2.format(product.getPrice());
             formattedPrices.add(formattedPrice);
         }
 
         model.addAttribute("listProducts", listProducts.getContent());
         model.addAttribute("formattedPrices", formattedPrices);
+        model.addAttribute("minPrice", minPrice);
+        model.addAttribute("maxPrice", maxPrice);
+        model.addAttribute("defaultMinPrice", 9490000);
+        model.addAttribute("defaultMaxPrice", 35000000);
         return "searchCategory";
     }
 

@@ -9,7 +9,7 @@
             type: "GET",
             url: '/Cart/GetListItems',
             success: function (res) {
-                $('#lbl_number_of_items_header').text(res.length);
+               /* $('#lbl_number_of_items_header').text(res.length);*/
             }
         });
     }
@@ -27,7 +27,7 @@
                     id: id,
                 },
                 success: function (res) {
-                   $('#lbl_number_of_items_header').text(res.length);
+                   /*$('#lbl_number_of_items_header').text(res.length);*/
                     Swal.fire({
                         position: 'top-end',
                         icon: 'success',

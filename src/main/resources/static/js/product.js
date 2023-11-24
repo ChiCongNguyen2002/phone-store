@@ -37,3 +37,29 @@ function saveProduct(event) {
   // Nếu không có lỗi, gửi biểu mẫu
   document.getElementById("productForm").submit();
 }
+
+function slideOne() {
+  var slider1 = document.getElementById("slider-1");
+  var slider2 = document.getElementById("slider-2");
+  var minPriceInput = document.getElementById("minPrice");
+  var maxPriceInput = document.getElementById("maxPrice");
+
+  minPriceInput.value = slider1.value;
+  if (parseInt(minPriceInput.value) > parseInt(maxPriceInput.value)) {
+    maxPriceInput.value = minPriceInput.value;
+    slider2.value = slider1.value;
+  }
+}
+
+function slideTwo() {
+  var slider1 = document.getElementById("slider-1");
+  var slider2 = document.getElementById("slider-2");
+  var minPriceInput = document.getElementById("minPrice");
+  var maxPriceInput = document.getElementById("maxPrice");
+
+  maxPriceInput.value = slider2.value;
+  if (parseInt(maxPriceInput.value) < parseInt(minPriceInput.value)) {
+    minPriceInput.value = maxPriceInput.value;
+    slider1.value = slider2.value;
+  }
+}

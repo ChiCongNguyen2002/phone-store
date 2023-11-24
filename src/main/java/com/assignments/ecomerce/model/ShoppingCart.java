@@ -18,13 +18,17 @@ public class ShoppingCart {
     private Integer id;
 
     @OneToOne
-    @JoinColumn(name = "customerId")
-    private Customer customer;
+    @JoinColumn(name = "userId")
+    private User user;
 
     @OneToMany(cascade = CascadeType.DETACH, mappedBy = "shoppingCart")
     private List<CartItem> cartItems;
+    private double totalPrice;
+    private int totalItems;
 
     public ShoppingCart() {
         this.cartItems = new ArrayList<>();
+        this.totalItems = 0;
+        this.totalPrice = 0.0;
     }
 }

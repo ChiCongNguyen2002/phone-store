@@ -13,8 +13,8 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id ;
     @ManyToOne
-    @JoinColumn(name = "customerId")
-    private Customer customer;
+    @JoinColumn(name = "userId")
+    private User user;
     @ManyToOne
     @JoinColumn(name = "productId")
     private Product product;
@@ -30,10 +30,6 @@ public class Review {
         this.id = id;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
     public void setProduct(Product product) {
         this.product = product;
     }
@@ -45,13 +41,19 @@ public class Review {
         this.comments = comments;
     }
 
-    public Review(Integer id, Customer customer, Product product, Integer rating, String comments) {
-        this.id = id;
-        this.customer = customer;
-        this.product = product;
-        this.rating = rating;
-        this.comments = comments;
+    public Review(){}
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public Review(){}
+    public Review(Integer id, User user, Product product, Integer rating, LocalDateTime dateReview, String comments) {
+        this.id = id;
+        this.user = user;
+        this.product = product;
+        this.rating = rating;
+        DateReview = dateReview;
+        this.comments = comments;
+    }
 }
+

@@ -26,7 +26,7 @@
 <!-- /BREADCRUMB -->
 
 <div class="div_form">
-    <form th:action="@{/search-productByOption/0}" method="get" class="toolbar__search"
+    <form id="formSearch" th:action="@{/search-productByOption/0}" method="get" class="toolbar__search"
           style="margin-bottom: 30px;justify-content: center;">
         <div class="toolbar__search-left">
             <span class="toolbar__search-title" style=" width: 229px;">Sắp xếp theo</span>
@@ -55,13 +55,18 @@
             <input placeholder="" type="text" name="color"/>
         </div>
 
-        <div class="price-range">
+        <div class="price-range" style="margin-top: 20px;">
             <span class="toolbar__search-title">Khoảng Giá</span>
-            <input placeholder="Thấp" type="number" name="minPrice" step="10000"/>
+            <input th:value="${minPrice != null ? minPrice : defaultMinPrice}" placeholder="Thấp" type="text" id="minPrice" name="minPrice" readonly/>
             <span style="width: 18px;"> - </span>
-            <input placeholder="Cao" type="number" name="maxPrice" step="10000"/>
+            <input th:value="${maxPrice != null ? maxPrice : defaultMaxPrice}" placeholder="Cao" type="text" id="maxPrice" name="maxPrice" readonly/>
+            <input type="hidden" th:value="${defaultMinPrice}" id="minPriceDefault" name="minPriceDefault">
+            <input type="hidden" th:value="${defaultMaxPrice}" id="maxPriceDefault" name="maxPriceDefault">
+            <div class="multi-range-field my-5 pb-5">
+                <div id="multi6" class="multi-range"></div>
+            </div>
         </div>
-        <button type="submit" class="toolbar__search-icon">Lọc</button>
+        <button id="filterButton" type="submit" class="toolbar__search-icon">Lọc</button>
     </form>
 </div>
 
@@ -95,7 +100,8 @@
                                                         <div class="item-price">
                                                             <div class="price-box">
                                                             <span class="regular-price">
-                                                                <span class="price" th:text="${formattedPrices[__${index.index}__] + ' VNĐ'}"></span>
+                                                                <span class="price"
+                                                                      th:text="${formattedPrices[__${index.index}__] + ' VNĐ'}"></span>
                                                             </span>
                                                             </div>
                                                         </div>
@@ -143,5 +149,82 @@
 </div>
 
 <footer th:replace="~{indexUser::footer}"></footer>
+<script>
+    var minPrice = parseInt([[${minPrice}]]);
+    var maxPrice = parseInt([[${maxPrice}]]);
+    var priceRange = document.getElementById('multi6');
+    var minPriceInput = document.getElementById('minPrice');
+    var maxPriceInput = document.getElementById('maxPrice');
+    var defaultMinPriceInput = document.getElementById('minPriceDefault');
+    var defaultMaxPriceInput = document.getElementById('maxPriceDefault');
+    const initialMinPrice = parseInt(minPriceInput.value);
+    const initialMaxPrice = parseInt(maxPriceInput.value);
+    var stepSize = 3500000;
+
+    // Tạo thanh trượt noUiSlider
+    noUiSlider.create(priceRange, {
+        start: [minPrice, maxPrice],
+        connect: true,
+        range: {
+            'min': minPrice,
+            'max': maxPrice
+        }
+    });
+
+    // Cập nhật giá trị minPrice và maxPrice khi kéo thanh trượt
+    priceRange.noUiSlider.on('update', function (values, handle) {
+        minPrice = parseInt(values[0]);
+        maxPrice = parseInt(values[1]);
+        minPriceInput.value = minPrice;
+        maxPriceInput.value = maxPrice;
+    });
+
+    // Thay đổi giá trị minPrice hoặc maxPrice khi kéo thanh trượt
+    priceRange.noUiSlider.on('slide', function (values, handle) {
+        var range = maxPrice - minPrice;
+        var numSteps = Math.round(range / stepSize);
+        var stepIncrement = range / numSteps;
+
+        if (handle === 0) {
+            minPrice = parseInt(values[0]);
+            maxPrice = minPrice + stepIncrement * numSteps;
+        } else {
+            maxPrice = parseInt(values[1]);
+            minPrice = maxPrice - stepIncrement * numSteps;
+        }
+
+        priceRange.noUiSlider.set([minPrice, maxPrice]);
+    });
+
+    var filterButton = document.getElementById('filterButton');
+    filterButton.addEventListener('click', function (event) {
+        event.preventDefault();
+
+        // Thực hiện bộ lọc dữ liệu
+
+        // Lấy giá trị minPrice và maxPrice từ khoảng giá mới được chọn
+        var selectedMinPrice = parseInt(minPriceInput.value);
+        var selectedMaxPrice = parseInt(maxPriceInput.value);
+
+        // Kiểm tra và gán lại giá trị maxPrice nếu cần
+        if (selectedMinPrice > selectedMaxPrice) {
+            selectedMaxPrice = selectedMinPrice;
+        }
+
+        // Cập nhật lại range của thanh trượt
+        priceRange.noUiSlider.updateOptions({
+            range: {
+                'min': minPrice,
+                'max': maxPrice
+            }
+        });
+
+        // Cập nhật giá trị minPrice và maxPrice trên thanh trượt
+        priceRange.noUiSlider.set([selectedMinPrice, selectedMaxPrice]);
+
+        // Gửi form
+        document.getElementById('formSearch').submit();
+    });
+</script>
 </body>
 </html>

@@ -16,7 +16,6 @@
     <div id="content-wrapper" class="d-flex flex-column">
         <!-- Main Content -->
         <div id="content">
-
             <!-- Topbar -->
             <nav th:replace="~{fragments::top-navbar}">
             </nav>
@@ -39,7 +38,7 @@
 
                     <div class="statistics-card order-statistics">
                         <h2>Tổng doanh thu</h2>
-                        <h5><span th:text="${total}"></span></h5>
+                        <h5><span th:text="${total + ' VNĐ'}"></span></h5>
                     </div>
 
                 </div>
@@ -56,9 +55,7 @@
                     </div>
 
                     <select id="chartType" name="chartType" onchange="displayChart()">
-                        <option value="top5Customers">Top 5 Khách Hàng Mua Nhiều Nhất</option>
                         <option value="top10Products">Top 10 Sản Phẩm Bán Chạy Nhất</option>
-                        <option value="top5Employees">Top 5 Nhân Viên Bán Hàng Xuất Sắc Nhất</option>
                         <option value="monthlyRevenue">Doanh Thu theo tháng</option>
                         <option value="weeklyRevenue">Doanh Thu theo thứ trong tuần</option>
                     </select>
@@ -67,7 +64,7 @@
             </div>
             <!-- /.container-fluid -->
 
-            <div id="top5CustomersDiv">
+            <!--<div id="top5CustomersDiv">
                 <table class="styled-table">
                     <thead>
                     <tr>
@@ -79,7 +76,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <!-- Lặp qua danh sách khách hàng -->
+                    &lt;!&ndash; Lặp qua danh sách khách hàng &ndash;&gt;
                     <tr th:each="customer,index : ${top5Customers}">
                         <td th:text="${index.count}"></td>
                         <td th:text="${customer.Name}"></td>
@@ -89,9 +86,9 @@
                     </tr>
                     </tbody>
                 </table>
-            </div>
+            </div>-->
 
-            <div id="top5EmployeesDiv">
+            <!--<div id="top5EmployeesDiv">
                 <table class="styled-table">
                     <thead>
                     <tr>
@@ -104,7 +101,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <!-- Lặp qua danh sách khách hàng -->
+                    &lt;!&ndash; Lặp qua danh sách khách hàng &ndash;&gt;
                     <tr th:each="employee,index : ${top5Employees}">
                         <td th:text="${index.count}"></td>
                         <td th:text="${employee.Name}"></td>
@@ -115,7 +112,7 @@
                     </tr>
                     </tbody>
                 </table>
-            </div>
+            </div>-->
 
             <div id="top10ProductsDiv">
                 <table class="styled-table">

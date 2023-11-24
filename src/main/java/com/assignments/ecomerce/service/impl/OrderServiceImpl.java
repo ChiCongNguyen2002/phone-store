@@ -65,7 +65,7 @@ public class OrderServiceImpl implements OrderService {
         for (Orders order : orders) {
             Orders newOrder = new Orders();
             newOrder.setId(order.getId());
-            newOrder.setCustomer(order.getCustomer());
+            newOrder.setCustomer(order.getUser());
             newOrder.setOrderDate(order.getOrderDate());
             newOrder.setStatus(order.getStatus());
             newOrder.setCouponId(order.getCouponId());
@@ -78,7 +78,7 @@ public class OrderServiceImpl implements OrderService {
 
     public List<Object> getData(Date dateFrom, Date dateTo, String chartType) {
         switch (chartType) {
-            case "top5Customers":
+            /*case "top5Customers":
                 List<Object[]> results = orderRepository.getTop5CustomersWithSumQuantity(dateFrom, dateTo);
                 List<Customer> customers = new ArrayList<>();
 
@@ -91,7 +91,7 @@ public class OrderServiceImpl implements OrderService {
                     Customer customer = new Customer(name, phoneNumber, address, email);
                     customers.add(customer);
                 }
-                return new ArrayList<>(customers);
+                return new ArrayList<>(customers);*/
             case "top10Products":
                 List<Object[]> resultProduct = orderRepository.getTop10ProductsWithSumQuantity(dateFrom, dateTo);
                 List<Product> products = new ArrayList<>();
@@ -107,7 +107,7 @@ public class OrderServiceImpl implements OrderService {
                     products.add(product);
                 }
                 return new ArrayList<>(products);
-            case "top5Employees":
+            /*case "top5Employees":
                 List<Object[]> resultEmployee = orderRepository.findTop5EmployeesByTotalQuantity(dateFrom, dateTo);
                 List<Employee> employees = new ArrayList<>();
                 for (Object[] result : resultEmployee) {
@@ -119,7 +119,7 @@ public class OrderServiceImpl implements OrderService {
                     Employee employee = new Employee(name,phoneNumber,address,email,salary);
                     employees.add(employee);
                 }
-                return new ArrayList<>(employees);
+                return new ArrayList<>(employees);*/
             case "monthlyRevenue":
                 List<Object[]> resultMonth = orderRepository.getMonthlyRevenue(dateFrom, dateTo);
                 List<MonthlyRevenue> monthlyRevenues = new ArrayList<>();

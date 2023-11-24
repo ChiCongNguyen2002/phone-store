@@ -6,6 +6,7 @@ import lombok.Getter;
 import java.util.Date;
 import java.util.List;
 
+@Getter
 @Entity
 @Table(name="Orders")
 public class Orders {
@@ -13,8 +14,8 @@ public class Orders {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @ManyToOne
-    @JoinColumn(name = "customerId")
-    private Customer customer;
+    @JoinColumn(name = "userId")
+    private User user;
     private Date orderDate;
     private String status;
     private Integer couponId;
@@ -51,8 +52,8 @@ public class Orders {
         this.total = total;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setCustomer(User user) {
+        this.user = user;
     }
 
     public void setShipName(String shipName) {
@@ -71,9 +72,9 @@ public class Orders {
         this.orderDetails = orderDetails;
     }
 
-    public Orders(Integer id, Customer customer, Date orderDate, String status, Integer couponId, String paymentMethod, Double total, String shipName, String shipAddress, String shipPhone) {
+    public Orders(Integer id, User user, Date orderDate, String status, Integer couponId, String paymentMethod, Double total, String shipName, String shipAddress, String shipPhone) {
         this.id = id;
-        this.customer = customer;
+        this.user = user;
         this.orderDate = orderDate;
         this.status = status;
         this.couponId = couponId;
@@ -85,48 +86,4 @@ public class Orders {
     }
 
     public Orders(){}
-
-    public Integer getId() {
-        return id;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public Date getOrderDate() {
-        return orderDate;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public Integer getCouponId() {
-        return couponId;
-    }
-
-    public String getPaymentMethod() {
-        return paymentMethod;
-    }
-
-    public Double getTotal() {
-        return total;
-    }
-
-    public String getShipName() {
-        return ShipName;
-    }
-
-    public String getShipAddress() {
-        return ShipAddress;
-    }
-
-    public String getShipPhoneNumber() {
-        return ShipPhoneNumber;
-    }
-
-    public List<OrderDetail> getOrderDetails() {
-        return orderDetails;
-    }
 }

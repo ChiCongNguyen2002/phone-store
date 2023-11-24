@@ -27,6 +27,8 @@
 
     <link type="text/css" rel="stylesheet" href="/css/cart.css"/>
     <link type="text/css" rel="stylesheet" href="/css/checkout.css"/>
+    <link href="//cdn.bootcss.com/noUiSlider/8.5.1/nouislider.min.css" rel="stylesheet"/>
+    <script src="//cdn.bootcss.com/noUiSlider/8.5.1/nouislider.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
@@ -95,7 +97,7 @@
                     <div class="header-ctn">
                         <!-- Cart -->
                         <div class="dropdown">
-                            <a th:href="@{/Cart/GetListItems}">
+                            <a th:href="@{/cart}">
                                 <i class="fa fa-shopping-cart"></i>
                                 <span>Giỏ hàng</span>
                                 <div class="qty" id="lbl_number_of_items_header">0</div>

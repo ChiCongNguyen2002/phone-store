@@ -1,7 +1,6 @@
 package com.assignments.ecomerce.controller;
 
 import com.assignments.ecomerce.model.*;
-import com.assignments.ecomerce.service.CustomerService;
 import com.assignments.ecomerce.service.OrderService;
 import com.assignments.ecomerce.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +11,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Controller
@@ -21,21 +24,17 @@ public class StatisticalController {
     @Autowired
     private ProductService productService;
     @Autowired
-    private CustomerService customerService;
-    @Autowired
     private OrderService orderService;
 
     @GetMapping("/statistical")
     public String countProducts(Model model) {
         int countProduct = productService.countProducts();
-        int countCustomer = customerService.countCustomers();
         int countOrder = orderService.countOrders();
         Double total = productService.getTotalRevenue();
 
         model.addAttribute("total", total);
         model.addAttribute("countOrder", countOrder);
         model.addAttribute("countProduct", countProduct);
-        model.addAttribute("countCustomer", countCustomer);
         return "statistical";
     }
 
@@ -46,6 +45,10 @@ public class StatisticalController {
                               Model model) {
         List<Object> chartData = orderService.getData(dateFrom, dateTo, chartType);
 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String formattedDateFrom = dateFormat.format(dateFrom);
+        String formattedDateTo = dateFormat.format(dateTo);
+
         if (chartData != null) {
             if (chartData.isEmpty()) {
                 throw new IllegalArgumentException("No data available for the selected chart type: " + chartType);
@@ -53,27 +56,12 @@ public class StatisticalController {
             Object firstData = chartData.get(0);
 
             switch (firstData.getClass().getSimpleName()) {
-                case "Customer":
-                    List<Customer> topCustomers = chartData.stream()
-                            .map(c -> (Customer) c)
-                            .collect(Collectors.toList());
-                    model.addAttribute("top5Customers", topCustomers);
-                    break;
-
                 case "Product":
                     List<Product> topProducts = chartData.stream()
                             .map(p -> (Product) p)
                             .collect(Collectors.toList());
                     model.addAttribute("top10Products", topProducts);
                     break;
-
-                case "Employee":
-                    List<Employee> topEmployees = chartData.stream()
-                            .map(e -> (Employee) e)
-                            .collect(Collectors.toList());
-                    model.addAttribute("top5Employees", topEmployees);
-                    break;
-
                 case "MonthlyRevenue":
                     List<MonthlyRevenue> topMonth = chartData.stream()
                             .map(m -> (MonthlyRevenue) m)
@@ -94,14 +82,19 @@ public class StatisticalController {
             throw new IllegalArgumentException("No data available for the selected chart type: " + chartType);
         }
         int countProduct = productService.countProducts();
-        int countCustomer = customerService.countCustomers();
         int countOrder = orderService.countOrders();
-        Double total = productService.getTotalRevenue();
 
-        model.addAttribute("total", total);
+        Double total = productService.getTotalRevenue();
+        DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols(Locale.getDefault());
+        decimalFormatSymbols.setGroupingSeparator('.');
+        DecimalFormat decimalFormat = new DecimalFormat("#,###", decimalFormatSymbols);
+        String formattedPrice = decimalFormat.format(total);
+
+        model.addAttribute("total", formattedPrice);
         model.addAttribute("countOrder", countOrder);
         model.addAttribute("countProduct", countProduct);
-        model.addAttribute("countCustomer", countCustomer);
+        model.addAttribute("formattedDateFrom", formattedDateFrom);
+        model.addAttribute("formattedDateTo", formattedDateTo);
         return "statistical";
     }
 }

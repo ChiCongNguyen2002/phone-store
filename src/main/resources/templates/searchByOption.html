@@ -26,7 +26,8 @@
 <!-- /BREADCRUMB -->
 
 <div class="div_form">
-    <form th:action="@{/search-productByOption/0}" method="get" class="toolbar__search" style="margin-bottom: 30px;justify-content: center;">
+    <form id="formSearch" th:action="@{/search-productByOption/0}" method="get" class="toolbar__search"
+          style="margin-bottom: 30px;justify-content: center;">
         <div class="toolbar__search-left">
             <span class="toolbar__search-title" style=" width: 229px;">Sắp xếp theo</span>
             <select id="category" name="category" class="form-control">
@@ -54,16 +55,19 @@
             <input placeholder="" type="text" name="color"/>
         </div>
 
-        <div class="price-range">
+        <div class="price-range" style="margin-top: 20px;">
             <span class="toolbar__search-title">Khoảng Giá</span>
-            <input placeholder="Thấp" type="number" name="minPrice" step="10000"/>
+            <input th:value="${minPrice != null ? minPrice : defaultMinPrice}" placeholder="Thấp" type="text" id="minPrice" name="minPrice" readonly/>
             <span style="width: 18px;"> - </span>
-            <input placeholder="Cao" type="number" name="maxPrice" step="10000"/>
+            <input th:value="${maxPrice != null ? maxPrice : defaultMaxPrice}" placeholder="Cao" type="text" id="maxPrice" name="maxPrice" readonly/>
+            <input type="hidden" th:value="${defaultMinPrice}" id="minPriceDefault" name="minPriceDefault">
+            <input type="hidden" th:value="${defaultMaxPrice}" id="maxPriceDefault" name="maxPriceDefault">
+            <div class="multi-range-field my-5 pb-5">
+                <div id="multi6" class="multi-range"></div>
+            </div>
         </div>
-
-        <button type="submit" class="toolbar__search-icon">Lọc</button>
+        <button id="filterButton" type="submit" class="toolbar__search-icon">Lọc</button>
     </form>
-
 </div>
 
 <div class="main-container col1-layout">
@@ -95,7 +99,8 @@
                                                         <div class="item-price">
                                                             <div class="price-box">
                                                             <span class="regular-price">
-                                                                <span class="price" th:text="${formattedPrices[__${index.index}__] + ' VNĐ'}"></span>
+                                                                <span class="price"
+                                                                      th:text="${formattedPrices[__${index.index}__] + ' VNĐ'}"></span>
                                                             </span>
                                                             </div>
                                                         </div>
@@ -113,24 +118,27 @@
                     <nav aria-label="...">
                         <ul class="pagination" style="display: flex;justify-content: center;">
                             <li th:if="${currentPage != 0}" class="page-item">
-                                <a th:href="@{/search-productByOption/{pageNo}(pageNo=${currentPage - 1}, category=${category},color = ${color}, sortOption=${sortOption}, minPrice=${minPrice}, maxPrice=${maxPrice})}" class="page-link">Previous</a>
+                                <a th:href="@{/search-productByOption/{pageNo}(pageNo=${currentPage - 1}, category=${category},color = ${color}, sortOption=${sortOption}, minPrice=${minPrice}, maxPrice=${maxPrice})}"
+                                   class="page-link">Previous</a>
                             </li>
 
                             <th:block th:if="${totalPages > 1}">
                                 <li th:each="i : ${#numbers.sequence(0, totalPages-1)}"
                                     th:classappend="${currentPage == i ? 'active' : ''}" class="page-item">
-                                    <a th:href="@{/search-productByOption/{pageNo}(pageNo=${i}, category=${category}, color = ${color}, sortOption=${sortOption}, minPrice=${minPrice}, maxPrice=${maxPrice})}" class="page-link">
+                                    <a th:href="@{/search-productByOption/{pageNo}(pageNo=${i}, category=${category}, color = ${color}, sortOption=${sortOption}, minPrice=${minPrice}, maxPrice=${maxPrice})}"
+                                       class="page-link">
                                         <span th:text="${i + 1}"></span>
                                     </a>
                                 </li>
                             </th:block>
 
                             <li th:if="${currentPage + 1 != totalPages}" class="page-item">
-                                <a th:href="@{/search-productByOption/{pageNo}(pageNo=${currentPage + 1}, category=${category},color = ${color}, sortOption=${sortOption}, minPrice=${minPrice}, maxPrice=${maxPrice})}" class="page-link">Next</a>
+                                <a th:href="@{/search-productByOption/{pageNo}(pageNo=${currentPage + 1}, category=${category},color = ${color}, sortOption=${sortOption}, minPrice=${minPrice}, maxPrice=${maxPrice})}"
+                                   class="page-link">Next</a>
                             </li>
                         </ul>
                     </nav>
-                   <!--  Pagination -->
+                    <!--  Pagination -->
                 </div>
             </div>
         </div>
@@ -138,5 +146,56 @@
 </div>
 
 <footer th:replace="~{indexUser::footer}"></footer>
+<!--<script th:inline="javascript">
+    /*<![CDATA[*/
+    document.addEventListener("DOMContentLoaded", function() {
+        var minPriceInput = document.getElementById("minPrice");
+        var maxPriceInput = document.getElementById("maxPrice");
+        var minPriceDefaultInput = document.getElementById("minPriceDefault");
+        var maxPriceDefaultInput = document.getElementById("maxPriceDefault");
+
+        // Lấy giá trị của các trường input
+        var minPrice = Number(minPriceInput.value);
+        var maxPrice = Number(maxPriceInput.value);
+        var minPriceDefault = Number(minPriceDefaultInput.value);
+        var maxPriceDefault = Number(maxPriceDefaultInput.value);
+
+         // Khởi tạo thanh trượt giá
+        var slider = document.getElementById("multi6");
+        noUiSlider.create(slider, {
+            start: [minPrice, maxPrice],
+            connect: true,
+            range: {
+                'min': minPriceDefault,
+                'max': maxPriceDefault
+            }
+        });
+
+        // Cập nhật giá trị khi thanh trượt di chuyển
+        slider.noUiSlider.on("update", function(values, handle) {
+            if (handle === 0) {
+                minPriceInput.value = Math.round(values[0]);
+            }
+            if (handle === 1) {
+                maxPriceInput.value = Math.round(values[1]);
+            }
+        });
+
+        // Đặt giá trị mặc định ở vị trí cuối của hai đầu thanh trượt
+        slider.noUiSlider.on("end", function() {
+            var currentValues = slider.noUiSlider.get();
+            if (currentValues[0] === currentValues[1]) {
+                slider.noUiSlider.set([currentValues[0], maxPriceDefault]);
+            }
+        });
+
+        // Gửi form khi nhấn nút Lọc
+        var filterButton = document.getElementById("filterButton");
+        filterButton.addEventListener("click", function() {
+            document.getElementById("formSearch").submit();
+        });
+    });
+    /*]]>*/
+</script>-->
 </body>
 </html>

@@ -164,7 +164,7 @@ public class ProductServiceImpl implements ProductService {
 
     public Page<Product> searchProducts(int pageNo, String keyword) {
         Pageable pageable = PageRequest.of(pageNo, 4);
-        List<Product> products = transfer(productRepository.searchByKeyword(keyword));
+        List<Product> products = transfer(productRepository.findProductsByKeywordWithMinMaxPrice(keyword));
         Page<Product> productPages = toPage(products, pageable);
         return productPages;
     }
@@ -238,5 +238,27 @@ public class ProductServiceImpl implements ProductService {
             products.add(product);
         }
         return products;
+    }
+
+    @Override
+    public double getMinPrice(Page<Product> productList) {
+        double minPrice = Double.MAX_VALUE;
+        for (Product product : productList) {
+            if (product.getPrice() <= minPrice) {
+                minPrice = product.getPrice();
+            }
+        }
+        return minPrice;
+    }
+
+    @Override
+    public double getMaxPrice(Page<Product> productList) {
+        double maxPrice = Double.MIN_VALUE;
+        for (Product product : productList) {
+            if (product.getPrice() >= maxPrice) {
+                maxPrice = product.getPrice();
+            }
+        }
+        return maxPrice;
     }
 }

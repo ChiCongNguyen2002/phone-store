@@ -1,15 +1,16 @@
 package com.assignments.ecomerce.controller;
 
 import com.assignments.ecomerce.model.ShoppingCart;
-import com.assignments.ecomerce.service.CustomerService;
 import com.assignments.ecomerce.service.ProductService;
 import com.assignments.ecomerce.service.ShoppingCartService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 import java.util.List;
@@ -19,12 +20,13 @@ public class CartController {
     @Autowired
     private ProductService productService;
     @Autowired
-    private CustomerService customerService;
-
-    @Autowired
     private ShoppingCartService shoppingCartService;
-    @GetMapping("/Cart/GetListItems")
+    @GetMapping("/cart")
     public String pageHome(Model model, Principal principal, HttpSession session) {
+        if (principal == null) {
+            return "redirect:/login";
+        }
+
         List<ShoppingCart> listShoppingCart = shoppingCartService.findAll();
         model.addAttribute("size", listShoppingCart.size());
         return "cart";
@@ -36,13 +38,12 @@ public class CartController {
     }
 
     @PostMapping("/Cart/add-to-cart")
-    public String pageAddToCart(Model model, HttpSession session, Principal principal) {
-      /*  if (principal == null) {
-            return "redirect:/login";
-        }*/
-         //Customer customer = customerService.findByUsername(principal.getName());
-        //ShoppingCart cart = customer.getCart();
-        //session.setAttribute("totalItems", cart.getTotalItems());
+    public String pageAddToCart(@RequestParam("id") Integer id,
+                                @RequestParam(value = "quantity", required = false, defaultValue = "1") int quantity,
+                                HttpServletRequest request,
+                                Model model,
+                                Principal principal,
+                                HttpSession session) {
         return "cart";
     }
 }
