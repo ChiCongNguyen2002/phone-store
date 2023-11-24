@@ -23,7 +23,7 @@
                 <div class="statistics-container">
                     <div class="statistics-card sold-products-statistics">
                         <h2>Tổng Số Khách Hàng</h2>
-                        <h5><span th:text="${countCustomer}"></span></h5>
+                        <h5><span th:text="${countUser}"></span></h5>
                     </div>
 
                     <div class="statistics-card revenue-statistics">
@@ -43,50 +43,51 @@
 
                 </div>
 
-                <form id="editForm" th:action="@{/ShowChartType}" method="post">
-                    <div class="date-input">
-                        <label for="dateFrom">Từ ngày:</label>
-                        <input type="date" id="dateFrom" name="dateFrom">
-                    </div>
+                <div class="form-container" style="display: flex;">
+                    <form id="editForm" th:action="@{/ShowChartType}" method="post">
+                        <div class="date-input">
+                            <label for="dateFrom">Từ ngày:</label>
+                            <input type="date" id="dateFrom" name="dateFrom">
+                        </div>
 
-                    <div class="date-input">
-                        <label for="dateTo">Đến ngày:</label>
-                        <input type="date" id="dateTo" name="dateTo">
-                    </div>
+                        <div class="date-input">
+                            <label for="dateTo">Đến ngày:</label>
+                            <input type="date" id="dateTo" name="dateTo">
+                        </div>
 
-                    <select id="chartType" name="chartType" onchange="displayChart()">
-                        <option value="top10Products">Top 10 Sản Phẩm Bán Chạy Nhất</option>
-                        <option value="monthlyRevenue">Doanh Thu theo tháng</option>
-                        <option value="weeklyRevenue">Doanh Thu theo thứ trong tuần</option>
-                    </select>
-                    <button id="submitButton" type="submit" onclick="saveStatistical(event)">Xem thống kê</button>
-                </form>
+                        <select id="chartType" name="chartType" onchange="displayChart()">
+                            <option value="top10Products">Top 10 Sản Phẩm Bán Chạy Nhất</option>
+                            <option value="top5Users">Top 5 Khách hàng mua hàng nhiều nhất</option>
+                            <option value="top5Employee">Top 5 Nhân viên bán chạy nhất</option>
+                            <option value="monthlyRevenue">Doanh Thu theo tháng</option>
+                            <option value="weeklyRevenue">Doanh Thu theo thứ trong tuần</option>
+                        </select>
+                        <button id="submitButton" type="submit" onclick="saveStatistical(event)">Xem thống kê</button>
+                    </form>
+
+                    <button class="show_chart">Xem dạng biểu đồ</button>
+                </div>
             </div>
-            <!-- /.container-fluid -->
 
-            <!--<div id="top5CustomersDiv">
+
+            <div id="top5UsersDiv">
                 <table class="styled-table">
                     <thead>
                     <tr>
                         <th>Top</th>
-                        <th>Name</th>
-                        <th>phoneNumber</th>
-                        <th>address</th>
-                        <th>email</th>
+                        <th>Email</th>
+                        <th>Full Name</th>
                     </tr>
                     </thead>
                     <tbody>
-                    &lt;!&ndash; Lặp qua danh sách khách hàng &ndash;&gt;
-                    <tr th:each="customer,index : ${top5Customers}">
+                    <tr th:each="user,index : ${top5Users}">
                         <td th:text="${index.count}"></td>
-                        <td th:text="${customer.Name}"></td>
-                        <td th:text="${customer.PhoneNumber}"></td>
-                        <td th:text="${customer.Address}"></td>
-                        <td th:text="${customer.Email}"></td>
+                        <td th:text="${user.email}"></td>
+                        <td th:text="${user.fullname}"></td>
                     </tr>
                     </tbody>
                 </table>
-            </div>-->
+            </div>
 
             <!--<div id="top5EmployeesDiv">
                 <table class="styled-table">
@@ -121,9 +122,6 @@
                         <th>Top</th>
                         <th>Tên</th>
                         <th>Giá</th>
-                        <th>Số lượng</th>
-                        <th>Mô Tả</th>
-                        <th>Màu sắc</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -131,10 +129,7 @@
                     <tr th:each="product,index : ${top10Products}">
                         <td th:text="${index.count}"></td>
                         <td th:text="${product.Name}"></td>
-                        <td th:text="${product.price}"></td>
-                        <td th:text="${product.quantity}"></td>
-                        <td th:text="${product.description}"></td>
-                        <td th:text="${product.color}"></td>
+                        <td th:text="${formattedPrices[__${index.index}__] + ' VNĐ'}"></td>
                     </tr>
                     </tbody>
                 </table>

@@ -42,7 +42,7 @@ public class SupplierController {
             e2.printStackTrace();
             attributes.addFlashAttribute("failed", "Error Server");
         }
-        return "redirect:/supplier";
+        return "redirect:/supplier/0";
     }
 
     @RequestMapping(value = "/findByIdSupplier/{id}", method = {RequestMethod.PUT, RequestMethod.GET})

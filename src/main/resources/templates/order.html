@@ -33,18 +33,26 @@
                     </form>
                 </div>
 
-                <h1>Xuất hóa đơn ra file Excel</h1>
-                <label>Lọc theo ngày:</label>
-                <div class="date-input">
-                    <label for="dateFrom">Từ ngày:</label>
-                    <input type="date" id="dateFrom" name="dateFrom">
-                </div>
+                <form th:action="@{/search-order-by-time/0}" id="filterOrder" method="get"  onsubmit="filterAndExport(); return false;">
+                    <h1>Xuất hóa đơn ra file Excel</h1>
+                    <label>Lọc theo ngày:</label>
+                    <div class="date-input">
+                        <label for="dateFrom">Từ ngày:</label>
+                        <input type="date" id="dateFrom" name="dateFrom" >
+                    </div>
+                    <div class="date-input">
+                        <label for="dateTo">Đến ngày:</label>
+                        <input type="date" id="dateTo" name="dateTo">
+                    </div>
+                    <button type="submit">Lọc Hóa đơn</button>
+                </form>
 
-                <div class="date-input">
-                    <label for="dateTo">Đến ngày:</label>
-                    <input type="date" id="dateTo" name="dateTo">
-                </div>
-                <button onclick="filterAndExport()">Lọc và Xuất Excel</button>
+                <form th:action="@{/export/orders-excel/0}" id="exportForm" method="get"
+                      onsubmit="Export(); return false;">
+                    <input style="display:none" type="date" id="dateFromExcel" name="dateFromExcel">
+                    <input style="display:none" type="date" id="dateToExcel" name="dateToExcel">
+                    <button type="submit">Xuất File Excel</button>
+                </form>
 
                 <p th:if="${size == 0} ">No Products</p>
                 <div th:if="${success}" class="text-center alert alert-success">
@@ -57,7 +65,7 @@
                 <table class="styled-table">
                     <tr>
                         <th>ID</th>
-                        <th>ID Customer</th>
+                        <th>Tên người dùng</th>
                         <th>Order Date</th>
                         <th>Status</th>
                         <th>Total Order</th>
@@ -66,12 +74,13 @@
 
                     <tr th:each="orders : ${listOrder}">
                         <td th:text="${orders.Id}"></td>
-                        <td th:text="${orders.customer.getId()}"></td>
+                        <td th:text="${orders.user.getFullname()}"></td>
                         <td th:text="${orders.orderDate}"></td>
                         <td th:text="${orders.Status}"></td>
                         <td th:text="${orders.total}"></td>
                         <td>
-                            <a th:if="${orders != null}" th:href="@{/orderdetail(orderId=${orders.Id})}">Xem Chi Tiết</a>
+                            <a th:if="${orders != null}" th:href="@{/orderdetail(orderId=${orders.Id})}">Xem Chi
+                                Tiết</a>
                         </td>
                     </tr>
                 </table>
@@ -80,13 +89,15 @@
                 <nav aria-label="...">
                     <ul class="pagination">
                         <li th:if="${currentPage != 0}" class="page-item ">
-                            <a th:href="@{/search-order/{pageNo}(pageNo=${currentPage - 1}, keyword=${keyword})}" class="page-link">Previous</a>
+                            <a th:href="@{/search-order/{pageNo}(pageNo=${currentPage - 1}, keyword=${keyword})}"
+                               class="page-link">Previous</a>
                         </li>
 
                         <th:block th:if="${totalPages > 1}">
                             <li th:each="i : ${#numbers.sequence(0, totalPages-1)}"
                                 th:classappend="${currentPage == i ? 'active' : ''}" class="page-item">
-                                <a th:href="@{/search-order/{pageNo}(pageNo=${i}, keyword=${keyword})}" class="page-link">
+                                <a th:href="@{/search-order/{pageNo}(pageNo=${i}, keyword=${keyword})}"
+                                   class="page-link">
                                     <span th:text="${i + 1}"></span>
                                 </a>
                             </li>
@@ -123,6 +134,55 @@
 
 <!-- Bootstrap core JavaScript-->
 <div th:replace="~{fragments::script}"></div>
+<script th:inline="javascript">
+
+    var dateFrom = document.getElementById("dateFrom");
+    var dateTo = document.getElementById("dateTo");
+
+    function Export(){
+         if(dateFrom.value == "" || dateTo.value == null){
+            alert('Chưa nhập ngày xác định!');
+            return false;
+        }
+        if(dateFrom.value > dateTo.value){
+            alert('Vui lòng kiểm tra lại ngày nhập!!');
+            return false;
+        }
+        document.getElementById("dateFromExcel").value = dateFrom.value;
+        document.getElementById("dateToExcel").value = dateTo.value;
+
+        localStorage.setItem("dateFrom_Order", dateFrom.value); // Lưu giá trị mới vào localStorage
+        localStorage.setItem("dateTo_Order", dateTo.value); // Lưu giá trị mới vào localStorage
+        document.getElementById("exportForm").submit();
+    }
+
+    function filterAndExport(){
+        if(dateFrom.value == "" || dateTo.value == null){
+            alert('Chưa nhập ngày xác định!');
+            return false;
+        }
+        if(dateFrom.value > dateTo.value){
+            alert('Vui lòng kiểm tra lại ngày nhập!!');
+            return false;
+        }
+
+        localStorage.setItem("dateFrom_Order", dateFrom.value); // Lưu giá trị mới vào localStorage
+        localStorage.setItem("dateTo_Order", dateTo.value); // Lưu giá trị mới vào localStorage
+        document.getElementById("filterOrder").submit();
+    }
+
+    dateFrom.value =  localStorage.getItem("dateFrom_Order")
+    dateTo.value =  localStorage.getItem("dateTo_Order")
+
+    localStorage.removeItem("dateFrom_Order");
+    localStorage.removeItem("dateTo_Order");
+
+     var message = /*[[${successMessage}]]*/ '';
+     if(message != null){
+         alert('Message from the server: ' + message);
+     }
+
+</script>
 </body>
 
 </html>

@@ -3,6 +3,7 @@ package com.assignments.ecomerce.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+@Getter
 @Entity
 @Table(name="Supplier")
 public class Supplier {
@@ -50,24 +51,5 @@ public class Supplier {
     public Supplier() {
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
 }
 

@@ -27,6 +27,11 @@ public class User {
         this.fullname = fullname;
     }
 
+    public User(String email,String fullname) {
+        this.email = email;
+        this.fullname = fullname;
+    }
+
     public User() {
     }
 
@@ -50,7 +55,8 @@ public class User {
         this.fullname = fullname;
     }
 
-
-
+    public String getFullname() {
+        return fullname;
+    }
 }
 

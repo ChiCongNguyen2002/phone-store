@@ -46,7 +46,6 @@ function saveStatistical(event) {
 document.addEventListener('DOMContentLoaded', function() {
     var selectOption = localStorage.getItem("selectedChartType") || "top10Products";
     document.getElementById("chartType").value = selectOption; // Đặt giá trị mặc định cho select
-
     displayChart();
 
     var form = document.querySelector("form");
@@ -63,7 +62,6 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById("chartType").value = savedChartType;
         displayChart();
     }
-
 });
 
 function displayChart() {
@@ -74,8 +72,9 @@ function displayChart() {
 
     if (selectOption === "top10Products") {
         showDiv("top10ProductsDiv");
-        // Hiển thị dữ liệu và cập nhật div "top10ProductsDiv"
-    } else if (selectOption === "weeklyRevenue") {
+    }else if (selectOption === "top5Users") {
+        showDiv("top5UsersDiv");
+    }else if (selectOption === "weeklyRevenue") {
         showDiv("weeklyRevenueDiv");
         // Hiển thị dữ liệu và cập nhật div "weeklyRevenueDiv"
     }else if (selectOption === "monthlyRevenue") {
@@ -85,9 +84,11 @@ function displayChart() {
 }
 
 function hideAllDivs() {
+    var div1 = document.getElementById("top5UsersDiv");
     var div2 = document.getElementById("top10ProductsDiv");
     var div3 = document.getElementById("monthlyRevenueDiv");
     var div4 = document.getElementById("weeklyRevenueDiv");
+    div1.style.display = "none";
     div2.style.display = "none";
     div3.style.display = "none";
     div4.style.display = "none";

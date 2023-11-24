@@ -33,7 +33,7 @@ public class OrderServiceImpl implements OrderService {
         return optionalOrder.orElse(null);
     }
 
-    public int countOrders(){
+    public int countOrders() {
         return orderRepository.countOrders();
     }
 
@@ -77,21 +77,18 @@ public class OrderServiceImpl implements OrderService {
     }
 
     public List<Object> getData(Date dateFrom, Date dateTo, String chartType) {
+        System.out.println("charType:" + chartType);
         switch (chartType) {
-            /*case "top5Customers":
-                List<Object[]> results = orderRepository.getTop5CustomersWithSumQuantity(dateFrom, dateTo);
-                List<Customer> customers = new ArrayList<>();
-
+            case "top5Users":
+                List<Object[]> results = orderRepository.getTop5UsersWithSumQuantity(dateFrom, dateTo);
+                List<User> users = new ArrayList<>();
                 for (Object[] result : results) {
-                    String name = (String) result[0];
-                    String phoneNumber = (String) result[1];
-                    String address = (String) result[2];
-                    String email = (String) result[3];
-                    Long sumQuantity = (Long) result[4];
-                    Customer customer = new Customer(name, phoneNumber, address, email);
-                    customers.add(customer);
+                    String email = (String) result[0];
+                    String fullname = (String) result[1];
+                    User user = new User(email, fullname);
+                    users.add(user);
                 }
-                return new ArrayList<>(customers);*/
+                return new ArrayList<>(users);
             case "top10Products":
                 List<Object[]> resultProduct = orderRepository.getTop10ProductsWithSumQuantity(dateFrom, dateTo);
                 List<Product> products = new ArrayList<>();
@@ -103,23 +100,10 @@ public class OrderServiceImpl implements OrderService {
                     String description = (String) result[2];
                     String color = (String) result[4];
 
-                    Product product = new Product(name, price,quantity,description,color);
+                    Product product = new Product(name, price, quantity, description, color);
                     products.add(product);
                 }
                 return new ArrayList<>(products);
-            /*case "top5Employees":
-                List<Object[]> resultEmployee = orderRepository.findTop5EmployeesByTotalQuantity(dateFrom, dateTo);
-                List<Employee> employees = new ArrayList<>();
-                for (Object[] result : resultEmployee) {
-                    String name = (String) result[0];
-                    String phoneNumber = (String) result[1];
-                    String address = (String) result[3];
-                    String email = (String) result[2];
-                    Double salary = (Double) result[4];
-                    Employee employee = new Employee(name,phoneNumber,address,email,salary);
-                    employees.add(employee);
-                }
-                return new ArrayList<>(employees);*/
             case "monthlyRevenue":
                 List<Object[]> resultMonth = orderRepository.getMonthlyRevenue(dateFrom, dateTo);
                 List<MonthlyRevenue> monthlyRevenues = new ArrayList<>();
@@ -155,5 +139,17 @@ public class OrderServiceImpl implements OrderService {
             default:
                 throw new IllegalArgumentException("Invalid chart type: " + chartType);
         }
+    }
+
+    public Page<Orders> searchOrdersByTime(int pageNo, Date dateFrom, Date dateTo) {
+        Pageable pageable = PageRequest.of(pageNo, 5);
+        List<Orders> order = transfer(orderRepository.searchOrdersByTime(dateFrom,dateTo));
+        Page<Orders> orderPages = toPage(order, pageable);
+        return orderPages;
+    }
+
+    public List<Orders> searchOrdersByTimeToExcel(Date dateFrom, Date dateTo) {
+        List<Orders> order = orderRepository.searchOrdersByTime(dateFrom,dateTo);
+        return order;
     }
 }

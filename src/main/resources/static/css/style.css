@@ -2502,3 +2502,8 @@
 .fa-truck:before {
   content: "\f0d1";
 }
+
+.show_chart{
+    margin-left: 10px;
+    margin-bottom: 10px;
+}

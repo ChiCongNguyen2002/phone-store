@@ -12,21 +12,24 @@ import java.util.Date;
 import java.util.List;
 
 @Repository
-public interface OrderRepository extends JpaRepository<Orders,Integer> {
+public interface OrderRepository extends JpaRepository<Orders, Integer> {
     @Query(value = "SELECT COUNT(*) FROM orders", nativeQuery = true)
     int countOrders();
+
+    @Query("SELECT o from Orders o WHERE o.orderDate BETWEEN :dateFrom AND :dateTo ")
+    List<Orders> searchOrdersByTime(@Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo);
 
     @Query("SELECT p from Orders p")
     Page<Orders> pageOrders(Pageable pageable);
 
-/*    @Query("SELECT c.name, c.phoneNumber, c.address, c.email, SUM(od.quantity) AS sumQuantity " +
+    @Query("SELECT u.email, u.fullname,SUM(od.quantity) AS sumQuantity " +
             "FROM OrderDetail od " +
             "JOIN od.order o " +
-            "JOIN o.customer c " +
+            "JOIN o.user u " +
             "WHERE o.orderDate BETWEEN :dateFrom AND :dateTo " +
-            "GROUP BY c.name, c.phoneNumber, c.address, c.email " +
+            "GROUP BY u.email, u.fullname " +
             "ORDER BY sumQuantity DESC")
-    List<Object[]> getTop5CustomersWithSumQuantity(@Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo);*/
+    List<Object[]> getTop5UsersWithSumQuantity(@Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo);
 
     @Query("SELECT p.name, p.price, p.description, p.quantity, p.color, SUM(od.quantity) AS sumQuantity " +
             "FROM OrderDetail od " +
@@ -35,7 +38,7 @@ public interface OrderRepository extends JpaRepository<Orders,Integer> {
             "WHERE o.orderDate BETWEEN :dateFrom AND :dateTo " +
             "GROUP BY p.name, p.price, p.description, p.quantity, p.color " +
             "ORDER BY sumQuantity DESC")
-        List<Object[]> getTop10ProductsWithSumQuantity(@Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo);
+    List<Object[]> getTop10ProductsWithSumQuantity(@Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo);
 
 /*    @Query("SELECT e.name, e.phoneNumber, e.address, e.email , e.salary , SUM(od.quantity) AS totalQuantity " +
             "FROM OrderDetail od " +

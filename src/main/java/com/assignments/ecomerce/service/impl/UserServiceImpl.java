@@ -30,4 +30,9 @@ public class UserServiceImpl implements UserService {
     public User save(User user) {
         return userRepository.save(user);
     }
+
+    @Override
+    public int countUsersByRole() {
+        return userRepository.countUsersByRole();
+    }
 }

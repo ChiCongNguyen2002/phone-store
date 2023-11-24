@@ -19,10 +19,6 @@ public class SupplierServiceImpl implements SupplierService {
     @Autowired
     private  SupplierRepository supplierRepository;
 
-    public List<Supplier> getAllSuppliers() {
-        return (List<Supplier>) supplierRepository.findAll();
-    }
-
     public Supplier save(Supplier supplier) {
         supplier.setStatus(1);
         return supplierRepository.save(supplier);
@@ -100,6 +96,11 @@ public class SupplierServiceImpl implements SupplierService {
             e.printStackTrace();
         }
         return supplierRepository.save(supplierUpdate);
+    }
+
+    @Override
+    public List<Supplier> getAllSuppliers() {
+        return supplierRepository.findByStatusActivated();
     }
 }
 

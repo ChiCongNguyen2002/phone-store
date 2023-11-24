@@ -11,6 +11,8 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +28,8 @@ import java.util.Locale;
 
 @Controller
 public class ProductController {
+    @Autowired
+    UserDetailsService userDetailsService;
     @Autowired
     private ProductService productService;
     @Autowired
@@ -69,7 +73,6 @@ public class ProductController {
         int countReview = reviewService.countReviews(product);
         Double calculateAverageRating = reviewService.calculateAverageRating(product);
 
-
         //Format Price
         Double price = product.getPrice();
         DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols(Locale.getDefault());
@@ -94,14 +97,13 @@ public class ProductController {
 
     @GetMapping("/ViewByCategory/{pageNo}")
     public String ViewByCategory(@PathVariable("pageNo") int pageNo,
-                                 @RequestParam("categoryId") Integer categoryId, Model model) {
+                                 @RequestParam("categoryId") Integer categoryId, Model model,Principal principal) {
         List<Category> categories = categoryService.getAllCategory();
         Page<Product> listProducts = productService.pageProductByCategory(pageNo, categoryId);
         Category category = categoryService.findById(categoryId);
         model.addAttribute("category", category);
         model.addAttribute("categories", categories);
         model.addAttribute("size", listProducts.getSize());
-
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", listProducts.getTotalPages());
 
@@ -115,6 +117,8 @@ public class ProductController {
             formattedPrices.add(formattedPrice);
         }
 
+        UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
+        model.addAttribute("user", userDetails);
         model.addAttribute("listProducts", listProducts.getContent());
         model.addAttribute("formattedPrices", formattedPrices);
 
@@ -139,9 +143,9 @@ public class ProductController {
 
     @GetMapping("/product/{pageNo}")
     public String pageProduct(@PathVariable("pageNo") int pageNo, Model model, Principal principal) {
-        List<Category> categories = categoryService.getAllCategory();
-        Page<Product> listProducts = productService.pageProducts(pageNo);
 
+        Page<Product> listProducts = productService.pageProducts(pageNo);
+        List<Category> categories = categoryService.getAllCategory();
         model.addAttribute("categories", categories);
         model.addAttribute("size", listProducts.getSize());
         model.addAttribute("listProducts", listProducts);

@@ -25,9 +25,10 @@ public class CategoryController {
 
     @GetMapping("/category/{pageNo}")
     public String getAllCategory(@PathVariable("pageNo") int pageNo, Model model, Principal principal) {
+
         Page<Category> listCategory = categoryService.pageCategory(pageNo);
-        List<Supplier> suppliers = supplierService.getAllSuppliers();
-        model.addAttribute("suppliers", suppliers);
+        List<Supplier> listSuppliers =  supplierService.getAllSuppliers();
+        model.addAttribute("listSuppliers", listSuppliers);
         model.addAttribute("listCategory", listCategory);
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", listCategory.getTotalPages());

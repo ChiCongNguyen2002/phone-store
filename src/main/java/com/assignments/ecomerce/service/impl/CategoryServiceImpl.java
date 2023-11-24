@@ -39,11 +39,12 @@ public class CategoryServiceImpl implements CategoryService {
     public Category findByName(String name){
         return categoryRepository.findByName(name);
     }
-    public Category     update(Category category) {
+    public Category update(Category category) {
         Category categoryUpdate = null;
         try {
             categoryUpdate = categoryRepository.findById(category.getId()).get();
             categoryUpdate.setName(category.getName());
+            categoryUpdate.setSupplier(category.getSupplier());
         } catch (Exception e) {
             e.printStackTrace();
         }

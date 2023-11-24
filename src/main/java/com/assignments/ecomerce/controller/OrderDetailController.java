@@ -21,15 +21,13 @@ public class OrderDetailController {
     @Autowired
     private OrderService orderService;
     @GetMapping("/orderdetail")
-    public String getAllOrderDetail(@RequestParam("orderId") Integer orderId,Model model) {
-        //List<OrderDetail> listOrderDetail = orderDetailService.getAllOrderDetail();
+    public String getAllOrderDetail(@RequestParam("orderId") Integer orderId, Model model) {
         List<Orders> listOrder = new ArrayList<>();
         Orders order = orderService.getOrderById(orderId);
         if (order != null) {
             listOrder.add(order);
         }
         model.addAttribute("listOrder", listOrder);
-
         List<OrderDetail> listOrderDetail = orderDetailService.findAllByOrderId(orderId);
         model.addAttribute("listOrderDetail", listOrderDetail);
         return "orderdetail";

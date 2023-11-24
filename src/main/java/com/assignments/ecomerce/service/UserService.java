@@ -9,4 +9,6 @@ public interface UserService {
     User findByEmail(String email);
     User save (UserDTO userDto);
     User save(User user);
+
+    int countUsersByRole();
 }

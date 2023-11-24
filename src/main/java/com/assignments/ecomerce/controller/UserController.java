@@ -48,15 +48,16 @@ public class UserController {
 
     @GetMapping("/indexCustomer")
     public String userPage (Model model, Principal principal) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
+
         List<Product> listProducts = productService.getAllProducts();
         List<Category> categories = categoryService.getAllCategory();
         List<Product> topProducts = productService.getData();
+        UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
+        model.addAttribute("user", userDetails);
 
         model.addAttribute("top10Products", topProducts);
         model.addAttribute("listProducts", listProducts);
         model.addAttribute("categories", categories);
-        model.addAttribute("user", userDetails);
         return "indexUser";
     }
 

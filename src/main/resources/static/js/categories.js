@@ -8,7 +8,7 @@ $('document').ready(function (){
             success: function (category, status) {
                 $('#idEdit').val(category.id);
                 $('#nameEdit').val(category.name);
-                 $('#supplierEdit').val(category.supplier);
+                $('#supplierEdit').val(category.supplier);
                 $('#editModal').modal('show');
             },
             error: function (xhr, status, error) {

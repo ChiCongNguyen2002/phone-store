@@ -51,9 +51,9 @@
                     </tr>
 
                     <tr th:each="category : ${listCategory}">
-                        <td scope="row" th:text="${category.Id}"></td>
+                        <td th:text="${category.Id}"></td>
                         <td th:text="${category.Name}"></td>
-                      <td th:text="${category.supplier.getName()}"></td>
+                        <td th:text="${category.supplier.getName()}"></td>
                         <td>
                             <a id="editButton" th:href="@{/findByIdCategory/{id}(id=${category.id})}"
                                class="btn btn-primary">Update</a>
@@ -66,13 +66,15 @@
                 <nav aria-label="...">
                     <ul class="pagination">
                         <li th:if="${currentPage != 0}" class="page-item ">
-                            <a th:href="@{/search-category/{pageNo}(pageNo=${currentPage - 1}, keyword=${keyword})}" class="page-link">Previous</a>
+                            <a th:href="@{/search-category/{pageNo}(pageNo=${currentPage - 1}, keyword=${keyword})}"
+                               class="page-link">Previous</a>
                         </li>
 
                         <th:block th:if="${totalPages > 1}">
                             <li th:each="i : ${#numbers.sequence(0, totalPages-1)}"
                                 th:classappend="${currentPage == i ? 'active' : ''}" class="page-item">
-                                <a th:href="@{/search-category/{pageNo}(pageNo=${i}, keyword=${keyword})}" class="page-link">
+                                <a th:href="@{/search-category/{pageNo}(pageNo=${i}, keyword=${keyword})}"
+                                   class="page-link">
                                     <span th:text="${i + 1}"></span>
                                 </a>
                             </li>
@@ -107,7 +109,8 @@
 </a>
 
 <!--Add Modal-->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
     <form id="categoryForm" th:action="@{/add-category}" method="post" th:object="${categoryNew}">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -120,17 +123,17 @@
                         <input type="text" class="form-control" th:field="*{name}" id="recipient-name" required>
                     </div>
 
-                 <!--   <div class="form-group">
-                        <label class="col-md-8 control-label" for="supplier"> Supplier</label>
+                    <div class="form-group">
+                        <label class="col-md-8 control-label" for="supplier"> Nhà cung cấp</label>
                         <div class="col-md-8">
                             <select id="supplier" th:field="*{supplier}" name="supplier" class="form-control">
-                                <option th:each=" supplier : ${suppliers}"
-                                        th:value="${supplier.id}"
-                                        th:text="${supplier.name}"
+                                <option th:each="supplier : ${listSuppliers}"
+                                        th:value="${supplier.Id}"
+                                        th:text="${supplier.Name}"
                                 ></option>
                             </select>
                         </div>
-                    </div>-->
+                    </div>
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -152,27 +155,28 @@
                 <h5 class="modal-title" id="exampleModalLabel">Edit category</h5>
             </div>
             <div class="modal-body">
-                    <form id="categoryFormEdit" th:action="@{/update-category}" method="put">
+                <form id="categoryFormEdit" th:action="@{/update-category}" method="put">
                     <div class="form-group">
                         <label for="idEdit" class="col-form-label">ID</label>
                         <input type="text" class="form-control" id="idEdit" name="id" readonly required>
                     </div>
+
                     <div class="form-group">
                         <label for="nameEdit" class="col-form-label">Category Name</label>
                         <input type="text" class="form-control" id="nameEdit" name="name" required>
                     </div>
 
-                      <!--  <div class="form-group">
-                            <label class="col-md-8 control-label" for="supplierEdit"> Supplier</label>
-                            <div class="col-md-8">
-                                <select id="supplierEdit" th:field="*{supplier}" name="supplier" class="form-control">
-                                    <option th:each="supplier : ${suppliers}"
-                                            th:value="${supplier.id}"
-                                            th:text="${supplier.name}"
-                                    ></option>
-                                </select>
-                            </div>
-                        </div>-->
+                     <div class="form-group">
+                          <label class="col-md-8 control-label" for="supplierEdit"> Supplier</label>
+                          <div class="col-md-8">
+                              <select id="supplierEdit" name="supplier" class="form-control">
+                                  <option th:each="supplier : ${listSuppliers}"
+                                          th:value="${supplier.Id}"
+                                          th:text="${supplier.Name}"
+                                  ></option>
+                              </select>
+                          </div>
+                      </div>
                     <button type="submit" class="btn btn-primary" onclick="saveCategoryEdit(event)">Save</button>
                 </form>
             </div>

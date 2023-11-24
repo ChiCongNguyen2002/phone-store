@@ -9,6 +9,8 @@ import com.assignments.ecomerce.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +21,9 @@ import java.util.List;
 
 @Controller
 public class CouponController {
+
+    @Autowired
+    UserDetailsService userDetailsService;
     @Autowired
     private ProductService productService;
     @Autowired
@@ -26,27 +31,29 @@ public class CouponController {
     @Autowired
     private CouponService couponService;
     @GetMapping("/coupon/{pageNo}")
-    public String getAllCoupons(@PathVariable("pageNo") int pageNo, Model model, Principal principal) {
+    public String getAllCoupons(@PathVariable("pageNo") int pageNo, Model model) {
         Page<Coupon> listCoupon = couponService.pageCoupon(pageNo);
         model.addAttribute("listCoupon", listCoupon);
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", listCoupon.getTotalPages());
         model.addAttribute("couponNew", new Coupon());
+
         return "coupon";
     }
 
     @GetMapping("/couponCustomer/{pageNo}")
-    public String getAllCouponCustomer(@PathVariable("pageNo") int pageNo,Model model) {
+    public String getAllCouponCustomer(@PathVariable("pageNo") int pageNo,Model model,Principal principal) {
         List<Product> listProducts = productService.getAllProducts();
         List<Category> categories = categoryService.getAllCategory();
         //List<Coupon> listCoupon = couponService.getAllCoupons();
-
+        UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
         Page<Coupon> listCoupon = couponService.pageCoupon(pageNo);
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", listCoupon.getTotalPages());
         model.addAttribute("listCoupon", listCoupon);
         model.addAttribute("listProducts", listProducts);
         model.addAttribute("categories", categories);
+        model.addAttribute("user", userDetails);
         return "couponCustomer";
     }
 
