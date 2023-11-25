@@ -20,6 +20,11 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderRepository orderRepository;
 
+    @Override
+    public Orders save(Orders orders) {
+        return orderRepository.save(orders);
+    }
+
     public Orders findById(Integer id) {
         return orderRepository.findById(id).get();
     }
@@ -145,5 +150,22 @@ public class OrderServiceImpl implements OrderService {
     public List<Orders> searchOrdersByTimeToExcel(Date dateFrom, Date dateTo) {
         List<Orders> order = orderRepository.searchOrdersByTime(dateFrom, dateTo);
         return order;
+    }
+
+    @Override
+    public Orders getById(Integer id) {
+        Orders order = orderRepository.getById(id);
+        Orders newOrder = new Orders();
+        newOrder.setId(order.getId());
+        newOrder.setCouponId(order.getCouponId());
+        newOrder.setCustomer(order.getUser());
+        newOrder.setOrderDate(order.getOrderDate());
+        newOrder.setStatus(order.getStatus());
+        newOrder.setTotal(order.getTotal());
+        newOrder.setPaymentMethod(order.getPaymentMethod());
+        newOrder.setShipAddress(order.getShipAddress());
+        newOrder.setShipPhoneNumber(order.getShipPhoneNumber());
+        newOrder.setShipName(order.getShipName());
+        return newOrder;
     }
 }

@@ -17,7 +17,7 @@ public class Orders {
     @JoinColumn(name = "userId")
     private User user;
     private Date orderDate;
-    private String status;
+    private Integer status;
     private Integer couponId;
     private String paymentMethod;
     private Double total;
@@ -36,7 +36,7 @@ public class Orders {
         this.orderDate = orderDate;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
@@ -72,7 +72,7 @@ public class Orders {
         this.orderDetails = orderDetails;
     }
 
-    public Orders(Integer id, User user, Date orderDate, String status, Integer couponId, String paymentMethod, Double total, String shipName, String shipAddress, String shipPhone) {
+    public Orders(Integer id, User user, Date orderDate, Integer status, Integer couponId, String paymentMethod, Double total, String shipName, String shipAddress, String shipPhone) {
         this.id = id;
         this.user = user;
         this.orderDate = orderDate;

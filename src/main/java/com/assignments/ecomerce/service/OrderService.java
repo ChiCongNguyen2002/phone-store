@@ -16,6 +16,7 @@ import java.util.Optional;
 
 @Service
 public interface OrderService {
+     Orders save(Orders orders);
 
      Orders findById(Integer id);
 
@@ -35,4 +36,6 @@ public interface OrderService {
      Page<Orders> searchOrdersByTime(int pageNo, Date dateFrom, Date dateTo);
 
      List<Orders> searchOrdersByTimeToExcel(Date dateFrom, Date dateTo);
+
+     Orders getById(Integer id) ;
 }

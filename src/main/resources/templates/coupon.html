@@ -20,6 +20,8 @@
             <!-- Topbar -->
             <nav th:replace="~{fragments::top-navbar}">
             </nav>
+
+            <h1>Danh sách khuyến mãi</h1>
             <!-- End of Topbar -->
 
             <!-- Begin Page Content -->
@@ -33,7 +35,7 @@
                     </form>
                 </div>
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal"
-                        data-whatever="@mdo">Add new coupon
+                        data-whatever="@mdo">Tạo mới
                 </button>
                 <p th:if="${size == 0} ">No Products</p>
                 <div th:if="${success}" class="text-center alert alert-success">
@@ -46,11 +48,11 @@
                 <table class="styled-table">
                     <tr>
                         <th>ID</th>
-                        <th>Code</th>
-                        <th>Count</th>
-                        <th>promotion</th>
-                        <th>describe</th>
-                        <th>Action</th>
+                        <th>Mã Code</th>
+                        <th>Số lượng còn lại</th>
+                        <th>Phần trăm giảm giá</th>
+                        <th>Mô tả</th>
+                        <th>Thao tác</th>
                     </tr>
 
                     <tr th:each="coupon : ${listCoupon}">

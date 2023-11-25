@@ -163,10 +163,21 @@ public class ProductController {
         Page<Product> listProducts = productService.searchProducts(pageNo, keyword);
 
         List<Category> categories = categoryService.getAllCategory();
+        List<String> formattedPrices = new ArrayList<>();
+        DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols(Locale.getDefault());
+        decimalFormatSymbols.setGroupingSeparator('.');
+        DecimalFormat decimalFormat = new DecimalFormat("#,###", decimalFormatSymbols);
+
+        for (Product product : listProducts.getContent()) {
+            String formattedPrice = decimalFormat.format(product.getPrice());
+            formattedPrices.add(formattedPrice);
+        }
+
+        model.addAttribute("formattedPrices", formattedPrices);
+
         session.setAttribute("keyword", keyword);
         model.addAttribute("keyword", keyword);
         model.addAttribute("categories", categories);
-
         model.addAttribute("size", listProducts.getSize());
         model.addAttribute("listProducts", listProducts);
         model.addAttribute("currentPage", pageNo);
@@ -215,6 +226,7 @@ public class ProductController {
             String formattedPrice = decimalFormat.format(product.getPrice());
             formattedPrices.add(formattedPrice);
         }
+
         model.addAttribute("listProducts", listProducts.getContent());
         model.addAttribute("formattedPrices", formattedPrices);
         return "searchByOption";
@@ -257,7 +269,14 @@ public class ProductController {
     @GetMapping("/detail-product/{id}")
     public String DetailProducts(@PathVariable("id") Integer id, Model model) {
         Product newProduct = productService.getById(id);
+        Double price = newProduct.getPrice();
+        DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols(Locale.getDefault());
+        decimalFormatSymbols.setGroupingSeparator('.');
+        DecimalFormat decimalFormat = new DecimalFormat("#,###", decimalFormatSymbols);
+        String formattedPrice = decimalFormat.format(price);
         List<Category> categories = categoryService.getAllCategory();
+
+        model.addAttribute("formattedPrice", formattedPrice);
         model.addAttribute("categories", categories);
         model.addAttribute("listProducts", newProduct);
         return "detail";
@@ -288,6 +307,12 @@ public class ProductController {
         Product product = productService.getById(id);
         String productImage = product.getImage();
         List<Category> categories = categoryService.getAllCategory();
+
+        DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols(Locale.getDefault());
+        decimalFormatSymbols.setGroupingSeparator('.');
+        DecimalFormat decimalFormat = new DecimalFormat("#,###", decimalFormatSymbols);
+        String formattedPrice = decimalFormat.format(product.getPrice());
+        model.addAttribute("formattedPrice", formattedPrice);
         model.addAttribute("categories", categories);
         model.addAttribute("newProduct", product);
         model.addAttribute("productImage", productImage);

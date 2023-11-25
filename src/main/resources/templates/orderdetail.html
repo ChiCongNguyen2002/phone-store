@@ -50,11 +50,20 @@
                     </tr>
                     <tr th:each="orders : ${listOrder}">
                         <td class="font-weight-bold">Trạng thái</td>
-                        <td th:text="${orders.Status}"></td>
+                        <td>
+                             <span th:switch="${orders.Status}">
+                                    <span th:case="1">Đang chờ duyệt</span>
+                                    <span th:case="2"></span>
+                                    <span th:case="3"></span>
+                                    <span th:case="4"></span>
+                                    <span th:case="5"></span>
+                                    <span th:case="*" th:text="..."></span>
+                                </span>
+                        </td>
                     </tr>
-                    <tr th:each="orders : ${listOrder}">
+                    <tr th:each="orders,index : ${listOrder}">
                         <td class="font-weight-bold">Giá trị đơn hàng</td>
-                        <td th:text="${orders.total}"></td>
+                        <td  th:text="${formattedPrices[__${index.index}__] + ' VNĐ'}"></td>
                     </tr>
                 </table>
 
@@ -68,7 +77,7 @@
                             <th>Giá bán</th>
                         </tr>
 
-                            <tr th:each="orderdetail : ${listOrderDetail}">
+                            <tr th:each="orderdetail,index : ${listOrderDetail}">
                             <td th:text="${orderdetail.order.id}"></td>
                             <td>
                                 <img class="product-image"  style="height: 150px; width: 150px;"
@@ -76,7 +85,7 @@
                             </td>
                             <td th:text="${orderdetail.product.getName()}"></td>
                             <td th:text="${orderdetail.quantity}"></td>
-                            <td th:text="${orderdetail.unitPrice}"></td>
+                            <td th:text="${formattedPriceDetail[__${index.index}__] + ' VNĐ'}"></td>
                         </tr>
                     </table>
                     <div>

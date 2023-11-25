@@ -25,7 +25,7 @@
             <!-- Begin Page Content -->
             <div class="container-fluid">
                 <a th:href="@{/product}">Quay lại</a>
-                <table class="table table-bordered styled-table" >
+                <table class="table table-bordered styled-table">
                     <tr th:each="product : ${listProducts}">
                         <th>ID:</th>
                         <td th:text="${product.Id}"></td>
@@ -34,9 +34,9 @@
                         <th>Name:</th>
                         <td th:text="${product.Name}"></td>
                     </tr>
-                    <tr th:each="product : ${listProducts}">
+                    <tr th:each="product,index : ${listProducts}">
                         <th>Price:</th>
-                        <td th:text="${product.price}"></td>
+                        <td th:text="${formattedPrice.replace(',', '.') + ' VNĐ'}"></td>
                     </tr>
                     <tr th:each="product : ${listProducts}">
                         <th>Image:</th>

@@ -20,6 +20,8 @@
             <!-- Topbar -->
             <nav th:replace="~{fragments::top-navbar}">
             </nav>
+
+            <h1>Danh sách Nhà cung cấp</h1>
             <!-- End of Topbar -->
 
             <!-- Begin Page Content -->
@@ -31,7 +33,7 @@
                         <button type="submit" class="btn btn-outline-primary">search</button>
                     </form>
                 </div>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal" data-whatever="@mdo">Add new Supplier</button>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal" data-whatever="@mdo">Tạo mới</button>
                 <p th:if="${size == 0} ">No Products</p>
                 <div th:if="${success}" class="text-center alert alert-success">
                     <p th:text="${success}"></p>
@@ -43,10 +45,10 @@
                 <table class="styled-table">
                     <tr>
                         <th>ID</th>
-                        <th>Name</th>
-                        <th>phoneNumber</th>
-                        <th>address</th>
-                        <th>Action</th>
+                        <th>Tên</th>
+                        <th>Số điện thoại</th>
+                        <th>Địa chỉ</th>
+                        <th>Thao tác</th>
                     </tr>
 
                     <tr th:each="supplier : ${listSupplier}">

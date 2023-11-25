@@ -20,6 +20,7 @@
             <nav th:replace="~{fragments::top-navbar}">
             </nav>
             <!-- End of Topbar -->
+            <h1>Danh sách danh mục</h1>
 
             <!-- Begin Page Content -->
             <div class="container-fluid">
@@ -33,7 +34,7 @@
                 </div>
 
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
-                        data-whatever="@mdo">Add new category
+                        data-whatever="@mdo">Tạo mới
                 </button>
                 <div th:if="${success}" class="text-center alert alert-success">
                     <p th:text="${success}"></p>
@@ -45,9 +46,9 @@
                 <table class="styled-table">
                     <tr>
                         <th>ID</th>
-                        <th>Name</th>
-                        <th>Supplier</th>
-                        <th>Action</th>
+                        <th>Tên</th>
+                        <th>Nhà cung cấp</th>
+                        <th>Thao tác</th>
                     </tr>
 
                     <tr th:each="category : ${listCategory}">

@@ -18,6 +18,9 @@
             <!-- Topbar -->
             <nav th:replace="~{fragments::top-navbar}">
             </nav>
+
+            <h1>Danh sách sản phẩm</h1>
+
             <!-- End of Topbar -->
             <!-- Begin Page Content -->
             <div class="container-fluid">
@@ -31,7 +34,7 @@
                 </div>
 
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal"
-                        data-whatever="@mdo">Add new Product
+                        data-whatever="@mdo">Tạo mới
                 </button>
                 <p th:if="${size == 0} ">No Products</p>
                 <div th:if="${success}" class="text-center alert alert-success">
@@ -43,23 +46,21 @@
 
                 <table class="styled-table">
                     <tr>
-                        <th>Name</th>
-                        <th>Price</th>
-                        <th>Image</th>
-                        <th>Description</th>
-                        <th>Name Category</th>
-                        <th>Color</th>
-                        <th>Quantity</th>
-                        <th>Action</th>
+                        <th>Tên</th>
+                        <th>Giá bán</th>
+                        <th>Ảnh đại diện</th>
+                        <th>Tên danh mục</th>
+                        <th>Màu Sắc</th>
+                        <th>Số lượng</th>
+                        <th>Thao tác</th>
                     </tr>
 
-                    <tr th:each="product : ${listProducts}">
+                    <tr th:each="product,index : ${listProducts}">
                         <td scope="row" th:text="${product.Name}"></td>
-                        <td th:text="${product.price}"></td>
+                        <td th:text="${formattedPrices[__${index.index}__] + ' VNĐ'}"></td>
                         <td>
                             <img class="product-image" th:src="@{'../../img/' + ${product.image}}" alt="Product Image">
                         </td>
-                        <td><textarea class="description_text" th:text="${product.description}"></textarea></td>
                         <td th:text="${product.category.name}"></td>
                         <td th:text="${product.color}"></td>
                         <td th:text="${product.quantity}">
