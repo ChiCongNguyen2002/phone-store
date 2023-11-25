@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 24, 2023 at 07:17 PM
+-- Generation Time: Nov 25, 2023 at 08:52 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -135,7 +135,8 @@ CREATE TABLE `orderdetail` (
 
 INSERT INTO `orderdetail` (`id`, `orderId`, `productId`, `quantity`, `unitPrice`) VALUES
 (22, 7, 131, 2, 20000),
-(23, 8, 132, 4, 13000000);
+(23, 8, 132, 4, 13000000),
+(24, 7, 132, 1, 230000);
 
 -- --------------------------------------------------------
 
@@ -161,8 +162,8 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `userId`, `orderDate`, `Status`, `couponId`, `paymentMethod`, `total`, `ShipName`, `ShipAddress`, `ShipPhoneNumber`) VALUES
-(7, 11, '2023-10-22', 1, 1, 'COD', 1500000, 'Dinh Thinh', 'Ca Mau', '0941124123'),
-(8, 8, '2023-11-24', 1, 2, 'COD', 1500000, 'Tan Duy', 'Cà Mau', '0129293493'),
+(7, 11, '2022-10-22', 5, 1, 'COD', 1500000, 'Dinh Thinh', 'Ca Mau', '0941124123'),
+(8, 8, '2023-11-24', 4, 2, 'COD', 1500000, 'Tan Duy', 'Cà Mau', '0129293493'),
 (9, 7, '2023-10-05', 1, 1, 'COD', 1500000, 'Ngoc So', 'Ca Mau', '0129294393'),
 (10, 11, '2023-08-22', 1, 1, 'COD', 1500000, 'Dinh Thinh', 'Ca Mau', '0941124123'),
 (11, 11, '2023-06-22', 1, 1, 'COD', 1500000, 'Dinh Thinh', 'Ca Mau', '0941124123');
@@ -399,7 +400,7 @@ ALTER TABLE `forgot_password_token`
 -- AUTO_INCREMENT for table `orderdetail`
 --
 ALTER TABLE `orderdetail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `orders`
