@@ -19,7 +19,7 @@ public interface OrderRepository extends JpaRepository<Orders, Integer> {
     @Query("SELECT o from Orders o WHERE o.orderDate BETWEEN :dateFrom AND :dateTo ")
     List<Orders> searchOrdersByTime(@Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo);
 
-    @Query("SELECT p from Orders p")
+    @Query("SELECT p from Orders p") 
     Page<Orders> pageOrders(Pageable pageable);
 
     @Query("SELECT u.email, u.fullname,SUM(od.quantity) AS sumQuantity " +

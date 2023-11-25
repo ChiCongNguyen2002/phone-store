@@ -34,7 +34,7 @@ public class StatisticalController {
     @GetMapping("/statistical")
     public String countProducts(Model model) {
         int countProduct = productService.countProducts();
-        int countCustomer = userService.countUsersByRole();
+        int countUser = userService.countUsersByRole();
         int countOrder = orderService.countOrders();
 
         Double total = productService.getTotalRevenue();
@@ -45,7 +45,7 @@ public class StatisticalController {
 
         model.addAttribute("total", formattedPrice);
         model.addAttribute("countOrder", countOrder);
-        model.addAttribute("countCustomer", countCustomer);
+        model.addAttribute("countUser", countUser);
         model.addAttribute("countProduct", countProduct);
         return "statistical";
     }
