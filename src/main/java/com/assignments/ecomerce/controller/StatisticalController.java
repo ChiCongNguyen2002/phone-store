@@ -53,9 +53,10 @@ public class StatisticalController {
     @PostMapping("/ShowChartType")
     public String processForm(@RequestParam("dateFrom") @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateFrom,
                                @RequestParam("dateTo") @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateTo,
+                              @RequestParam(value = "year", defaultValue = "2023") int selectedYear,
                               @RequestParam("chartType") String chartType,
                               Model model) {
-        List<Object> chartData = orderService.getData(dateFrom, dateTo, chartType);
+        List<Object> chartData = orderService.getData(dateFrom, dateTo, selectedYear, chartType);
 
         if (chartData != null) {
             if (chartData.isEmpty()) {

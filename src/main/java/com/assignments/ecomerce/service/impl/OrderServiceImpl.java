@@ -76,8 +76,7 @@ public class OrderServiceImpl implements OrderService {
         return orderList;
     }
 
-    public List<Object> getData(Date dateFrom, Date dateTo, String chartType) {
-        System.out.println("charType:" + chartType);
+    public List<Object> getData(Date dateFrom, Date dateTo, int year, String chartType) {
         switch (chartType) {
             case "top5Users":
                 List<Object[]> results = orderRepository.getTop5UsersWithSumQuantity(dateFrom, dateTo);
@@ -99,21 +98,18 @@ public class OrderServiceImpl implements OrderService {
                     Integer quantity = (Integer) result[3];
                     String description = (String) result[2];
                     String color = (String) result[4];
-
                     Product product = new Product(name, price, quantity, description, color);
                     products.add(product);
                 }
                 return new ArrayList<>(products);
             case "monthlyRevenue":
-                List<Object[]> resultMonth = orderRepository.getMonthlyRevenue(dateFrom, dateTo);
+                List<Object[]> resultMonth = orderRepository.getMonthlyRevenue(dateFrom, dateTo, year);
                 List<MonthlyRevenue> monthlyRevenues = new ArrayList<>();
 
                 for (Object[] result : resultMonth) {
                     Integer month = (Integer) result[0];
-                    Integer year = (Integer) result[1];
                     Double sumTotal = (Double) result[2];
-
-                    MonthlyRevenue monthlyRevenue = new MonthlyRevenue(month, year, sumTotal);
+                    MonthlyRevenue monthlyRevenue = new MonthlyRevenue(month, sumTotal);
                     monthlyRevenues.add(monthlyRevenue);
                 }
                 return new ArrayList<>(monthlyRevenues);
@@ -130,9 +126,7 @@ public class OrderServiceImpl implements OrderService {
                     Double fridayTotal = (Double) row[5];
                     Double saturdayTotal = (Double) row[6];
                     Double sundayTotal = (Double) row[7];
-
-                    WeeklyRevenue weeklyRevenue = new WeeklyRevenue(weekDate, mondayTotal, tuesdayTotal, wednesdayTotal,
-                            thursdayTotal, fridayTotal, saturdayTotal, sundayTotal);
+                    WeeklyRevenue weeklyRevenue = new WeeklyRevenue(weekDate, mondayTotal, tuesdayTotal, wednesdayTotal, thursdayTotal, fridayTotal, saturdayTotal, sundayTotal);
                     weeklyRevenues.add(weeklyRevenue);
                 }
                 return new ArrayList<>(weeklyRevenues);
@@ -143,13 +137,13 @@ public class OrderServiceImpl implements OrderService {
 
     public Page<Orders> searchOrdersByTime(int pageNo, Date dateFrom, Date dateTo) {
         Pageable pageable = PageRequest.of(pageNo, 5);
-        List<Orders> order = transfer(orderRepository.searchOrdersByTime(dateFrom,dateTo));
+        List<Orders> order = transfer(orderRepository.searchOrdersByTime(dateFrom, dateTo));
         Page<Orders> orderPages = toPage(order, pageable);
         return orderPages;
     }
 
     public List<Orders> searchOrdersByTimeToExcel(Date dateFrom, Date dateTo) {
-        List<Orders> order = orderRepository.searchOrdersByTime(dateFrom,dateTo);
+        List<Orders> order = orderRepository.searchOrdersByTime(dateFrom, dateTo);
         return order;
     }
 }

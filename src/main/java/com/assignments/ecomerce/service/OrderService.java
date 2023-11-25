@@ -30,7 +30,7 @@ public interface OrderService {
      Page<Orders> searchOrders(int pageNo, String keyword);
      Page toPage(List<Orders> list, Pageable pageable);
      List<Orders> transfer(List<Orders> orders);
-     List<Object> getData(Date dateFrom, Date dateTo, String chartType);
+     List<Object> getData(Date dateFrom, Date dateTo,int year, String chartType);
 
      Page<Orders> searchOrdersByTime(int pageNo, Date dateFrom, Date dateTo);
 

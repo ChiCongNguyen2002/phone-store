@@ -40,7 +40,6 @@
                         <h2>Tổng doanh thu</h2>
                         <h5><span th:text="${total + ' VNĐ'}"></span></h5>
                     </div>
-
                 </div>
 
                 <div class="form-container" style="display: flex;">
@@ -61,7 +60,15 @@
                             <option value="monthlyRevenue">Doanh Thu theo tháng</option>
                             <option value="weeklyRevenue">Doanh Thu theo thứ trong tuần</option>
                         </select>
-                        <button class="chartTypeStyle" id="submitButton" type="submit" onclick="saveStatistical(event)">Xem thống kê</button>
+
+                        <div id="yearSelectContainer" style="display: none;">
+                            <label for="year">Năm:</label>
+                            <select id="year" name="year"></select>
+                        </div>
+
+                        <button class="chartTypeStyle" id="submitButton" type="submit" onclick="saveStatistical(event)">
+                            Xem thống kê
+                        </button>
                     </form>
 
                     <button class="show_chart">Xem dạng biểu đồ</button>
@@ -88,32 +95,6 @@
                 </table>
             </div>
 
-            <!--<div id="top5EmployeesDiv">
-                <table class="styled-table">
-                    <thead>
-                    <tr>
-                        <th>Top</th>
-                        <th>Name</th>
-                        <th>phoneNumber</th>
-                        <th>address</th>
-                        <th>email</th>
-                        <th>salary</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    &lt;!&ndash; Lặp qua danh sách khách hàng &ndash;&gt;
-                    <tr th:each="employee,index : ${top5Employees}">
-                        <td th:text="${index.count}"></td>
-                        <td th:text="${employee.Name}"></td>
-                        <td th:text="${employee.PhoneNumber}"></td>
-                        <td th:text="${employee.Address}"></td>
-                        <td th:text="${employee.Email}"></td>
-                        <td th:text="${employee.salary}"></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>-->
-
             <div id="top10ProductsDiv">
                 <table class="styled-table">
                     <thead>
@@ -139,7 +120,6 @@
                     <thead>
                     <tr>
                         <th>Tháng</th>
-                        <th>Năm</th>
                         <th>Tổng Tiền</th>
                     </tr>
                     </thead>
@@ -147,7 +127,6 @@
                     <!-- Lặp qua danh sách khách hàng -->
                     <tr th:each="revenue : ${monthlyRevenue}">
                         <td th:text="${revenue.month}"></td>
-                        <td th:text="${revenue.year}"></td>
                         <td th:text="${revenue.sumTotal}"></td>
                     </tr>
                     </tbody>
@@ -203,6 +182,22 @@
 
 <!-- Bootstrap core JavaScript-->
 <div th:replace="~{fragments::script}"></div>
+<script>
+    var tableRows = document.querySelectorAll("#monthlyRevenueDiv tbody tr");
+     var data_chart = [];
+
+     tableRows.forEach(function(row) {
+         var month = row.cells[0].innerText; // Lấy giá trị từ cột đầu tiên
+         var sumTotal = row.cells[1].innerText; // Lấy giá trị từ cột thứ hai
+
+         // Thêm giá trị month và sumTotal vào mảng data_chart
+         data_chart.push({
+             month: month,
+             sumTotal: sumTotal
+         });
+     });
+     console.log(data_chart);
+</script>
 <script th:src="@{/js/statistical.js}"></script>
 </body>
 

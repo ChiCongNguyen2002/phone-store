@@ -24,23 +24,22 @@ dateToInput.addEventListener('input', function() {
   savedToDate = dateToInput.value;
 });
 
+var formResponse;
 function saveStatistical(event) {
-  event.preventDefault();
-  if (savedFromDate === '' || savedToDate === '') {
-    alert('Vui lòng chọn cả hai ngày.');
-    return;
-  }
+    event.preventDefault();
+    if (savedFromDate === '' || savedToDate === '') {
+        alert('Vui lòng chọn cả hai ngày.');
+        return;
+    }
 
-  if (savedFromDate > savedToDate) {
-    alert('Ngày bắt đầu không được lớn hơn ngày kết thúc.');
-    return;
-  }
+    if (savedFromDate > savedToDate) {
+        alert('Ngày bắt đầu không được lớn hơn ngày kết thúc.');
+        return;
+    }
 
-  // Save the user-modified values in localStorage
-  localStorage.setItem('savedFromDate', savedFromDate);
-  localStorage.setItem('savedToDate', savedToDate);
-
-  document.getElementById("editForm").submit();
+    localStorage.setItem('savedFromDate', savedFromDate);
+    localStorage.setItem('savedToDate', savedToDate);
+    document.getElementById("editForm").submit();
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -67,7 +66,8 @@ document.addEventListener('DOMContentLoaded', function() {
 function displayChart() {
     var selectOption = document.getElementById("chartType").value;
     localStorage.setItem("selectedChartType", selectOption); // Lưu giá trị mới vào localStorage
-
+    var yearSelect = document.getElementById("year");
+    var yearSelectContainer = document.getElementById("yearSelectContainer");
     hideAllDivs();
 
     if (selectOption === "top10Products") {
@@ -78,8 +78,23 @@ function displayChart() {
         showDiv("weeklyRevenueDiv");
         // Hiển thị dữ liệu và cập nhật div "weeklyRevenueDiv"
     }else if (selectOption === "monthlyRevenue") {
-        showDiv("monthlyRevenueDiv");
-        // Hiển thị dữ liệu và cập nhật div "weeklyRevenueDiv"
+        yearSelectContainer.style.display = "block";
+                    yearSelect.innerHTML = ""; // Xóa tất cả các tùy chọn hiện tại
+
+                    // Tạo các tùy chọn từ dateFrom và dateTo
+                    var dateFromSelect = document.getElementById("dateFrom");
+                    var dateToSelect = document.getElementById("dateTo");
+                    var currentYear = new Date().getFullYear();
+                    var fromDateYear = new Date(dateFromSelect.value).getFullYear();
+                    var toDateYear = new Date(dateToSelect.value).getFullYear();
+
+                    for (var year = fromDateYear; year <= toDateYear; year++) {
+                        var option = document.createElement("option");
+                        option.value = year;
+                        option.text = year;
+                        yearSelect.appendChild(option);
+                    }
+                    showDiv("monthlyRevenueDiv");
     }
 }
 

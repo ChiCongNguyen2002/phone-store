@@ -19,7 +19,7 @@ public interface OrderRepository extends JpaRepository<Orders, Integer> {
     @Query("SELECT o from Orders o WHERE o.orderDate BETWEEN :dateFrom AND :dateTo ")
     List<Orders> searchOrdersByTime(@Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo);
 
-    @Query("SELECT p from Orders p") 
+    @Query("SELECT p from Orders p")
     Page<Orders> pageOrders(Pageable pageable);
 
     @Query("SELECT u.email, u.fullname,SUM(od.quantity) AS sumQuantity " +
@@ -49,12 +49,21 @@ public interface OrderRepository extends JpaRepository<Orders, Integer> {
             "ORDER BY totalQuantity DESC")
     List<Object[]> findTop5EmployeesByTotalQuantity(@Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo);*/
 
-    @Query("SELECT MONTH(o.orderDate) AS month, YEAR(o.orderDate) AS year, SUM(o.total) AS sumTotal " +
-            "FROM Orders o " +
-            "WHERE o.orderDate BETWEEN :startDate AND :endDate " +
-            "GROUP BY MONTH(o.orderDate), YEAR(o.orderDate) " +
-            "ORDER BY sumTotal DESC")
-    List<Object[]> getMonthlyRevenue(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
+    @Query(value = "SELECT temp.month, IFNULL(o.year, :userYear) AS year, COALESCE(o.sumTotal, 0.0) AS sumTotal " +
+            "FROM (" +
+            "    SELECT 1 AS month UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL " +
+            "    SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL " +
+            "    SELECT 9 UNION ALL SELECT 10 UNION ALL SELECT 11 UNION ALL SELECT 12 " +
+            ") AS temp " +
+            "LEFT JOIN (" +
+            "    SELECT MONTH(o.orderDate) AS month, YEAR(o.orderDate) AS year, SUM(o.total) AS sumTotal " +
+            "    FROM Orders o " +
+            "    WHERE o.orderDate BETWEEN :startDate AND :endDate " +
+            "        AND YEAR(o.orderDate) = :userYear " +
+            "    GROUP BY MONTH(o.orderDate), YEAR(o.orderDate) " +
+            ") AS o ON temp.month = o.month " +
+            "ORDER BY temp.month ASC", nativeQuery = true)
+    List<Object[]> getMonthlyRevenue(@Param("startDate") Date startDate, @Param("endDate") Date endDate, @Param("userYear") int userYear);
 
     @Query("SELECT CONCAT('Tuần',WEEK(o.orderDate), ' - ', " +
             "DATE_FORMAT(MIN(o.orderDate),'%d/%m/%Y'), ' - ', " +

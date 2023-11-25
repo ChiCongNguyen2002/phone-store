@@ -135,6 +135,10 @@
      margin: 0 auto;
 }
 
+#yearSelectContainer{
+    display: inline-block;
+}
+
 .show_chart{
     margin-left: 10px;
     margin-bottom: 10px;
