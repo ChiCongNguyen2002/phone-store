@@ -97,7 +97,9 @@ function displayChart() {
     localStorage.setItem("selectedChartType", selectOption); // Lưu giá trị mới vào localStorage
     var yearSelect = document.getElementById("year");
     var yearSelectContainer = document.getElementById("yearSelectContainer");
+    yearSelectContainer.style.display = "none";
     hideAllDivs();
+
 
     if (selectOption === "top10Products") {
         showDiv("top10ProductsDiv");
