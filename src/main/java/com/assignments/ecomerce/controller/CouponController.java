@@ -43,9 +43,9 @@ public class CouponController {
 
     @GetMapping("/couponCustomer/{pageNo}")
     public String getAllCouponCustomer(@PathVariable("pageNo") int pageNo,Model model,Principal principal) {
+
         List<Product> listProducts = productService.getAllProducts();
         List<Category> categories = categoryService.getAllCategory();
-        //List<Coupon> listCoupon = couponService.getAllCoupons();
         UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
         Page<Coupon> listCoupon = couponService.pageCoupon(pageNo);
         model.addAttribute("currentPage", pageNo);
@@ -58,10 +58,12 @@ public class CouponController {
     }
 
     @GetMapping("/detailCoupon/{id}")
-    public String getDetailCouponCustomer(@PathVariable("id") Integer id,Model model) {
+    public String getDetailCouponCustomer(@PathVariable("id") Integer id,Model model,Principal principal) {
         List<Product> listProducts = productService.getAllProducts();
         List<Category> categories = categoryService.getAllCategory();
         Coupon coupon = couponService.findById(id);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
+        model.addAttribute("user", userDetails);
         model.addAttribute("coupon", coupon);
         model.addAttribute("listProducts", listProducts);
         model.addAttribute("categories", categories);

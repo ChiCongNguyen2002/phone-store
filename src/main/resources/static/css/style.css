@@ -2507,3 +2507,10 @@
     margin-left: 10px;
     margin-bottom: 10px;
 }
+
+.center-container {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   margin: 10px;
+}

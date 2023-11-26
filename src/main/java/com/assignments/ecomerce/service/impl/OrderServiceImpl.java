@@ -47,6 +47,12 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.pageOrders(pageable);
     }
 
+    @Override
+    public Page<Orders> pageOrdersById(int pageNo, Integer userId) {
+        Pageable pageable = PageRequest.of(pageNo, 5);
+        return orderRepository.pageOrdersById(pageable,userId);
+    }
+
     public Page<Orders> searchOrders(int pageNo, String keyword) {
         Pageable pageable = PageRequest.of(pageNo, 5);
         List<Orders> order = transfer(orderRepository.searchOrders(keyword));

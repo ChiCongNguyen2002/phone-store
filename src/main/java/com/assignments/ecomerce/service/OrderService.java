@@ -28,6 +28,8 @@ public interface OrderService {
 
      Page<Orders> pageOrders(int pageNo);
 
+     Page<Orders> pageOrdersById(int pageNo,Integer userId);
+
      Page<Orders> searchOrders(int pageNo, String keyword);
      Page toPage(List<Orders> list, Pageable pageable);
      List<Orders> transfer(List<Orders> orders);

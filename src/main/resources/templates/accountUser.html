@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{indexUser::header}">
+</head>
+<body>
+
+<nav th:replace="~{indexUser::navigation}"></nav>
+
+<!-- BREADCRUMB -->
+<div id="breadcrumb" class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="breadcrumb-tree">
+                    <li><a th:href="@{/indexCustomer}">Trang chủ</a></li>
+                    <li class="active">TÀI KHOẢN</li>
+                </ul>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /BREADCRUMB -->
+
+<section class="main-container col2-right-layout">
+    <div class="main container">
+        <div class="row">
+            <div class="my-account">
+                <div class="col-main col-sm-12 col-xs-12">
+                    <div class="welcome-msg">
+                    </div>
+                    <div class="recent-orders">
+                        <div class="table-responsive">
+                            <div class="page-title">
+                                <h2>Danh Sách Đơn hàng của bạn</h2>
+                            </div>
+                            <table class="table table-bordered cart_summary table-striped" style="margin-top:10px">
+                                <thead>
+                                <tr class="first last">
+                                    <th class="text-center">Khách hàng</th>
+                                    <th class="text-center">Ngày đặt</th>
+                                    <th class="text-center">Trạng thái</th>
+                                    <th class="text-center">Giá trị đơn hàng</th>
+                                    <th class="text-center">Xử lý đơn</th>
+                                    <th class="text-center">Thao tác</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="orders,index : ${listOrder}">
+                                    <td class="text-center" th:text="${orders.user.getFullname()}"></td>
+                                    <td class="text-center" th:text="${orders.orderDate}"></td>
+                                    <td>
+                             <span th:switch="${orders.Status}">
+                                    <span class="text-center" th:case="1">Đang chờ duyệt</span>
+                                    <span class="text-center" th:case="2">Đã duyệt</span>
+                                    <span class="text-center" th:case="3">Đang giao</span>
+                                    <span class="text-center" th:case="4">Đã giao</span>
+                                    <span class="text-center" th:case="5">Đã huỷ</span>
+                                </span>
+                                    </td>
+                                    <td class="text-center" th:text="${formattedPrices[__${index.index}__] + ' VNĐ'}"></td>
+                                    <td>
+                            <span th:switch="${orders.status}">
+                                <span th:case="1">
+                                    <button class="btn btn-danger btn-cancel text-center">
+                                        <a class="text-center" th:href="@{'/CancelOrderStatus/0/' + ${orders.Id}}">Hủy đơn</a>
+                                    </button>
+                                </span>
+
+                                <span th:case="2">
+                                    <button class="btn btn-danger btn-cancel text-center">
+                                        <a class="text-center" th:href="@{'/CancelOrderStatus/0/' + ${orders.Id}}">Hủy đơn</a>
+                                    </button>
+                                </span>
+
+                                <span th:case="3">
+                                    <button class="btn btn-success btn-update-status text-center">
+                                        <a class="text-center" th:href="@{'/UpdateOrderStatus/0/' + ${orders.Id}}">Xác nhận đã giao hàng</a>
+                                    </button>
+                                </span>
+
+                                <span th:case="4">
+                                    <span class="text-center">Đã Giao Hàng thành công</span>
+                                </span>
+
+                                <span th:case="5">
+                                    <span class="text-center">Đơn Hàng đã bị hủy</span>
+                                </span>
+                                </span>
+                                    </td>
+                                    <td>
+                                        <a th:if="${orders != null}" class="text-center" th:href="@{/OrderDetailByUser/0/{orderId}(orderId=${orders.Id})}">Xem
+                                            Chi Tiết</a>
+
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="box-account">
+                        <div class="page-title">
+                            <h2>Thông tin tài khoản</h2>
+                        </div>
+
+                        <table class="table table-bordered cart_summary table-striped" style="margin-top:10px">
+                            <thead>
+                            <tr class="first last">
+                                <th class="text-center">Tên Khách hàng</th>
+                                <th class="text-center">Địa Chi</th>
+                                <th class="text-center">Email</th>
+                                <th class="text-center">Số Điện Thoại</th>
+                                <th class="text-center">Cập nhật thông tin</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td class="text-center" th:text="${userDetail.fullname}"></td>
+                                <td class="text-center" th:text="${userDetail.address}"></td>
+                                <td class="text-center" th:text="${userDetail.email}"></td>
+                                <td class="text-center" th:text="${userDetail.phone}"></td>
+                                <td class="text-center">
+                                    <a id="editButton" th:if="${userDetail != null}" class="text-center" th:href="@{/EditAccount/0/{userId}(userId=${userDetail.id})}">Cập nhật thông tin</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<footer th:replace="~{indexUser::footer}"></footer>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{indexUser::header}">
+</head>
+<body>
+
+<nav th:replace="~{indexUser::navigation}"></nav>
+
+<!-- BREADCRUMB -->
+<div id="breadcrumb" class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="breadcrumb-tree">
+                    <li><a th:href="@{/indexCustomer}">Trang chủ</a></li>
+                    <li><a th:href="@{/account/0}">TÀI KHOẢN</a></li>
+                    <li class="active">CẬP NHẬT THÔNG TIN</li>
+                </ul>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /BREADCRUMB -->
+
+<section class="main-container col2-right-layout">
+    <div class="main container">
+        <div class="row">
+            <div class="my-account">
+                <div class="col-main col-sm-12 col-xs-12">
+                    <div class="welcome-msg">
+                    </div>
+                    <div class="recent-orders">
+                        <div class="table-responsive">
+                            <div class="page-title">
+                                <h2>Cập nhật thông tin</h2>
+                            </div>
+
+                            <div th:if="${success}" class="text-center alert alert-success">
+                                <p th:text="${success}"></p>
+                            </div>
+                            <div th:if="${error}" class="text-center alert alert-danger">
+                                <p th:text="${error}"></p>
+                            </div>
+
+                            <form id="productForm" class="form-horizontal" enctype="multipart/form-data" method="POST"
+                                  th:action="@{/EditAccount/0/{userId}(userId = ${userDetail.id})}"
+                                  th:object="${userDetail}">
+
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="idEdit">ID</label>
+                                    <div class="col-md-4">
+                                        <input id="idEdit" th:field="*{id}" name="idEdit"
+                                               class="form-control input-md" required=""
+                                               type="text" readonly>
+                                    </div>
+                                </div>
+
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="fullname">Tên người dùng</label>
+                                    <div class="col-md-4">
+                                        <input id="fullname" th:field="*{fullname}" name="fullname"
+                                               class="form-control input-md"
+                                               required="" type="text">
+                                    </div>
+                                </div>
+
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="phone">Số điện thoại </label>
+                                    <div class="col-md-4">
+                                        <input id="phone" th:field="*{phone}" name="phone" class="form-control input-md"
+                                               required="" type="text">
+                                    </div>
+                                </div>
+
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="address">Địa chỉ</label>
+                                    <div class="col-md-4">
+                                        <input id="address" th:field="*{address}" name="quantity"
+                                               class="form-control input-md" required=""
+                                               type="text">
+                                    </div>
+                                </div>
+
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="email">Email</label>
+                                    <div class="col-md-4">
+                                        <input id="email" th:field="*{email}" name="price" class="form-control input-md"
+                                               required=""
+                                               type="text">
+                                    </div>
+                                </div>
+
+                                <div class="center-container">
+                                    <button type="submit" class="btn btn-primary text-center">Lưu Thông Tin</button>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<footer th:replace="~{indexUser::footer}"></footer>
+</body>
+</html>

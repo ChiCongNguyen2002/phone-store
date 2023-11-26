@@ -6,6 +6,8 @@ import com.assignments.ecomerce.service.ShoppingCartService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,14 +23,19 @@ public class CartController {
     private ProductService productService;
     @Autowired
     private ShoppingCartService shoppingCartService;
+
+    @Autowired
+    private UserDetailsService userDetailsService;
+
     @GetMapping("/cart")
     public String pageHome(Model model, Principal principal, HttpSession session) {
         if (principal == null) {
             return "redirect:/login";
         }
-
-        List<ShoppingCart> listShoppingCart = shoppingCartService.findAll();
-        model.addAttribute("size", listShoppingCart.size());
+        UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
+        model.addAttribute("userDetails", userDetails);
+        /*List<ShoppingCart> listShoppingCart = shoppingCartService.findAll();
+        model.addAttribute("size", listShoppingCart.size());*/
         return "cart";
     }
 

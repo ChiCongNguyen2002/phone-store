@@ -3,6 +3,7 @@ package com.assignments.ecomerce.controller;
 import com.assignments.ecomerce.model.Category;
 import com.assignments.ecomerce.model.Product;
 import com.assignments.ecomerce.model.Review;
+import com.assignments.ecomerce.model.User;
 import com.assignments.ecomerce.service.CategoryService;
 import com.assignments.ecomerce.service.ProductService;
 import com.assignments.ecomerce.service.ReviewService;
@@ -62,14 +63,18 @@ public class ProductController {
     }
 
     @GetMapping("/product-details/{id}")
-    public String DetailProduct(@PathVariable("id") Integer id, Model model) {
-        Product product = productService.findById(id);
+    public String DetailProduct(@PathVariable("id") Integer id, Model model,Principal principal) {
 
+        Product product = productService.findById(id);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
         List<Product> productDtoList = productService.findAllByCategory(product.getCategory().getName());
         List<Category> categories = categoryService.getAllCategory();
         List<Review> reviews = reviewService.getByProduct(product);
+        User user = userService.findByEmailUser(principal.getName());
 
+        System.out.println("user " + user.getId());
         List<Product> productColor = productService.getListColorByNameProduct(product.getName());
+
         int countReview = reviewService.countReviews(product);
         Double calculateAverageRating = reviewService.calculateAverageRating(product);
 
@@ -83,11 +88,15 @@ public class ProductController {
        /* Product getProductByColorAndName = productService.getProductByColorAndName(product.getName(), product.getColor());
         System.out.println("color:" + productColor);
         model.addAttribute("getProductByColorAndName", getProductByColorAndName);*/
+
+        model.addAttribute("user", user);
+        model.addAttribute("userDetails", userDetails);
         model.addAttribute("countReview", countReview);
         model.addAttribute("calculateAverageRating", calculateAverageRating);
         model.addAttribute("formattedPrice", formattedPrice);
         model.addAttribute("reviewNew", new Review());
         model.addAttribute("reviews", reviews);
+        model.addAttribute("product", product);
         model.addAttribute("products", productDtoList);
         model.addAttribute("productDetail", product);
         model.addAttribute("productColor", productColor);
@@ -118,7 +127,7 @@ public class ProductController {
         }
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
-        model.addAttribute("user", userDetails);
+        model.addAttribute("userDetails", userDetails);
         model.addAttribute("listProducts", listProducts.getContent());
         model.addAttribute("formattedPrices", formattedPrices);
 
@@ -206,6 +215,8 @@ public class ProductController {
 
         List<Category> categories = categoryService.getAllCategory();
         Page<Product> listProducts = productService.searchProductByOption(pageNo, category, sortOption, color, minPrice, maxPrice);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
+        model.addAttribute("user", userDetails);
         model.addAttribute("color", color);
         model.addAttribute("minPrice", minPrice);
         model.addAttribute("maxPrice", maxPrice);
@@ -243,6 +254,9 @@ public class ProductController {
         double defaultMinPrice = productService.getMinPrice(listProducts);
         double defaultMaxPrice = productService.getMaxPrice(listProducts);
         session.setAttribute("keyword", keyword);
+
+        UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
+        model.addAttribute("user", userDetails);
         model.addAttribute("keyword", keyword);
         model.addAttribute("categories", categories);
         model.addAttribute("size", listProducts.getSize());
@@ -275,7 +289,6 @@ public class ProductController {
         DecimalFormat decimalFormat = new DecimalFormat("#,###", decimalFormatSymbols);
         String formattedPrice = decimalFormat.format(price);
         List<Category> categories = categoryService.getAllCategory();
-
         model.addAttribute("formattedPrice", formattedPrice);
         model.addAttribute("categories", categories);
         model.addAttribute("listProducts", newProduct);
@@ -300,7 +313,6 @@ public class ProductController {
         }
         return "redirect:/product/0";
     }
-
 
     @GetMapping("/update-product/{id}")
     public String updateProduct(@PathVariable("id") Integer id, Model model) {

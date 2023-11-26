@@ -53,11 +53,11 @@ public class UserController {
         List<Category> categories = categoryService.getAllCategory();
         List<Product> topProducts = productService.getData();
         UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
-        model.addAttribute("user", userDetails);
-
+        model.addAttribute("userDetails", userDetails);
         model.addAttribute("top10Products", topProducts);
         model.addAttribute("listProducts", listProducts);
         model.addAttribute("categories", categories);
+
         return "indexUser";
     }
 

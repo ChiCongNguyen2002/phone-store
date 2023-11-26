@@ -1,3 +1,5 @@
+
+
 var ratingValue = 0;
 
 function setRating(star) {

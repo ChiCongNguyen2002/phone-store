@@ -71,7 +71,7 @@
                         </button>
                     </form>
 
-                    <button class="show_chart">Xem dạng biểu đồ</button>
+                    <button class="show_chart" onclick="showChart()">Xem dạng biểu đồ</button>
                 </div>
             </div>
 
@@ -162,13 +162,9 @@
                     </tbody>
                 </table>
             </div>
+            <div id="chartContainer"></div>
         </div>
         <!-- End of Main Content -->
-
-        <!-- Footer -->
-        <footer th:replace="~{fragments::footer}">
-        </footer>
-        <!-- End of Footer -->
 
     </div>
     <!-- End of Content Wrapper -->
@@ -184,21 +180,21 @@
 <div th:replace="~{fragments::script}"></div>
 <script>
     var tableRows = document.querySelectorAll("#monthlyRevenueDiv tbody tr");
-     var data_chart = [];
+    var data_chart = [];
 
      tableRows.forEach(function(row) {
          var month = row.cells[0].innerText; // Lấy giá trị từ cột đầu tiên
-         var sumTotal = row.cells[1].innerText; // Lấy giá trị từ cột thứ hai
+         var sumTotal = parseInt(row.cells[1].innerText); // Lấy giá trị từ cột thứ hai
 
          // Thêm giá trị month và sumTotal vào mảng data_chart
          data_chart.push({
-             month: month,
-             sumTotal: sumTotal
+             y: sumTotal,
+             label: month
          });
      });
-     console.log(data_chart);
 </script>
 <script th:src="@{/js/statistical.js}"></script>
+<script th:src="@{/js/canvasjs.min.js}"></script>
 </body>
 
 </html>

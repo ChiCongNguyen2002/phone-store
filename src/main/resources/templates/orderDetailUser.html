@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{indexUser::header}">
+</head>
+<body>
+
+<nav th:replace="~{indexUser::navigation}"></nav>
+
+<!-- BREADCRUMB -->
+<div id="breadcrumb" class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="breadcrumb-tree">
+                    <li><a th:href="@{/indexCustomer}">Trang chủ</a></li>
+                    <li><a th:href="@{/account/0}">TÀI KHOẢN</a></li>
+                    <li class="active">CHI TIẾT ĐƠN HÀNG</li>
+                </ul>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /BREADCRUMB -->
+
+<div class="main container">
+    <div class="row">
+        <div class="col-main col-sm-12 col-xs-12">
+            <div class="my-account">
+
+                <div class="row">
+                    <div class="col-xs-12 col-md-6 col-sm-6">
+                        <div class="page-title">
+                            <h2>Thông tin đơn hàng</h2>
+                        </div>
+
+                        <div th:if="${success}" class="text-center alert alert-success">
+                            <p th:text="${success}"></p>
+                        </div>
+                        <div th:if="${error}" class="text-center alert alert-danger">
+                            <p th:text="${error}"></p>
+                        </div>
+                        <table class="table table-bordered cart_summary table-striped">
+                            <tr>
+                                <td class="order-number">Ngày đặt hàng</td>
+                                <td data-title="Order Date" th:text="${order.orderDate}"></td>
+                            </tr>
+                            <tr>
+                                <td class="order-number">Trạng thái đơn hàng</td>
+                                <td data-title="Order Status">
+                                    <span th:switch="${order.Status}">
+                                        <span th:case="1">Đang chờ duyệt</span>
+                                        <span th:case="2">Đã duyệt</span>
+                                        <span th:case="3">Đang giao</span>
+                                        <span th:case="4">Đã giao</span>
+                                        <span th:case="5">Đã huỷ</span>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="order-number">Giá trị đơn hàng</td>
+                                <td th:text="${order.total + ' VNĐ'}"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-xs-12 col-md-6 col-sm-6">
+                        <div class="page-title">
+                            <h2>Thông tin giao hàng</h2>
+                        </div>
+
+                        <table class="table table-bordered cart_summary">
+                            <tr>
+                                <td>Tên người nhận</td>
+                                <td th:text="${order.ShipName}"></td>
+                            </tr>
+                            <tr>
+                                <td>Số điện thoại nhận hàng</td>
+                                <td th:text="${order.ShipPhoneNumber}"></td>
+                            </tr>
+                            <tr>
+                                <td>Địa chỉ nhận hàng</td>
+                                <td th:text="${order.ShipAddress}"></td>
+                            </tr>
+
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-md-12 col-sm-12">
+                        <div class="page-title">
+                            <h2>Sản phẩm đã mua</h2>
+                        </div>
+                        <table class="table table-bordered cart_summary">
+                            <thead>
+                            <tr>
+                                <th class="text-center">
+                                    Ảnh đại diện
+                                </th>
+                                <th class="text-center">
+                                    Tên
+                                </th>
+                                <th class="text-center">
+                                    Giá bán
+                                </th>
+                                <th class="text-center">
+                                    Số lượng mua
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="orderdetail : ${listOrderDetail}">
+                                <td class="text-center">
+                                    <img class="product-image" th:src="@{'../../img/' + ${orderdetail.product.image}}" alt="Product Image">
+                                </td>
+                                <td class="text-center" th:text="${orderdetail.product.name}"></td>
+                                <td class="text-center" th:text="${orderdetail.unitPrice + ' VNĐ'}"></td>
+                                <td class="text-center" th:text="${orderdetail.quantity}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{indexUser::footer}"></footer>
+</body>
+</html>

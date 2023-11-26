@@ -13,6 +13,8 @@ public class User {
     private String password;
     private String role;
     private String fullname;
+    private String address;
+    private String phone;
 
     public User(String email, String password, String role, String fullname) {
         this.email = email;
@@ -55,8 +57,12 @@ public class User {
         this.fullname = fullname;
     }
 
-    public String getFullname() {
-        return fullname;
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }
 
