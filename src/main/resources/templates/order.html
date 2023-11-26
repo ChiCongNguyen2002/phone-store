@@ -78,6 +78,7 @@
                         </tr>
 
                         <tr th:each="orders,index : ${listOrder}">
+                            <input type="hidden" name="orderId" th:value="${orders.Id}">
                             <td th:text="${orders.Id}"></td>
                             <td th:text="${orders.user.getFullname()}"></td>
                             <td th:text="${orders.orderDate}"></td>
