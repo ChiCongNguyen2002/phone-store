@@ -65,22 +65,23 @@
                     <p th:text="${error}"></p>
                 </div>
 
-                <table class="styled-table">
-                    <tr>
-                        <th>ID</th>
-                        <th>Khách hàng</th>
-                        <th>Ngày đặt</th>
-                        <th>Trạng thái</th>
-                        <th>Giá trị đơn hàng</th>
-                        <th>Xử lý đơn</th>
-                        <th>Thao tác</th>
-                    </tr>
+                <form id="orderDetailForm" th:action="@{/orderdetail}" method="post">
+                    <table class="styled-table">
+                        <tr>
+                            <th>ID</th>
+                            <th>Khách hàng</th>
+                            <th>Ngày đặt</th>
+                            <th>Trạng thái</th>
+                            <th>Giá trị đơn hàng</th>
+                            <th>Xử lý đơn</th>
+                            <th>Thao tác</th>
+                        </tr>
 
-                    <tr th:each="orders,index : ${listOrder}">
-                        <td th:text="${orders.Id}"></td>
-                        <td th:text="${orders.user.getFullname()}"></td>
-                        <td th:text="${orders.orderDate}"></td>
-                        <td>
+                        <tr th:each="orders,index : ${listOrder}">
+                            <td th:text="${orders.Id}"></td>
+                            <td th:text="${orders.user.getFullname()}"></td>
+                            <td th:text="${orders.orderDate}"></td>
+                            <td>
                              <span th:switch="${orders.Status}">
                                     <span th:case="1">Đang chờ duyệt</span>
                                     <span th:case="2">Đã duyệt</span>
@@ -88,12 +89,12 @@
                                     <span th:case="4">Đã giao</span>
                                     <span th:case="5">Đã huỷ</span>
                                 </span>
-                        </td>
-                        <td th:text="${formattedPrices[__${index.index}__] + ' VNĐ'}"></td>
-                        <td>
+                            </td>
+                            <td th:text="${formattedPrices[__${index.index}__] + ' VNĐ'}"></td>
+                            <td>
                             <span th:switch="${orders.status}">
                                 <span th:case="1">
-                                    <button class="btn btn-success btn-update-status" >
+                                    <button class="btn btn-success btn-update-status">
                                         <a th:href="@{'/UpdateOrderStatus/0/' + ${orders.Id}}">Duyệt đơn</a>
                                     </button>
                                     <button class="btn btn-danger btn-cancel">
@@ -102,16 +103,16 @@
                                 </span>
 
                                 <span th:case="2">
-                                    <button class="btn btn-success btn-update-status" >
+                                    <button class="btn btn-success btn-update-status">
                                         <a th:href="@{'/UpdateOrderStatus/0/' + ${orders.Id}}">Giao hàng</a>
                                     </button>
-                                    <button class="btn btn-danger btn-cancel" >
+                                    <button class="btn btn-danger btn-cancel">
                                         <a th:href="@{'/CancelOrderStatus/0/' + ${orders.Id}}">Hủy đơn</a>
                                     </button>
                                 </span>
 
                                 <span th:case="3">
-                                    <button class="btn btn-success btn-update-status" >
+                                    <button class="btn btn-success btn-update-status">
                                         <a th:href="@{'/UpdateOrderStatus/0/' + ${orders.Id}}">Xác nhận đã giao hàng</a>
                                     </button>
                                 </span>
@@ -124,13 +125,13 @@
                                     <span>Đơn Hàng đã bị hủy</span>
                                 </span>
                             </span>
-                        </td>
-                        <td>
-                            <a th:if="${orders != null}" th:href="@{/orderdetail(orderId=${orders.Id})}">Xem Chi
-                                Tiết</a>
-                        </td>
-                    </tr>
-                </table>
+                            </td>
+                            <td>
+                                <button type="submit">Xem Chi Tiết</button>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
 
                 <!--Pagination  -->
                 <nav aria-label="...">

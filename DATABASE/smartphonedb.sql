@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 25, 2023 at 08:52 PM
+-- Generation Time: Nov 26, 2023 at 02:22 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -216,6 +216,13 @@ CREATE TABLE `review` (
   `comments` varchar(2000) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `review`
+--
+
+INSERT INTO `review` (`id`, `userId`, `productId`, `rating`, `DateReview`, `comments`) VALUES
+(31, 11, 131, 5, '2023-11-26 12:16:34', 'Tốt');
+
 -- --------------------------------------------------------
 
 --
@@ -263,6 +270,8 @@ CREATE TABLE `user` (
   `email` varchar(40) NOT NULL,
   `password` varchar(100) NOT NULL,
   `fullname` varchar(30) NOT NULL,
+  `address` varchar(100) NOT NULL,
+  `phone` varchar(10) NOT NULL,
   `role` enum('ADMIN','USER') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -270,11 +279,11 @@ CREATE TABLE `user` (
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`id`, `email`, `password`, `fullname`, `role`) VALUES
-(7, 'congkhpro291002@gmail.com', '$2a$10$AsMAjMnlq.6HRBQb0tXrou3lNKAw6YaismGBXHzBdHW6tMOOIaOwq', 'Nguyễn Đình Thịnh', 'USER'),
-(8, 'congnguyen@gmail.com', '$2a$10$/RK4hgagmY7w/8CyYhQ.E.qcgFiI1ANppwn3Pq6l0oOFRjwvUOxSm', 'Nguyễn Chí Công', 'USER'),
-(9, 'admin@gmail.com', '$2a$10$cFfZBkooDqE7HzlM0b9dm.CGFs7XE3bpUVPB.iSIJyB/OnQKIPAHm', 'Nguyễn Chí Công', 'ADMIN'),
-(11, 'chicong123@gmail.com', '$2a$10$fvULYA6JnR2wssmuqEE.rOdXJ0/yK1poTTI2NqfB.qmizyWiWxPNS', 'chicong', 'USER');
+INSERT INTO `user` (`id`, `email`, `password`, `fullname`, `address`, `phone`, `role`) VALUES
+(7, 'congkhpro291002@gmail.com', '$2a$10$AsMAjMnlq.6HRBQb0tXrou3lNKAw6YaismGBXHzBdHW6tMOOIaOwq', 'Nguyễn Đình Thịnh', 'Ca Mau', '0948399484', 'USER'),
+(8, 'congnguyen@gmail.com', '$2a$10$/RK4hgagmY7w/8CyYhQ.E.qcgFiI1ANppwn3Pq6l0oOFRjwvUOxSm', 'Nguyễn Chí Công', 'Cà Mau', '0948831177', 'USER'),
+(9, 'admin@gmail.com', '$2a$10$cFfZBkooDqE7HzlM0b9dm.CGFs7XE3bpUVPB.iSIJyB/OnQKIPAHm', 'Nguyễn Chí Công', 'Bến Tre', '0912111222', 'ADMIN'),
+(11, 'chicong123@gmail.com', '$2a$10$fvULYA6JnR2wssmuqEE.rOdXJ0/yK1poTTI2NqfB.qmizyWiWxPNS', 'chi cong', 'Đắk Lắk', '0386431800', 'USER');
 
 --
 -- Indexes for dumped tables
@@ -418,7 +427,7 @@ ALTER TABLE `product`
 -- AUTO_INCREMENT for table `review`
 --
 ALTER TABLE `review`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `shoppingcart`
