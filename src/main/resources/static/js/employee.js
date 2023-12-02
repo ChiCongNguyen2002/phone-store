@@ -7,7 +7,7 @@ $('document').ready(function (){
             type: 'GET',
             success: function (employee, status) {
                 $('#idEdit').val(employee.id);
-                $('#nameEdit').val(employee.name);
+                $('#fullnameEdit').val(employee.name);
                 $('#phoneEdit').val(employee.phoneNumber);
                 $('#addressEdit').val(employee.address);
                 $('#emailEdit').val(employee.email);
@@ -68,7 +68,7 @@ if (!nameRegex.test(name)) {
 function saveCustomerEdit(event) {
   event.preventDefault();
 
-  var name = document.getElementById("nameEdit").value;
+  var name = document.getElementById("fullnameEdit").value;
   var address = document.getElementById("addressEdit").value;
   var phone = document.getElementById("phoneEdit").value;
   var email = document.getElementById("emailEdit").value;

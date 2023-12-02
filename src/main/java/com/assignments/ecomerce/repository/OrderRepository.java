@@ -84,6 +84,6 @@ public interface OrderRepository extends JpaRepository<Orders, Integer> {
             "ORDER BY WEEK(o.orderDate)")
     List<Object[]> getWeeklyRevenue(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
-    @Query("SELECT p from Orders p where CONCAT(p.orderDate,p.status,p.total) like %?1%")
+    @Query("SELECT p from Orders p where CONCAT(p.orderDate,p.status,p.total,p.orderDate) like %?1%")
     List<Orders> searchOrders(String keyword);
 }

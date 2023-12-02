@@ -53,7 +53,7 @@ public class CouponController {
         model.addAttribute("listCoupon", listCoupon);
         model.addAttribute("listProducts", listProducts);
         model.addAttribute("categories", categories);
-        model.addAttribute("user", userDetails);
+        model.addAttribute("userDetails", userDetails);
         return "couponCustomer";
     }
 
@@ -63,7 +63,7 @@ public class CouponController {
         List<Category> categories = categoryService.getAllCategory();
         Coupon coupon = couponService.findById(id);
         UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
-        model.addAttribute("user", userDetails);
+        model.addAttribute("userDetails", userDetails);
         model.addAttribute("coupon", coupon);
         model.addAttribute("listProducts", listProducts);
         model.addAttribute("categories", categories);

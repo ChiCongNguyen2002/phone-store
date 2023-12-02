@@ -37,6 +37,7 @@
                             <div class="page-title">
                                 <h2>Danh Sách Đơn hàng của bạn</h2>
                             </div>
+
                             <table class="table table-bordered cart_summary table-striped" style="margin-top:10px">
                                 <thead>
                                 <tr class="first last">
@@ -50,55 +51,54 @@
                                 </thead>
                                 <tbody>
                                 <tr th:each="orders,index : ${listOrder}">
-                                    <td class="text-center" th:text="${orders.user.getFullname()}"></td>
-                                    <td class="text-center" th:text="${orders.orderDate}"></td>
-                                    <td>
-                             <span th:switch="${orders.Status}">
-                                    <span class="text-center" th:case="1">Đang chờ duyệt</span>
-                                    <span class="text-center" th:case="2">Đã duyệt</span>
-                                    <span class="text-center" th:case="3">Đang giao</span>
-                                    <span class="text-center" th:case="4">Đã giao</span>
-                                    <span class="text-center" th:case="5">Đã huỷ</span>
-                                </span>
-                                    </td>
-                                    <td class="text-center" th:text="${formattedPrices[__${index.index}__] + ' VNĐ'}"></td>
-                                    <td>
-                            <span th:switch="${orders.status}">
-                                <span th:case="1">
-                                    <button class="btn btn-danger btn-cancel text-center">
-                                        <a class="text-center" th:href="@{'/CancelOrderStatus/0/' + ${orders.Id}}">Hủy đơn</a>
-                                    </button>
-                                </span>
+                                    <form id="orderDetailForm" th:action="@{/OrderDetailByUser/0}" method="post">
+                                        <input type="hidden" name="orderId" th:value="${orders.Id}">
+                                        <td class="text-center" th:text="${orders.user.getFullname()}"></td>
+                                        <td class="text-center" th:text="${orders.orderDate}"></td>
+                                        <td>
+                                         <span class="text-center" th:switch="${orders.Status}">
+                                                <span class="text-center" th:case="1">Đang chờ duyệt</span>
+                                                <span class="text-center" th:case="2">Đã duyệt</span>
+                                                <span class="text-center" th:case="3">Đang giao</span>
+                                                <span class="text-center" th:case="4">Đã giao</span>
+                                                <span class="text-center" th:case="5">Đã huỷ</span>
+                                         </span>
+                                            </td>
+                                        <td class="text-center" th:text="${#numbers.formatDecimal(orders.total, 0, 'COMMA', 0, 'POINT') + 'VND'}"></td>
+                                        <td class="text-center">
+                                            <span th:switch="${orders.Status}">
+                                            <span th:case="1">
+                                                <button class="btn btn-danger btn-cancel text-center">
+                                                    <a class="text-center"
+                                                       th:href="@{'/CancelOrderStatusByUser/0/' + ${orders.Id}}">Hủy đơn</a>
+                                                </button>
+                                            </span>
 
-                                <span th:case="2">
-                                    <button class="btn btn-danger btn-cancel text-center">
-                                        <a class="text-center" th:href="@{'/CancelOrderStatus/0/' + ${orders.Id}}">Hủy đơn</a>
-                                    </button>
-                                </span>
+                                            <span th:case="2">
+                                                    <span class="text-center">Đơn Hàng đã được Duyệt</span>
+                                            </span>
 
-                                <span th:case="3">
-                                    <button class="btn btn-success btn-update-status text-center">
-                                        <a class="text-center" th:href="@{'/UpdateOrderStatus/0/' + ${orders.Id}}">Xác nhận đã giao hàng</a>
-                                    </button>
-                                </span>
+                                            <span th:case="3">
+                                                    <span class="text-center">Xác nhận đã giao hàng</span>
+                                            </span>
 
-                                <span th:case="4">
-                                    <span class="text-center">Đã Giao Hàng thành công</span>
-                                </span>
+                                            <span th:case="4">
+                                                <span class="text-center">Đã Giao Hàng thành công</span>
+                                            </span>
 
-                                <span th:case="5">
-                                    <span class="text-center">Đơn Hàng đã bị hủy</span>
-                                </span>
-                                </span>
-                                    </td>
-                                    <td>
-                                        <a th:if="${orders != null}" class="text-center" th:href="@{/OrderDetailByUser/0/{orderId}(orderId=${orders.Id})}">Xem
-                                            Chi Tiết</a>
-
-                                    </td>
+                                            <span th:case="5">
+                                                 <span class="text-center">Đơn Hàng đã bị hủy</span>
+                                            </span>
+                                        </span>
+                                        </td>
+                                            <td>
+                                                <button class="text-center">Xem Chi Tiết</button>
+                                            </td>
+                                    </form>
                                 </tr>
                                 </tbody>
                             </table>
+
                         </div>
                     </div>
                     <div class="box-account">
@@ -106,28 +106,29 @@
                             <h2>Thông tin tài khoản</h2>
                         </div>
 
-                        <table class="table table-bordered cart_summary table-striped" style="margin-top:10px">
-                            <thead>
-                            <tr class="first last">
-                                <th class="text-center">Tên Khách hàng</th>
-                                <th class="text-center">Địa Chi</th>
-                                <th class="text-center">Email</th>
-                                <th class="text-center">Số Điện Thoại</th>
-                                <th class="text-center">Cập nhật thông tin</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td class="text-center" th:text="${userDetail.fullname}"></td>
-                                <td class="text-center" th:text="${userDetail.address}"></td>
-                                <td class="text-center" th:text="${userDetail.email}"></td>
-                                <td class="text-center" th:text="${userDetail.phone}"></td>
-                                <td class="text-center">
-                                    <a id="editButton" th:if="${userDetail != null}" class="text-center" th:href="@{/EditAccount/0/{userId}(userId=${userDetail.id})}">Cập nhật thông tin</a>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+                            <table class="table table-bordered cart_summary table-striped" style="margin-top:10px">
+                                <thead>
+                                <tr class="first last">
+                                    <th class="text-center">Tên Khách hàng</th>
+                                    <th class="text-center">Địa Chi</th>
+                                    <th class="text-center">Email</th>
+                                    <th class="text-center">Số Điện Thoại</th>
+                                    <th class="text-center">Cập nhật thông tin</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <input type="hidden" name="userId" th:value="${userDetail.Id}">
+                                    <td class="text-center" th:text="${userDetail.fullname}"></td>
+                                    <td class="text-center" th:text="${userDetail.address}"></td>
+                                    <td class="text-center" th:text="${userDetail.email}"></td>
+                                    <td class="text-center" th:text="${userDetail.phone}"></td>
+                                    <td class="text-center">
+                                        <a id="editButton" th:if="${userDetail != null}" class="text-center" th:href="@{/EditAccount/0/{userId}(userId=${userDetail.id})}"><i class="fas fa-edit"></i></a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
                     </div>
                 </div>
             </div>

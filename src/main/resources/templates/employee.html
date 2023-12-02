@@ -27,16 +27,41 @@
 
             <!-- Begin Page Content -->
             <div class="container-fluid">
-                <div class="input-group" style="width: 30%; margin-bottom: 20px;">
-                    <form th:action="@{/search-employee/0}" method="get">
-                        <input type="text" class="form-control rounded" placeholder="Search" name="keyword"
-                               aria-label="Search"
-                               aria-describedby="search-addon"/>
-                        <button type="submit" class="btn btn-outline-primary">search</button>
-                    </form>
-                </div>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal" data-whatever="@mdo">Add new Employee</button>
-                <p th:if="${size == 0} ">No Employee</p>
+                <div class="card mb-12">
+                    <h1 class="mt-4">Danh Sách Nhân Viên</h1>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item"><a style="color: #0779e4;" href="/">Trang chủ</a></li>
+                        <li class="breadcrumb-item active">Danh Sách Nhân Viên</li>
+                    </ol>
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-6 col-xs-12">
+                                <button type="button" class="btn btn-success" data-toggle="modal"
+                                        data-target="#addModal"
+                                        data-whatever="@mdo">Tạo mới
+                                </button>
+                            </div>
+
+                            <div class="col-md-6 col-xs-12">
+                                <form method="get">
+                                    <div class="row">
+                                        <div class="col-md-8 d-flex align-items-center">
+                                            <input type="text" name="keyword"
+                                                   class="form-control flex-grow-1"/>
+                                        </div>
+
+                                        <div class="col-md-4 d-flex align-items-center">
+                                            <button type="submit" class="btn btn-primary"
+                                                    style="margin: 10px"><i class="fas fa-search"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-dark ml-2"><i class="fas fa-undo"></i></button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
                 <div th:if="${success}" class="text-center alert alert-success">
                     <p th:text="${success}"></p>
                 </div>
@@ -47,24 +72,24 @@
                 <table class="styled-table">
                     <tr>
                         <th>ID</th>
-                        <th>Name</th>
-                        <th>PhoneNumber</th>
-                        <th>Address</th>
+                        <th>Tên Nhân Viên</th>
+                        <th>Số Điện Thoại</th>
+                        <th>Địa Chỉ</th>
                         <th>Email</th>
-                        <th>Salary</th>
-                        <th>Action</th>
+                        <th>Lương</th>
+                        <th>Thao tác</th>
                     </tr>
 
                     <tr th:each="employee : ${listEmployee}">
                         <td th:text="${employee.id}"></td>
-                        <td th:text="${employee.name}"></td>
-                        <td th:text="${employee.phoneNumber}"></td>
+                        <td th:text="${employee.fullname}"></td>
+                        <td th:text="${employee.phone}"></td>
                         <td th:text="${employee.address}"></td>
                         <td th:text="${employee.email}"></td>
                         <td th:text="${employee.salary}"></td>
                         <td>
-                            <a id="editButton" th:href="@{/findByIdEmployee/{id}(id=${employee.Id})}" class="btn btn-primary">Update</a>
-                            <a th:href="@{/status-employee(id = ${employee.id})}" class="btn btn-danger">Delete</a>
+                            <a id="editButton" th:href="@{/findByIdEmployee/{id}(id=${employee.id})}" class="btn btn-primary"><i class="fas fa-edit"></i></a>
+                            <a th:href="@{/status-employee(id = ${employee.id})}" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>
                         </td>
                     </tr>
                 </table>
@@ -94,14 +119,9 @@
                 <!--Pagination  -->
             </div>
             <!-- /.container-fluid -->
-
+            </div>
         </div>
         <!-- End of Main Content -->
-
-        <!-- Footer -->
-        <footer th:replace="~{fragments::footer}">
-        </footer>
-        <!-- End of Footer -->
 
     </div>
     <!-- End of Content Wrapper -->
@@ -125,27 +145,27 @@
 
                     <div class="form-group">
                         <label for="nameAdd" class="col-form-label">Name:</label>
-                        <input type="text" class="form-control"  th:field = "*{name}" id="nameAdd" name="name">
+                        <input type="text" class="form-control"  th:field = "*{fullname}" id="nameAdd" name="name" required>
                     </div>
 
                     <div class="form-group">
                         <label for="phoneAdd" class="col-form-label">Phone Number:</label>
-                        <input type="text" class="form-control"  th:field = "*{phoneNumber}" id="phoneAdd" name="phoneNumber">
+                        <input type="text" class="form-control"  th:field = "*{phone}" id="phoneAdd" name="phoneNumber" required>
                     </div>
 
                     <div class="form-group">
                         <label for="addressAdd" class="col-form-label">Address:</label>
-                        <input type="text" class="form-control"  th:field = "*{address}"  id="addressAdd" name="address">
+                        <input type="text" class="form-control"  th:field = "*{address}"  id="addressAdd" name="address" required>
                     </div>
 
                     <div class="form-group">
                         <label for="emailAdd" class="col-form-label">Email:</label>
-                        <input type="text" class="form-control"  th:field = "*{email}" id="emailAdd" name="email">
+                        <input type="text" class="form-control"  th:field = "*{email}" id="emailAdd" name="email" required>
                     </div>
 
                     <div class="form-group">
                         <label for="salaryAdd" class="col-form-label">Salary:</label>
-                        <input type="text" class="form-control"  th:field = "*{salary}" id="salaryAdd" name="email">
+                        <input type="text" class="form-control"  th:field = "*{salary}" id="salaryAdd" name="email" required>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -174,8 +194,8 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="nameEdit" class="col-form-label">Name:</label>
-                        <input type="text" class="form-control"  id="nameEdit" name="name" required>
+                        <label for="fullnameEdit" class="col-form-label">Name:</label>
+                        <input type="text" class="form-control"  id="fullnameEdit" name="fullname" required>
                     </div>
 
                     <div class="form-group">
@@ -211,5 +231,3 @@
 <div th:replace="~{fragments::script}"></div>
     <script th:src="@{/js/employee.js}"></script>
 </body>
-
-</html>

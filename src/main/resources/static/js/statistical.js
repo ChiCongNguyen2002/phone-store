@@ -109,7 +109,7 @@ function displayChart() {
         showDiv("weeklyRevenueDiv");
         // Hiển thị dữ liệu và cập nhật div "weeklyRevenueDiv"
     }else if (selectOption === "monthlyRevenue") {
-        yearSelectContainer.style.display = "block";
+        yearSelectContainer.style.display = "inline";
         yearSelect.innerHTML = ""; // Xóa tất cả các tùy chọn hiện tại
 
         // Tạo các tùy chọn từ dateFrom và dateTo

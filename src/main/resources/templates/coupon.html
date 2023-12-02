@@ -21,87 +21,107 @@
             <nav th:replace="~{fragments::top-navbar}">
             </nav>
 
-            <h1>Danh sách khuyến mãi</h1>
-            <!-- End of Topbar -->
-
             <!-- Begin Page Content -->
             <div class="container-fluid">
-                <div class="input-group" style="width: 30%; margin-bottom: 20px;">
-                    <form th:action="@{/search-coupon/0}" method="get">
-                        <input type="text" class="form-control rounded" placeholder="Search" name="keyword"
-                               aria-label="Search"
-                               aria-describedby="search-addon"/>
-                        <button type="submit" class="btn btn-outline-primary">search</button>
-                    </form>
-                </div>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal"
-                        data-whatever="@mdo">Tạo mới
-                </button>
-                <p th:if="${size == 0} ">No Products</p>
-                <div th:if="${success}" class="text-center alert alert-success">
-                    <p th:text="${success}"></p>
-                </div>
-                <div th:if="${error}" class="text-center alert alert-danger">
-                    <p th:text="${error}"></p>
-                </div>
+                <div class="card mb-12">
+                    <h1 class="mt-4">Danh Sách Khuyến mãi</h1>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item"><a style="color: #0779e4;" href="/">Trang chủ</a></li>
+                        <li class="breadcrumb-item active">Danh Sách Khuyến mãi</li>
+                    </ol>
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-6 col-xs-12">
+                                <button type="button" class="btn btn-success" data-toggle="modal"
+                                        data-target="#addModal"
+                                        data-whatever="@mdo">Tạo mới
+                                </button>
+                            </div>
 
-                <table class="styled-table">
-                    <tr>
-                        <th>ID</th>
-                        <th>Mã Code</th>
-                        <th>Số lượng còn lại</th>
-                        <th>Phần trăm giảm giá</th>
-                        <th>Mô tả</th>
-                        <th>Thao tác</th>
-                    </tr>
+                            <div class="col-md-6 col-xs-12">
+                                <form method="get">
+                                    <div class="row">
 
-                    <tr th:each="coupon : ${listCoupon}">
-                        <td th:text="${coupon.Id}"></td>
-                        <td th:text="${coupon.Code}"></td>
-                        <td th:text="${coupon.Count}"></td>
-                        <td th:text="${coupon.promotion}"></td>
-                        <td th:text="${coupon.description}"></td>
-                        <td>
-                            <a id="editButton" th:href="@{/findByIdCoupon/{id}(id=${coupon.Id})}"
-                               class="btn btn-primary">Update</a>
-                        </td>
-                    </tr>
-                </table>
+                                        <div class="col-md-8 d-flex align-items-center">
+                                            <input type="text" name="keyword"
+                                                   class="form-control flex-grow-1"/>
+                                        </div>
 
-                <!--Pagination  -->
-                <nav aria-label="...">
-                    <ul class="pagination">
-                        <li th:if="${currentPage != 0}" class="page-item ">
-                            <a th:href="@{/search-coupon/{pageNo}(pageNo=${currentPage - 1}, keyword=${keyword})}" class="page-link">Previous</a>
-                        </li>
+                                        <div class="col-md-4 d-flex align-items-center">
+                                            <button type="submit" class="btn btn-primary"
+                                                    style="margin: 10px"><i class="fas fa-search"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-dark ml-2"><i class="fas fa-undo"></i></button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
 
-                        <th:block th:if="${totalPages > 1}">
-                            <li th:each="i : ${#numbers.sequence(0, totalPages-1)}"
-                                th:classappend="${currentPage == i ? 'active' : ''}" class="page-item">
-                                <a th:href="@{/search-coupon/{pageNo}(pageNo=${i}, keyword=${keyword})}" class="page-link">
-                                    <span th:text="${i + 1}"></span>
-                                </a>
+
+                    <p th:if="${size == 0} ">No Products</p>
+                    <div th:if="${success}" class="text-center alert alert-success">
+                        <p th:text="${success}"></p>
+                    </div>
+                    <div th:if="${error}" class="text-center alert alert-danger">
+                        <p th:text="${error}"></p>
+                    </div>
+
+                    <table class="styled-table">
+                        <tr>
+                            <th>ID</th>
+                            <th>Mã Code</th>
+                            <th>Số lượng còn lại</th>
+                            <th>Phần trăm giảm giá</th>
+                            <th>Mô tả</th>
+                            <th>Thao tác</th>
+                        </tr>
+
+                        <tr th:each="coupon : ${listCoupon}">
+                            <td th:text="${coupon.Id}"></td>
+                            <td th:text="${coupon.Code}"></td>
+                            <td th:text="${coupon.Count}"></td>
+                            <td th:text="${coupon.promotion}"></td>
+                            <td th:text="${coupon.description}"></td>
+                            <td>
+                                <a id="editButton" th:href="@{/findByIdCoupon/{id}(id=${coupon.Id})}"
+                                   class="btn btn-primary"><i class="fas fa-edit"></i></a>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <!--Pagination  -->
+                    <nav aria-label="...">
+                        <ul class="pagination">
+                            <li th:if="${currentPage != 0}" class="page-item ">
+                                <a th:href="@{/search-coupon/{pageNo}(pageNo=${currentPage - 1}, keyword=${keyword})}"
+                                   class="page-link">Previous</a>
                             </li>
-                        </th:block>
 
-                        <li th:if="${currentPage + 1 != totalPages}" class="page-item">
-                            <a th:href="@{/search-coupon/{pageNo}(pageNo=${currentPage + 1},
+                            <th:block th:if="${totalPages > 1}">
+                                <li th:each="i : ${#numbers.sequence(0, totalPages-1)}"
+                                    th:classappend="${currentPage == i ? 'active' : ''}" class="page-item">
+                                    <a th:href="@{/search-coupon/{pageNo}(pageNo=${i}, keyword=${keyword})}"
+                                       class="page-link">
+                                        <span th:text="${i + 1}"></span>
+                                    </a>
+                                </li>
+                            </th:block>
+
+                            <li th:if="${currentPage + 1 != totalPages}" class="page-item">
+                                <a th:href="@{/search-coupon/{pageNo}(pageNo=${currentPage + 1},
                                  keyword=${keyword})}" class="page-link">Next</a>
-                        </li>
-                    </ul>
-                </nav>
-                <!--Pagination  -->
+                            </li>
+                        </ul>
+                    </nav>
+                    <!--Pagination  -->
+                </div>
+                <!-- /.container-fluid -->
+
             </div>
-            <!-- /.container-fluid -->
-
+            <!-- End of Main Content -->
         </div>
-        <!-- End of Main Content -->
-
-        <!-- Footer -->
-        <footer th:replace="~{fragments::footer}">
-        </footer>
-        <!-- End of Footer -->
-
     </div>
     <!-- End of Content Wrapper -->
 
@@ -119,7 +139,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">New Coupon</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Tạo Khuyến Mãi</h5>
                 </div>
                 <div class="modal-body">
 
@@ -129,26 +149,27 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="countAdd" class="col-form-label">Count:</label>
-                        <input id="countAdd" type="text" class="form-control" th:field="*{count}" name="couponCount" required>
+                        <label for="countAdd" class="col-form-label">Số Lượng:</label>
+                        <input id="countAdd" type="text" class="form-control" th:field="*{count}" name="couponCount"
+                               required>
                     </div>
 
                     <div class="form-group">
-                        <label for="promotionAdd" class="col-form-label">Promotion:</label>
+                        <label for="promotionAdd" class="col-form-label">Phần Trăm Khuyến Mãi:</label>
                         <input id="promotionAdd" type="text" class="form-control" th:field="*{promotion}"
                                name="couponPromotion" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="descriptionAdd" class="col-form-label">Describe:</label>
+                        <label for="descriptionAdd" class="col-form-label">Mô Tả:</label>
                         <input id="descriptionAdd" type="text" class="form-control" th:field="*{description}"
                                name="couponDescription" required>
                     </div>
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" onclick="saveCoupon(event)">Save</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-primary" onclick="saveCoupon(event)">Lưu Lại</button>
                 </div>
             </div>
         </div>
@@ -163,7 +184,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Edit Coupon</h5>
+                    <h5 class="modal-title">Cập Nhật Khuyến Mãi</h5>
                 </div>
                 <div class="modal-body">
 
@@ -173,28 +194,28 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="codeEdit" class="col-form-label">Code:</label>
+                        <label for="codeEdit" class="col-form-label">Mã Code:</label>
                         <input id="codeEdit" type="text" class="form-control" name="code" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="countEdit" class="col-form-label">Count:</label>
+                        <label for="countEdit" class="col-form-label">Số Lượng:</label>
                         <input id="countEdit" type="text" class="form-control" name="count" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="promotionEdit" class="col-form-label">Promotion:</label>
+                        <label for="promotionEdit" class="col-form-label">Phần Trăm Khuyến Mãi:</label>
                         <input id="promotionEdit" type="text" class="form-control" name="promotion" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="descriptionEdit" class="col-form-label">Describe:</label>
+                        <label for="descriptionEdit" class="col-form-label">Mô Tả:</label>
                         <input id="descriptionEdit" type="text" class="form-control" name="description" required>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" onclick="saveCouponEdit(event)">Save</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-primary" onclick="saveCouponEdit(event)">Lưu Lại</button>
                 </div>
             </div>
         </div>

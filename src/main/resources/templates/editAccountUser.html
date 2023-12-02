@@ -47,18 +47,9 @@
                             </div>
 
                             <form id="productForm" class="form-horizontal" enctype="multipart/form-data" method="POST"
-                                  th:action="@{/EditAccount/0/{userId}(userId = ${userDetail.id})}"
-                                  th:object="${userDetail}">
+                                  th:action="@{/EditAccount/0/{userId}(userId = ${userDetail.id})}" th:object="${userDetail}">
 
-                                <!-- Text input-->
-                                <div class="form-group">
-                                    <label class="col-md-4 control-label" for="idEdit">ID</label>
-                                    <div class="col-md-4">
-                                        <input id="idEdit" th:field="*{id}" name="idEdit"
-                                               class="form-control input-md" required=""
-                                               type="text" readonly>
-                                    </div>
-                                </div>
+                                <input type="hidden" name="orderId" id="idEdit" th:field="*{id}">
 
                                 <!-- Text input-->
                                 <div class="form-group">

@@ -66,7 +66,6 @@ public class ProductController {
     public String DetailProduct(@PathVariable("id") Integer id, Model model,Principal principal) {
 
         Product product = productService.findById(id);
-        UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
         List<Product> productDtoList = productService.findAllByCategory(product.getCategory().getName());
         List<Category> categories = categoryService.getAllCategory();
         List<Review> reviews = reviewService.getByProduct(product);
@@ -90,7 +89,6 @@ public class ProductController {
         model.addAttribute("getProductByColorAndName", getProductByColorAndName);*/
 
         model.addAttribute("user", user);
-        model.addAttribute("userDetails", userDetails);
         model.addAttribute("countReview", countReview);
         model.addAttribute("calculateAverageRating", calculateAverageRating);
         model.addAttribute("formattedPrice", formattedPrice);
@@ -106,7 +104,7 @@ public class ProductController {
 
     @GetMapping("/ViewByCategory/{pageNo}")
     public String ViewByCategory(@PathVariable("pageNo") int pageNo,
-                                 @RequestParam("categoryId") Integer categoryId, Model model,Principal principal) {
+                                 @RequestParam("categoryId") Integer categoryId, Model model) {
         List<Category> categories = categoryService.getAllCategory();
         Page<Product> listProducts = productService.pageProductByCategory(pageNo, categoryId);
         Category category = categoryService.findById(categoryId);
@@ -126,8 +124,6 @@ public class ProductController {
             formattedPrices.add(formattedPrice);
         }
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
-        model.addAttribute("userDetails", userDetails);
         model.addAttribute("listProducts", listProducts.getContent());
         model.addAttribute("formattedPrices", formattedPrices);
 
@@ -170,20 +166,7 @@ public class ProductController {
                                 Model model, Principal principal, HttpSession session) {
 
         Page<Product> listProducts = productService.searchProducts(pageNo, keyword);
-
         List<Category> categories = categoryService.getAllCategory();
-        List<String> formattedPrices = new ArrayList<>();
-        DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols(Locale.getDefault());
-        decimalFormatSymbols.setGroupingSeparator('.');
-        DecimalFormat decimalFormat = new DecimalFormat("#,###", decimalFormatSymbols);
-
-        for (Product product : listProducts.getContent()) {
-            String formattedPrice = decimalFormat.format(product.getPrice());
-            formattedPrices.add(formattedPrice);
-        }
-
-        model.addAttribute("formattedPrices", formattedPrices);
-
         session.setAttribute("keyword", keyword);
         model.addAttribute("keyword", keyword);
         model.addAttribute("categories", categories);
@@ -194,6 +177,7 @@ public class ProductController {
         model.addAttribute("productNew", new Product());
         return "product";
     }
+
 
     @GetMapping("/search-productByOption/{pageNo}")
     public String searchProductByOption(@PathVariable("pageNo") int pageNo,
@@ -215,8 +199,6 @@ public class ProductController {
 
         List<Category> categories = categoryService.getAllCategory();
         Page<Product> listProducts = productService.searchProductByOption(pageNo, category, sortOption, color, minPrice, maxPrice);
-        UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
-        model.addAttribute("user", userDetails);
         model.addAttribute("color", color);
         model.addAttribute("minPrice", minPrice);
         model.addAttribute("maxPrice", maxPrice);
@@ -254,9 +236,6 @@ public class ProductController {
         double defaultMinPrice = productService.getMinPrice(listProducts);
         double defaultMaxPrice = productService.getMaxPrice(listProducts);
         session.setAttribute("keyword", keyword);
-
-        UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
-        model.addAttribute("user", userDetails);
         model.addAttribute("keyword", keyword);
         model.addAttribute("categories", categories);
         model.addAttribute("size", listProducts.getSize());
@@ -341,7 +320,7 @@ public class ProductController {
             e.printStackTrace();
             attributes.addFlashAttribute("error", "Failed to update");
         }
-        return "redirect:/product/0";
+        return "redirect:/search-products/0?keyword=";
     }
 
     @RequestMapping(value = "/status-product", method = {RequestMethod.PUT, RequestMethod.GET})
@@ -353,6 +332,7 @@ public class ProductController {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("error", "Deleted failed!");
         }
-        return "redirect:/product/0";
+
+        return "redirect:/search-products/0?keyword=";
     }
 }

@@ -1,7 +1,9 @@
 package com.assignments.ecomerce.service;
 
 import com.assignments.ecomerce.dto.UserDTO;
+import com.assignments.ecomerce.model.Customer;
 import com.assignments.ecomerce.model.User;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,6 +14,7 @@ public interface UserService {
     int countUsersByRole();
     User findByEmailUser(String email);
     User getById(Integer id);
-
     User update(User user);
+
+    Page<User> searchUser(int pageNo, String keyword);
 }

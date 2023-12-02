@@ -30,10 +30,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(c -> c.disable())
-                .authorizeHttpRequests(request -> request.requestMatchers("/statistical")
+                .authorizeHttpRequests(request -> request.requestMatchers("/index")
                         .hasAuthority("ADMIN")
                         .requestMatchers("/indexUser").hasAuthority("USER")
-                        .requestMatchers("/registration","/reset-password","/password-request","/css/**", "/dist/**", "/fonts/**",
+                        .requestMatchers("/*","/indexUser","/registration","/reset-password","/password-request","/css/**", "/dist/**", "/fonts/**",
                                 "/img/**", "/js/**", "/less/**", "/lib/**", "/pages/**",
                                 "/scss/**", "/themes/**", "/vendor/**").permitAll()
                         .anyRequest().authenticated())

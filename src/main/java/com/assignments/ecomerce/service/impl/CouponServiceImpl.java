@@ -62,7 +62,7 @@ public class CouponServiceImpl implements CouponService {
 
     public Page<Coupon> searchCoupon(int pageNo, String keyword) {
         Pageable pageable = PageRequest.of(pageNo, 5);
-        List<Coupon> Coupons = transfer(couponRepository.searchCoupon(keyword));
+        List<Coupon> Coupons = transfer(couponRepository.searchCoupon(keyword.trim()));
         Page<Coupon> couponPages = toPage(Coupons, pageable);
         return couponPages;
     }

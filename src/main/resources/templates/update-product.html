@@ -24,112 +24,108 @@
 
             <!-- Begin Page Content -->
             <div class="container-fluid">
-                <div class="input-group" style="width: 30%; margin-bottom: 20px;">
-                    <form method="get" th:action="@{/search-products/0}">
-                        <input aria-describedby="search-addon" aria-label="Search" class="form-control rounded"
-                               name="keyword"
-                               placeholder="Search"
-                               type="text"/>
-                        <button class="btn btn-outline-primary" type="submit">search</button>
-                    </form>
-                </div>
+                <div class="card mb-12">
+                    <h1 class="mt-4">Cập nhật sản phẩm</h1>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item"><a style="color: #0779e4;" href="/">Trang chủ</a></li>
+                        <li class="breadcrumb-item active">Cập nhật sản phẩm</li>
+                    </ol>
+                    <div class="card-header">
+                        <a class="btn btn-success" asp-action="Index" asp-controller="Product">Về danh sách</a>
+                    </div>
 
-                <form id="productForm" class="form-horizontal" enctype="multipart/form-data" method="POST"
-                      th:action="@{/update-product/{id}(id = ${newProduct.id})}"
-                      th:object="${newProduct}">
-                    <fieldset>
+                    <form id="productForm" class="form-horizontal" enctype="multipart/form-data" method="POST"
+                          th:action="@{/update-product/{id}(id = ${newProduct.id})}"
+                          th:object="${newProduct}">
+                        <fieldset>
 
-                        <!-- Form Name -->
-                        <legend>UPDATE PRODUCTS</legend>
-
-                        <!-- Text input-->
-                        <div class="form-group">
-                            <label class="col-md-4 control-label" for="product_name">PRODUCT NAME</label>
-                            <div class="col-md-4">
-                                <input id="product_name" th:field="*{name}" name="product_name"
-                                       class="form-control input-md" required=""
-                                       type="text">
+                            <!-- Text input-->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="product_name">Tên Sản Phẩm</label>
+                                <div class="col-md-4">
+                                    <input id="product_name" th:field="*{name}" name="product_name"
+                                           class="form-control input-md" required=""
+                                           type="text">
+                                </div>
                             </div>
-                        </div>
 
-                        <!-- Select Basic -->
-                        <div class="form-group">
-                            <label class="col-md-4 control-label" for="category"> CATEGORY</label>
-                            <div class="col-md-4">
-                                <select id="category" th:field="*{category}" name="category" class="form-control">
-                                    <option th:each="category : ${categories}"
-                                            th:value="${category.id}"
-                                            th:text="${category.name}"
-                                    ></option>
-                                </select>
+                            <!-- Select Basic -->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="category">Danh Mục</label>
+                                <div class="col-md-4">
+                                    <select id="category" th:field="*{category}" name="category" class="form-control">
+                                        <option th:each="category : ${categories}"
+                                                th:value="${category.id}"
+                                                th:text="${category.name}"
+                                        ></option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
 
-                        <!-- Text input-->
-                        <div class="form-group">
-                            <label class="col-md-4 control-label" for="description">DESCRIPTION </label>
-                            <div class="col-md-4">
-                                <input id="description" th:field="*{description}" name="description"
-                                       class="form-control input-md" required=""
-                                       type="text">
+                            <!-- Text input-->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="description">Chi Tiết Sản Phẩm </label>
+                                <div class="col-md-4">
+                                    <input id="description" th:field="*{description}" name="description"
+                                           class="form-control input-md" required=""
+                                           type="text">
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="form-group">
-                            <label class="col-md-4 control-label" for="quantity">color</label>
-                            <div class="col-md-4">
-                                <input id="color" th:field="*{color}" name="color"
-                                       class="form-control input-md" required=""
-                                       type="text">
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="quantity">Màu Sắc</label>
+                                <div class="col-md-4">
+                                    <input id="color" th:field="*{color}" name="color"
+                                           class="form-control input-md" required=""
+                                           type="text">
+                                </div>
                             </div>
-                        </div>
 
-                        <!-- Text input-->
-                        <div class="form-group">
-                            <label class="col-md-4 control-label" for="quantity">QUANTITY</label>
-                            <div class="col-md-4">
-                                <input id="quantity" th:field="*{quantity}" name="quantity"
-                                       class="form-control input-md" required=""
-                                       type="text">
+                            <!-- Text input-->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="quantity">Số Lượng</label>
+                                <div class="col-md-4">
+                                    <input id="quantity" th:field="*{quantity}" name="quantity"
+                                           class="form-control input-md" required="" readonly
+                                           type="text">
+                                </div>
                             </div>
-                        </div>
 
-                        <!-- Text input-->
-                        <div class="form-group">
-                            <label class="col-md-4 control-label" for="price">PRICE</label>
-                            <div class="col-md-4">
-                                <input id="price" th:field="*{price}" name="price" class="form-control input-md"
-                                       required="" type="text">
+                            <!-- Text input-->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="price">Giá Tiền</label>
+                                <div class="col-md-4">
+                                    <input id="price" th:field="*{price}" name="price" class="form-control input-md"
+                                           required="" type="text">
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="form-group">
-                            <div class="col-md-4">
-                                <!-- File Button -->
-                                <div class="form-group">
-                                    <label class="col-md-4 control-label" for="file">IMAGE</label>
-                                    <div class="col-md-4">
-                                        <img class="product-image" th:field="*{image}" th:src="@{'/img/' + ${productImage}}" alt="Product Image">
-                                        <input id="file" name="photo_file" type="file" accept="image/png, image/jpeg"/>
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <!-- File Button -->
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="file">Hình Ảnh</label>
+                                        <div class="col-md-4">
+                                            <img class="product-image" th:field="*{image}"
+                                                 th:src="@{'/img/' + ${productImage}}" alt="Product Image">
+                                            <input id="file" name="photo_file" type="file"
+                                                   accept="image/png, image/jpeg"/>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Save</button>
-                    </fieldset>
-                </form>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </fieldset>
+                    </form>
 
+
+                </div>
+                <!-- /.container-fluid -->
 
             </div>
-            <!-- /.container-fluid -->
+            <!-- End of Main Content -->
 
         </div>
-        <!-- End of Main Content -->
-
-        <!-- Footer -->
-        <footer th:replace="~{fragments::footer}">
-        </footer>
-        <!-- End of Footer -->
 
     </div>
     <!-- End of Content Wrapper -->

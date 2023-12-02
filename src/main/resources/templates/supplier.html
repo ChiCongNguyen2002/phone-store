@@ -21,81 +21,111 @@
             <nav th:replace="~{fragments::top-navbar}">
             </nav>
 
-            <h1>Danh sách Nhà cung cấp</h1>
-            <!-- End of Topbar -->
-
-            <!-- Begin Page Content -->
             <div class="container-fluid">
-                <div class="input-group" style="width: 30%; margin-bottom: 20px;">
-                    <form th:action="@{/search-supplier/0}" method="get">
-                        <input type="text" class="form-control rounded" placeholder="Search" name="keyword" aria-label="Search"
-                               aria-describedby="search-addon"/>
-                        <button type="submit" class="btn btn-outline-primary">search</button>
-                    </form>
-                </div>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal" data-whatever="@mdo">Tạo mới</button>
-                <p th:if="${size == 0} ">No Products</p>
-                <div th:if="${success}" class="text-center alert alert-success">
-                    <p th:text="${success}"></p>
-                </div>
-                <div th:if="${error}" class="text-center alert alert-danger">
-                    <p th:text="${error}"></p>
-                </div>
+                <!--                <div class="input-group" style="width: 30%; margin-bottom: 20px;">
+                                    <form th:action="@{/search-supplier/0}" method="get">
+                                        <input type="text" class="form-control rounded" placeholder="Search" name="keyword" aria-label="Search"
+                                               aria-describedby="search-addon"/>
+                                        <button type="submit" class="btn btn-outline-primary">search</button>
+                                    </form>
+                                </div>
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal" data-whatever="@mdo">Tạo mới</button>-->
 
-                <table class="styled-table">
-                    <tr>
-                        <th>ID</th>
-                        <th>Tên</th>
-                        <th>Số điện thoại</th>
-                        <th>Địa chỉ</th>
-                        <th>Thao tác</th>
-                    </tr>
+                <div class="card mb-12">
+                    <h1 class="mt-4">Danh sách Nhà cung cấp</h1>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item"><a style="color: #0779e4;" href="/">Trang chủ</a></li>
+                        <li class="breadcrumb-item active">Danh sách Nhà cung cấp</li>
+                    </ol>
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-6 col-xs-12">
+                                <button type="button" class="btn btn-success" data-toggle="modal"
+                                        data-target="#addModal"
+                                        data-whatever="@mdo">Tạo mới
+                                </button>
+                            </div>
 
-                    <tr th:each="supplier : ${listSupplier}">
-                        <td th:text="${supplier.Id}"></td>
-                        <td th:text="${supplier.Name}"></td>
-                        <td th:text="${supplier.PhoneNumber}"></td>
-                        <td th:text="${supplier.Address}"></td>
-                        <td>
-                            <a id="editButton" th:href="@{/findByIdSupplier/{id}(id=${supplier.Id})}" class="btn btn-primary">Update</a>
-                        </td>
-                    </tr>
-                </table>
+                            <div class="col-md-6 col-xs-12">
+                                <form method="get">
+                                    <div class="row">
 
-                <!--Pagination  -->
-                <nav aria-label="...">
-                    <ul class="pagination">
-                        <li th:if="${currentPage != 0}" class="page-item ">
-                            <a th:href="@{/search-supplier/{pageNo}(pageNo=${currentPage - 1}, keyword=${keyword})}" class="page-link">Previous</a>
-                        </li>
+                                        <div class="col-md-8 d-flex align-items-center">
+                                            <input type="text" name="keyword"
+                                                   class="form-control flex-grow-1"/>
+                                        </div>
 
-                        <th:block th:if="${totalPages > 1}">
-                            <li th:each="i : ${#numbers.sequence(0, totalPages-1)}"
-                                th:classappend="${currentPage == i ? 'active' : ''}" class="page-item">
-                                <a th:href="@{/search-supplier/{pageNo}(pageNo=${i}, keyword=${keyword})}" class="page-link">
-                                    <span th:text="${i + 1}"></span>
-                                </a>
+                                        <div class="col-md-4 d-flex align-items-center">
+                                            <button type="submit" class="btn btn-primary"
+                                                    style="margin: 10px"><i class="fas fa-search"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-dark ml-2"><i class="fas fa-undo"></i></button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p th:if="${size == 0} ">No Products</p>
+                    <div th:if="${success}" class="text-center alert alert-success">
+                        <p th:text="${success}"></p>
+                    </div>
+                    <div th:if="${error}" class="text-center alert alert-danger">
+                        <p th:text="${error}"></p>
+                    </div>
+
+                    <table class="styled-table">
+                        <tr>
+                            <th>ID</th>
+                            <th>Tên</th>
+                            <th>Số điện thoại</th>
+                            <th>Địa chỉ</th>
+                            <th>Thao tác</th>
+                        </tr>
+
+                        <tr th:each="supplier : ${listSupplier}">
+                            <td th:text="${supplier.Id}"></td>
+                            <td th:text="${supplier.Name}"></td>
+                            <td th:text="${supplier.PhoneNumber}"></td>
+                            <td th:text="${supplier.Address}"></td>
+                            <td>
+                                <a id="editButton" th:href="@{/findByIdSupplier/{id}(id=${supplier.Id})}"
+                                   class="btn btn-primary"><i class="fas fa-edit"></i></a>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <!--Pagination  -->
+                    <nav aria-label="...">
+                        <ul class="pagination">
+                            <li th:if="${currentPage != 0}" class="page-item ">
+                                <a th:href="@{/search-supplier/{pageNo}(pageNo=${currentPage - 1}, keyword=${keyword})}"
+                                   class="page-link">Previous</a>
                             </li>
-                        </th:block>
 
-                        <li th:if="${currentPage + 1 != totalPages}" class="page-item">
-                            <a th:href="@{/search-supplier/{pageNo}(pageNo=${currentPage + 1},
+                            <th:block th:if="${totalPages > 1}">
+                                <li th:each="i : ${#numbers.sequence(0, totalPages-1)}"
+                                    th:classappend="${currentPage == i ? 'active' : ''}" class="page-item">
+                                    <a th:href="@{/search-supplier/{pageNo}(pageNo=${i}, keyword=${keyword})}"
+                                       class="page-link">
+                                        <span th:text="${i + 1}"></span>
+                                    </a>
+                                </li>
+                            </th:block>
+
+                            <li th:if="${currentPage + 1 != totalPages}" class="page-item">
+                                <a th:href="@{/search-supplier/{pageNo}(pageNo=${currentPage + 1},
                                  keyword=${keyword})}" class="page-link">Next</a>
-                        </li>
-                    </ul>
-                </nav>
-                <!--Pagination  -->
+                            </li>
+                        </ul>
+                    </nav>
+                    <!--Pagination  -->
+                </div>
+                <!-- /.container-fluid -->
             </div>
-            <!-- /.container-fluid -->
-
         </div>
         <!-- End of Main Content -->
-
-        <!-- Footer -->
-        <footer th:replace="~{fragments::footer}">
-        </footer>
-        <!-- End of Footer -->
-
     </div>
     <!-- End of Content Wrapper -->
 
@@ -107,8 +137,9 @@
 </a>
 
 <!--Add Modal-->
-<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <form id="addForm" th:action="@{/add-supplier}" method="post" th:object="${supplierNew}">
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <form id="addForm" th:action="@{/add-supplier}" method="post" th:object="${supplierNew}">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -118,17 +149,19 @@
 
                     <div class="form-group">
                         <label for="nameAdd" class="col-form-label">Name:</label>
-                        <input type="text" class="form-control"  th:field = "*{name}" id="nameAdd" name="name" required>
+                        <input type="text" class="form-control" th:field="*{name}" id="nameAdd" name="name" required>
                     </div>
 
                     <div class="form-group">
                         <label for="phoneAdd" class="col-form-label">Phone Number:</label>
-                        <input type="text" class="form-control"  th:field = "*{phoneNumber}" id="phoneAdd" name="phoneNumber" required>
+                        <input type="text" class="form-control" th:field="*{phoneNumber}" id="phoneAdd"
+                               name="phoneNumber" required>
                     </div>
 
                     <div class="form-group">
                         <label for="addressAdd" class="col-form-label">Address:</label>
-                        <input type="text" class="form-control"  th:field = "*{address}"  id="addressAdd" name="address" required>
+                        <input type="text" class="form-control" th:field="*{address}" id="addressAdd" name="address"
+                               required>
                     </div>
 
                 </div>
@@ -143,7 +176,8 @@
 
 <!--end-->
 <!--Change Name category Modal-->
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalExample" aria-hidden="true">
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalExample"
+     aria-hidden="true">
     <form id="editForm" th:action="@{/update-supplier}" method="GET">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -153,22 +187,22 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="idEdit" class="col-form-label">Id:</label>
-                        <input type="text" class="form-control"  id="idEdit" name="id" required readonly>
+                        <input type="text" class="form-control" id="idEdit" name="id" required readonly>
                     </div>
 
                     <div class="form-group">
                         <label for="nameEdit" class="col-form-label">Name:</label>
-                        <input type="text" class="form-control"  id="nameEdit" name="name" required>
+                        <input type="text" class="form-control" id="nameEdit" name="name" required>
                     </div>
 
                     <div class="form-group">
                         <label for="nameEdit" class="col-form-label">Phone Number:</label>
-                        <input type="text" class="form-control"  id="phoneEdit" name="phoneNumber" required>
+                        <input type="text" class="form-control" id="phoneEdit" name="phoneNumber" required>
                     </div>
 
                     <div class="form-group">
                         <label for="nameEdit" class="col-form-label">Address:</label>
-                        <input type="text" class="form-control"  id="addressEdit" name="address" required>
+                        <input type="text" class="form-control" id="addressEdit" name="address" required>
                     </div>
 
                 </div>

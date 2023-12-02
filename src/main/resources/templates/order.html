@@ -24,7 +24,7 @@
 
             <!-- Begin Page Content -->
             <div class="container-fluid">
-                <div class="input-group" style="width: 30%; margin-bottom: 20px;">
+                <!--<div class="input-group" style="width: 30%; margin-bottom: 20px;">
                     <form th:action="@{/search-order/0}" method="get">
                         <input type="text" class="form-control rounded" placeholder="Search" name="keyword"
                                aria-label="Search"
@@ -33,39 +33,44 @@
                     </form>
                 </div>
 
-                <h1>Xuất hóa đơn ra file Excel</h1>
-                <div class="check_style">
-                    <form class="order_style" th:action="@{/search-order-by-time/0}" id="filterOrder" method="get"
-                          onsubmit="filterAndExport(); return false;">
-                        <label>Lọc theo ngày</label>
-                        <div class="date-input">
-                            <label for="dateFrom">Từ ngày:</label>
-                            <input type="date" id="dateFrom" name="dateFrom">
-                        </div>
-                        <div class="date-input">
-                            <label for="dateTo">Đến ngày:</label>
-                            <input type="date" id="dateTo" name="dateTo">
-                        </div>
-                        <button class="order_style_2" type="submit">Lọc Hóa đơn</button>
-                    </form>
+                <h1>Xuất hóa đơn ra file Excel</h1>-->
 
-                    <form th:action="@{/export/orders-excel/0}" id="exportForm" method="get"
-                          onsubmit="Export(); return false;">
-                        <input style="display:none" type="date" id="dateFromExcel" name="dateFromExcel">
-                        <input style="display:none" type="date" id="dateToExcel" name="dateToExcel">
-                        <button type="submit" style="background-color: green;">Xuất File Excel</button>
-                    </form>
-                </div>
+                <div class="card mb-12">
+                    <h1 class="mt-4">Danh Sách Đơn Hàng</h1>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item"><a style="color: #0779e4;" href="/">Trang chủ</a></li>
+                        <li class="breadcrumb-item active">Danh Sách Đơn Hàng</li>
+                    </ol>
 
-                <p th:if="${size == 0} ">No Products</p>
-                <div th:if="${success}" class="text-center alert alert-success">
-                    <p th:text="${success}"></p>
-                </div>
-                <div th:if="${error}" class="text-center alert alert-danger">
-                    <p th:text="${error}"></p>
-                </div>
+                    <div class="check_style">
+                        <form class="order_style" th:action="@{/search-order-by-time/0}" id="filterOrder" method="get"
+                              onsubmit="filterAndExport(); return false;">
+                            <div class="filter-header">
+                                <label>Lọc theo ngày</label>
+                            </div>
+                            <div class="date-input">
+                                <label for="dateFrom">Từ ngày:</label>
+                                <input type="date" id="dateFrom" name="dateFrom">
+                            </div>
+                            <div class="date-input">
+                                <label for="dateTo">Đến ngày:</label>
+                                <input type="date" id="dateTo" name="dateTo">
+                            </div>
+                            <button class="order_style_2" type="submit">Lọc Hóa đơn</button>
+                        </form>
 
-                <form id="orderDetailForm" th:action="@{/orderdetail}" method="post">
+
+                        <button type="submit" onclick="Export()" style="background-color: green;">Xuất File Excel</button>
+                    </div>
+
+                    <p th:if="${size == 0} ">No Products</p>
+                    <div th:if="${success}" class="text-center alert alert-success">
+                        <p th:text="${success}"></p>
+                    </div>
+                    <div th:if="${error}" class="text-center alert alert-danger">
+                        <p th:text="${error}"></p>
+                    </div>
+
                     <table class="styled-table">
                         <tr>
                             <th>ID</th>
@@ -78,11 +83,12 @@
                         </tr>
 
                         <tr th:each="orders,index : ${listOrder}">
-                            <input type="hidden" name="orderId" th:value="${orders.Id}">
-                            <td th:text="${orders.Id}"></td>
-                            <td th:text="${orders.user.getFullname()}"></td>
-                            <td th:text="${orders.orderDate}"></td>
-                            <td>
+                            <form id="orderDetailForm" th:action="@{/orderdetail}" method="post">
+                                <input type="hidden" name="orderId" th:value="${orders.Id}">
+                                <td th:text="${orders.Id}"></td>
+                                <td th:text="${orders.user.getFullname()}"></td>
+                                <td th:text="${orders.orderDate}"></td>
+                                <td>
                              <span th:switch="${orders.Status}">
                                     <span th:case="1">Đang chờ duyệt</span>
                                     <span th:case="2">Đã duyệt</span>
@@ -90,9 +96,9 @@
                                     <span th:case="4">Đã giao</span>
                                     <span th:case="5">Đã huỷ</span>
                                 </span>
-                            </td>
-                            <td th:text="${formattedPrices[__${index.index}__] + ' VNĐ'}"></td>
-                            <td>
+                                </td>
+                                <td th:text="${#numbers.formatDecimal(orders.total, 0, 'COMMA', 0, 'POINT') + 'VND'}"></td>
+                                <td>
                             <span th:switch="${orders.status}">
                                 <span th:case="1">
                                     <button class="btn btn-success btn-update-status">
@@ -126,49 +132,46 @@
                                     <span>Đơn Hàng đã bị hủy</span>
                                 </span>
                             </span>
-                            </td>
-                            <td>
-                                <button type="submit">Xem Chi Tiết</button>
-                            </td>
+                                </td>
+                                <td>
+                                    <button type="submit">Xem Chi Tiết</button>
+                                </td>
+                            </form>
                         </tr>
+
                     </table>
-                </form>
 
-                <!--Pagination  -->
-                <nav aria-label="...">
-                    <ul class="pagination">
-                        <li th:if="${currentPage != 0}" class="page-item ">
-                            <a th:href="@{/search-order/{pageNo}(pageNo=${currentPage - 1}, keyword=${keyword})}"
-                               class="page-link">Previous</a>
-                        </li>
 
-                        <th:block th:if="${totalPages > 1}">
-                            <li th:each="i : ${#numbers.sequence(0, totalPages-1)}"
-                                th:classappend="${currentPage == i ? 'active' : ''}" class="page-item">
-                                <a th:href="@{/search-order/{pageNo}(pageNo=${i}, keyword=${keyword})}"
-                                   class="page-link">
-                                    <span th:text="${i + 1}"></span>
-                                </a>
+                    <!--Pagination  -->
+                    <nav aria-label="...">
+                        <ul class="pagination">
+                            <li th:if="${currentPage != 0}" class="page-item ">
+                                <a th:href="@{/search-order/{pageNo}(pageNo=${currentPage - 1}, keyword=${keyword})}"
+                                   class="page-link">Previous</a>
                             </li>
-                        </th:block>
 
-                        <li th:if="${currentPage + 1 != totalPages}" class="page-item">
-                            <a th:href="@{/search-order/{pageNo}(pageNo=${currentPage + 1},
+                            <th:block th:if="${totalPages > 1}">
+                                <li th:each="i : ${#numbers.sequence(0, totalPages-1)}"
+                                    th:classappend="${currentPage == i ? 'active' : ''}" class="page-item">
+                                    <a th:href="@{/search-order/{pageNo}(pageNo=${i}, keyword=${keyword})}"
+                                       class="page-link">
+                                        <span th:text="${i + 1}"></span>
+                                    </a>
+                                </li>
+                            </th:block>
+
+                            <li th:if="${currentPage + 1 != totalPages}" class="page-item">
+                                <a th:href="@{/search-order/{pageNo}(pageNo=${currentPage + 1},
                                  keyword=${keyword})}" class="page-link">Next</a>
-                        </li>
-                    </ul>
-                </nav>
-                <!--Pagination  -->
+                            </li>
+                        </ul>
+                    </nav>
+                    <!--Pagination  -->
+                </div>
+                <!-- /.container-fluid -->
             </div>
-            <!-- /.container-fluid -->
-
         </div>
         <!-- End of Main Content -->
-
-        <!-- Footer -->
-        <footer th:replace="~{fragments::footer}">
-        </footer>
-        <!-- End of Footer -->
 
     </div>
     <!-- End of Content Wrapper -->
@@ -196,26 +199,60 @@
         font-size: 14px;
     }
 </style>
+
+<script>
+</script>
+
+<script th:src="@{/js/exceljs.js}"></script>
+<script th:src="@{/js/FileSaver.js}"></script>
+<script th:inline="javascript">
+    var viewDetailBtn = document.querySelector("#orderDetailForm button[type='submit']");
+    var orderDetailForm = document.getElementById("orderDetailForm");
+    var orderIdInput = orderDetailForm.querySelector("input[name='orderId']");
+
+    viewDetailBtn.addEventListener("click", function(event) {
+      event.preventDefault();
+
+      var orderId = this.getAttribute("data-order-id");
+      orderIdInput.value = orderId;
+
+      orderDetailForm.submit();
+    });
+</script>
+
 <script th:inline="javascript">
 
     var dateFrom = document.getElementById("dateFrom");
     var dateTo = document.getElementById("dateTo");
 
     function Export(){
-         if(dateFrom.value == "" || dateTo.value == null){
-            alert('Chưa nhập ngày xác định!');
-            return false;
-        }
-        if(dateFrom.value > dateTo.value){
-            alert('Vui lòng kiểm tra lại ngày nhập!!');
-            return false;
-        }
-        document.getElementById("dateFromExcel").value = dateFrom.value;
-        document.getElementById("dateToExcel").value = dateTo.value;
+        const table = document.querySelector('table');
+            const rows = table.querySelectorAll('tr');
 
-        localStorage.setItem("dateFrom_Order", dateFrom.value); // Lưu giá trị mới vào localStorage
-        localStorage.setItem("dateTo_Order", dateTo.value); // Lưu giá trị mới vào localStorage
-        document.getElementById("exportForm").submit();
+            // Tạo workbook và worksheet
+            const workbook = new ExcelJS.Workbook();
+            const worksheet = workbook.addWorksheet('Sheet1');
+
+            // Đọc dữ liệu từ bảng HTML và đưa vào worksheet
+            rows.forEach(row => {
+                const rowData = [];
+                const cols = row.querySelectorAll('td, th');
+
+                cols.forEach(col => {
+                    rowData.push(col.innerText);
+                });
+
+                worksheet.addRow(rowData);
+            });
+
+            // Tạo Blob từ workbook
+            workbook.xlsx.writeBuffer()
+                .then(buffer => {
+                    const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+                    // Sử dụng FileSaver để tải xuống Blob
+                    saveAs(blob, 'Order.xlsx');
+                });
     }
 
     function filterAndExport(){
@@ -245,6 +282,8 @@
      }
 
 </script>
+
+
 </body>
 
 </html>

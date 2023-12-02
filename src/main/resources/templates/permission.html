@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org/">
+<head th:replace="~{fragments::header}">
+</head>
+
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul th:replace="~{fragments::sidebar}">
+    </ul>
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+            <!-- Topbar -->
+            <nav th:replace="~{fragments::top-navbar}">
+            </nav>
+            <!-- End of Topbar -->
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                <div class="card mb-12">
+                    <h1 class="mt-4">Quản Lý Quyền</h1>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item"><a style="color: #0779e4;" href="/">Trang chủ</a></li>
+                        <li class="breadcrumb-item active">Quản Lý Quyền</li>
+                    </ol>
+
+                    <div class="Content_User header_content">
+                        <select class="cb_Quyen_QLTK" id="cb_Quyen">
+                            <option value='1'>Admin</option>
+                            <option value='2'>Employee</option>
+                        </select>
+
+                        <button class="btn_QLquyen" id="btn_update">Lưu Thay Đổi</button>
+                        <table>
+                            <thead>
+                            <tr>
+                                <th class="column5">STT</th>
+                                <th class="column5">Khu Vực Quản Lý</th>
+                                <th class="column15">Thêm</th>
+                                <th class="column15">Xóa</th>
+                                <th class="column15">Sửa</th>
+                                <th class="column15">Xem</th>
+                            </tr>
+                            <tbody id="tBody_QL_Quyen">
+                            </tbody>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+</body>
+</html>

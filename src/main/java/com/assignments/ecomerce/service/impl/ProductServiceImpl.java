@@ -164,7 +164,7 @@ public class ProductServiceImpl implements ProductService {
 
     public Page<Product> searchProducts(int pageNo, String keyword) {
         Pageable pageable = PageRequest.of(pageNo, 4);
-        List<Product> products = transfer(productRepository.findProductsByKeywordWithMinMaxPrice(keyword));
+        List<Product> products = transfer(productRepository.findProductsByKeywordWithMinMaxPrice(keyword.trim()));
         Page<Product> productPages = toPage(products, pageable);
         return productPages;
     }

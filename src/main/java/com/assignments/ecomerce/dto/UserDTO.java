@@ -7,10 +7,10 @@ public class UserDTO {
 
     private String email;
     private String password;
-    private String role;
     private String fullname;
     private String address;
     private String phone;
+    private String role;
 
     public UserDTO(String email, String password, String role, String fullname, String address, String phone) {
         this.email = email;

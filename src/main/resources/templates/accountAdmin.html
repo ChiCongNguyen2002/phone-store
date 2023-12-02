@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org/">
+<head th:replace="~{fragments::header}">
+
+</head>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul th:replace="~{fragments::sidebar}">
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+            <!-- Topbar -->
+            <nav th:replace="~{fragments::top-navbar}">
+            </nav>
+            <!-- End of Topbar -->
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                <div class="card mb-12">
+                    <h1 class="mt-4">Danh Sách Tài Khoản</h1>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item"><a style="color: #0779e4;" href="/">Trang chủ</a></li>
+                        <li class="breadcrumb-item active">Danh Sách Tài Khoản</li>
+                    </ol>
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-6 col-xs-12">
+                                <button type="button" class="btn btn-success" data-toggle="modal"
+                                        data-target="#addModal"
+                                        data-whatever="@mdo">Tạo mới
+                                </button>
+                            </div>
+
+                            <div class="col-md-6 col-xs-12">
+                                <form method="get">
+                                    <div class="row">
+                                        <div class="col-md-8 d-flex align-items-center">
+                                            <input type="text" name="keyword"
+                                                   class="form-control flex-grow-1"/>
+                                        </div>
+
+                                        <div class="col-md-4 d-flex align-items-center">
+                                            <button type="submit" class="btn btn-primary"
+                                                    style="margin: 10px"><i class="fas fa-search"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-dark ml-2"><i class="fas fa-undo"></i></button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div th:if="${success}" class="text-center alert alert-success">
+                        <p th:text="${success}"></p>
+                    </div>
+                    <div th:if="${error}" class="text-center alert alert-danger">
+                        <p th:text="${error}"></p>
+                    </div>
+
+                    <table class="styled-table">
+                        <tr>
+                            <th>ID</th>
+                            <th>Tên Nhân Viên</th>
+                            <th>Số Điện Thoại</th>
+                            <th>Địa Chỉ</th>
+                            <th>Email</th>
+                        </tr>
+
+                        <tr th:each="user : ${listUser}">
+                            <td th:text="${user.id}"></td>
+                            <td th:text="${user.fullname}"></td>
+                            <td th:text="${user.phone}"></td>
+                            <td th:text="${user.address}"></td>
+                            <td th:text="${user.email}"></td>
+                        </tr>
+                    </table>
+
+                </div>
+                <!-- /.container-fluid -->
+            </div>
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <footer th:replace="~{fragments::footer}">
+        </footer>
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a th:replace="~{fragments::scroll}">
+</a>
+
+<!-- Bootstrap core JavaScript-->
+<div th:replace="~{fragments::script}"></div>
+</body>

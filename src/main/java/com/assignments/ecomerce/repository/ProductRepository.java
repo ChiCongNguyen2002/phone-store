@@ -36,7 +36,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Query("SELECT DISTINCT p, (SELECT MIN(p2.price) FROM Product p2) AS min_price, (SELECT MAX(p3.price) FROM Product p3) AS max_price " +
             "FROM Product p JOIN p.category c " +
             "WHERE p.status = 1 AND c.status = 1 " +
-            "AND CONCAT(p.name, p.price, p.quantity, p.description, p.color) LIKE %:keyword% " +
+            "AND CONCAT(p.name, p.price, p.quantity, p.color) LIKE %:keyword% " +
             "GROUP BY p.name")
     List<Product> findProductsByKeywordWithMinMaxPrice(@Param("keyword") String keyword);
 

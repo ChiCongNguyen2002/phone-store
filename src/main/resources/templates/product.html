@@ -19,101 +19,117 @@
             <nav th:replace="~{fragments::top-navbar}">
             </nav>
 
-            <h1>Danh sách sản phẩm</h1>
-
-            <!-- End of Topbar -->
-            <!-- Begin Page Content -->
             <div class="container-fluid">
-                <div class="input-group" style="width: 30%; margin-bottom: 20px;">
-                    <form th:action="@{/search-products/0}" method="get">
-                        <input type="text" class="form-control rounded" placeholder="Search" name="keyword"
-                               aria-label="Search"
-                               aria-describedby="search-addon"/>
-                        <button type="submit" class="btn btn-outline-primary">search</button>
-                    </form>
-                </div>
+                <div class="card mb-12">
+                    <h1 class="mt-4">Danh sách sản phẩm</h1>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item"><a style="color: #0779e4;" href="/">Trang chủ</a></li>
+                        <li class="breadcrumb-item active">Danh sách sản phẩm</li>
+                    </ol>
 
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal"
-                        data-whatever="@mdo">Tạo mới
-                </button>
-                <p th:if="${size == 0} ">No Products</p>
-                <div th:if="${success}" class="text-center alert alert-success">
-                    <p th:text="${success}"></p>
-                </div>
-                <div th:if="${error}" class="text-center alert alert-danger">
-                    <p th:text="${error}"></p>
-                </div>
-
-                <table class="styled-table">
-                    <tr>
-                        <th>Tên</th>
-                        <th>Giá bán</th>
-                        <th>Ảnh đại diện</th>
-                        <th>Tên danh mục</th>
-                        <th>Màu Sắc</th>
-                        <th>Số lượng</th>
-                        <th>Thao tác</th>
-                    </tr>
-
-                    <tr th:each="product,index : ${listProducts}">
-                        <td scope="row" th:text="${product.Name}"></td>
-                        <td th:text="${formattedPrices[__${index.index}__] + ' VNĐ'}"></td>
-                        <td>
-                            <img class="product-image" th:src="@{'../../img/' + ${product.image}}" alt="Product Image">
-                        </td>
-                        <td th:text="${product.category.name}"></td>
-                        <td th:text="${product.color}"></td>
-                        <td th:text="${product.quantity}">
-                            <div class="btn_header" style="left: 43px;">
-                                <i class="fa-solid fa-caret-up" onclick="sortData('Amount','asc')"></i>
-                                <i class="fa fa-caret-down" onclick="sortData('Amount','desc')"></i>
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-6 col-xs-12">
+                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addModal"
+                                        data-whatever="@mdo">Tạo mới
+                                </button>
                             </div>
-                        </td>
-                        <td>
-                            <a id="editButton" th:href="@{/update-product/{id}(id=${product.id})}"
-                               class="btn btn-primary">Update</a>
-                            <a th:href="@{/status-product(id = ${product.id})}" class="btn btn-danger">Delete</a>
-                            <a id="detailButton" th:href="@{/detail-product/{id}(id=${product.id})}"
-                               class="btn btn-success">Detail</a>
-                        </td>
-                    </tr>
-                </table>
 
-                <!--Pagination  -->
-                <nav aria-label="...">
-                    <ul class="pagination">
-                        <li th:if="${currentPage != 0}" class="page-item ">
-                            <a th:href="@{/search-products/{pageNo}(pageNo=${currentPage - 1}, keyword=${keyword})}" class="page-link">Previous</a>
-                        </li>
+                            <div class="col-md-6 col-xs-12">
+                                <form th:action="@{/search-products/0}" method="get">
+                                    <div class="row">
+                                        <div class="col-md-8 d-flex align-items-center">
+                                            <input type="text" name="keyword" class="form-control flex-grow-1"/>
+                                        </div>
 
-                        <th:block th:if="${totalPages > 1}">
-                            <li th:each="i : ${#numbers.sequence(0, totalPages-1)}"
-                                th:classappend="${currentPage == i ? 'active' : ''}" class="page-item">
-                                <a th:href="@{/search-products/{pageNo}(pageNo=${i}, keyword=${keyword})}" class="page-link">
-                                    <span th:text="${i + 1}"></span>
-                                </a>
+                                        <div class="col-md-4 d-flex align-items-center">
+                                            <button type="submit" class="btn btn-primary"
+                                                    style="margin: 10px"><i class="fas fa-search"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-dark ml-2"><i class="fas fa-undo"></i></button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p th:if="${size == 0} ">No Products</p>
+                    <div th:if="${success}" class="text-center alert alert-success">
+                        <p th:text="${success}"></p>
+                    </div>
+                    <div th:if="${error}" class="text-center alert alert-danger">
+                        <p th:text="${error}"></p>
+                    </div>
+
+                    <table class="styled-table">
+                        <tr>
+                            <th>Tên</th>
+                            <th>Giá bán</th>
+                            <th>Ảnh đại diện</th>
+                            <th>Tên danh mục</th>
+                            <th>Màu Sắc</th>
+                            <th>Số lượng</th>
+                            <th>Thao tác</th>
+                        </tr>
+
+                        <tr th:each="product,index : ${listProducts}">
+                            <td scope="row" th:text="${product.Name}"></td>
+                            <td th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + 'VND'}"></td>
+                            <td>
+                                <img class="product-image" th:src="@{'../../img/' + ${product.image}}"
+                                     alt="Product Image">
+                            </td>
+                            <td th:text="${product.category.name}"></td>
+                            <td th:text="${product.color}"></td>
+                            <td th:text="${product.quantity}">
+                                <div class="btn_header" style="left: 43px;">
+                                    <i class="fa-solid fa-caret-up" onclick="sortData('Amount','asc')"></i>
+                                    <i class="fa fa-caret-down" onclick="sortData('Amount','desc')"></i>
+                                </div>
+                            </td>
+                            <td>
+                                <a id="editButton" th:href="@{/update-product/{id}(id=${product.id})}"
+                                   class="btn btn-primary"><i class="fas fa-edit"></i></a>
+                                <a th:href="@{/status-product(id = ${product.id})}" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>
+                                <a id="detailButton" th:href="@{/detail-product/{id}(id=${product.id})}"
+                                   class="btn btn-success"><i class="fas fa-info"></i></a>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <!--Pagination  -->
+                    <nav aria-label="...">
+                        <ul class="pagination">
+                            <li th:if="${currentPage != 0}" class="page-item ">
+                                <a th:href="@{/search-products/{pageNo}(pageNo=${currentPage - 1}, keyword=${keyword})}"
+                                   class="page-link">Previous</a>
                             </li>
-                        </th:block>
 
-                        <li th:if="${currentPage + 1 != totalPages}" class="page-item">
-                            <a th:href="@{/search-products/{pageNo}(pageNo=${currentPage + 1},
+                            <th:block th:if="${totalPages > 1}">
+                                <li th:each="i : ${#numbers.sequence(0, totalPages-1)}"
+                                    th:classappend="${currentPage == i ? 'active' : ''}" class="page-item">
+                                    <a th:href="@{/search-products/{pageNo}(pageNo=${i}, keyword=${keyword})}"
+                                       class="page-link">
+                                        <span th:text="${i + 1}"></span>
+                                    </a>
+                                </li>
+                            </th:block>
+
+                            <li th:if="${currentPage + 1 != totalPages}" class="page-item">
+                                <a th:href="@{/search-products/{pageNo}(pageNo=${currentPage + 1},
                                  keyword=${keyword})}" class="page-link">Next</a>
-                        </li>
-                    </ul>
-                </nav>
-                <!--Pagination  -->
+                            </li>
+                        </ul>
+                    </nav>
+                    <!--Pagination  -->
+                </div>
+                <!-- /.container-fluid -->
 
             </div>
-            <!-- /.container-fluid -->
+            <!-- End of Main Content -->
 
         </div>
-        <!-- End of Main Content -->
-
-        <!-- Footer -->
-        <footer th:replace="~{fragments::footer}">
-        </footer>
-        <!-- End of Footer -->
-
     </div>
     <!-- End of Content Wrapper -->
 
@@ -202,14 +218,13 @@
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary" onclick="saveProduct(event)">Save</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
                     </div>
                 </div>
             </div>
         </div>
     </form>
 </div>
-
 
 <style>
     .form-group {

@@ -1,4 +1,4 @@
-function saveProduct(event) {
+/*function saveProduct(event) {
   event.preventDefault(); // Ngăn chặn hành vi gửi biểu mẫu mặc định
 
   var name = document.getElementById("nameAdd").value;
@@ -36,7 +36,7 @@ function saveProduct(event) {
 
   // Nếu không có lỗi, gửi biểu mẫu
   document.getElementById("productForm").submit();
-}
+}*/
 
 function slideOne() {
   var slider1 = document.getElementById("slider-1");

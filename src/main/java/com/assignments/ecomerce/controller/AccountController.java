@@ -14,10 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
@@ -49,18 +46,8 @@ public class AccountController {
         UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
         User user = userService.findByEmailUser(principal.getName());
         Page<Orders> listOrder = orderService.pageOrdersById(pageNo, user.getId());
-        List<String> formattedPrices = new ArrayList<>();
-        DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols(Locale.getDefault());
-        decimalFormatSymbols.setGroupingSeparator('.');
-        DecimalFormat decimalFormat = new DecimalFormat("#,###", decimalFormatSymbols);
-
-        for (Orders orders : listOrder) {
-            String formattedPrice = decimalFormat.format(orders.getTotal());
-            formattedPrices.add(formattedPrice);
-        }
         List<Category> categories = categoryService.getAllCategory();
         model.addAttribute("categories", categories);
-        model.addAttribute("formattedPrices", formattedPrices);
         model.addAttribute("size", listOrder.getSize());
         model.addAttribute("listOrder", listOrder);
         model.addAttribute("currentPage", pageNo);
@@ -83,9 +70,9 @@ public class AccountController {
         return "editAccountUser";
     }
 
-    @GetMapping("/OrderDetailByUser/{pageNo}/{orderId}")
+    @PostMapping("/OrderDetailByUser/{pageNo}")
     public String OrderDetailByUser(@PathVariable("pageNo") int pageNo,
-                               @PathVariable("orderId") Integer orderId, Model model, Principal principal) {
+                                    @RequestParam("orderId") Integer orderId, Model model, Principal principal) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
         List<Category> categories = categoryService.getAllCategory();
         model.addAttribute("categories", categories);
