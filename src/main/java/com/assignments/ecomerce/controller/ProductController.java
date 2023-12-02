@@ -160,6 +160,24 @@ public class ProductController {
         return "product";
     }
 
+    @GetMapping("/search-productByAdmin/{pageNo}")
+    public String searchProductByAdmin(@PathVariable("pageNo") int pageNo,
+                                @RequestParam("keyword") String keyword,
+                                Model model, Principal principal, HttpSession session) {
+
+        Page<Product> listProducts = productService.findProductByAdmin(pageNo, keyword);
+        List<Category> categories = categoryService.getAllCategory();
+        session.setAttribute("keyword", keyword);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("categories", categories);
+        model.addAttribute("size", listProducts.getSize());
+        model.addAttribute("listProducts", listProducts);
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", listProducts.getTotalPages());
+        model.addAttribute("productNew", new Product());
+        return "product";
+    }
+
     @GetMapping("/search-products/{pageNo}")
     public String searchProduct(@PathVariable("pageNo") int pageNo,
                                 @RequestParam("keyword") String keyword,

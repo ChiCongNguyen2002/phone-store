@@ -22,15 +22,6 @@
             </nav>
 
             <div class="container-fluid">
-                <!--                <div class="input-group" style="width: 30%; margin-bottom: 20px;">
-                                    <form th:action="@{/search-supplier/0}" method="get">
-                                        <input type="text" class="form-control rounded" placeholder="Search" name="keyword" aria-label="Search"
-                                               aria-describedby="search-addon"/>
-                                        <button type="submit" class="btn btn-outline-primary">search</button>
-                                    </form>
-                                </div>
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal" data-whatever="@mdo">Tạo mới</button>-->
-
                 <div class="card mb-12">
                     <h1 class="mt-4">Danh sách Nhà cung cấp</h1>
                     <ol class="breadcrumb mb-4">
@@ -59,7 +50,7 @@
                                             <button type="submit" class="btn btn-primary"
                                                     style="margin: 10px"><i class="fas fa-search"></i>
                                             </button>
-                                            <button type="button" class="btn btn-dark ml-2"><i class="fas fa-undo"></i></button>
+                                            <button type="button" onclick="window.location.href='/search-supplier/0?keyword='" class="btn btn-dark ml-2"><i class="fas fa-undo"></i></button>
                                         </div>
                                     </div>
                                 </form>

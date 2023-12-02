@@ -47,6 +47,7 @@ public interface ProductService {
      Page<Product> pageProducts(int pageNo);
      Page<Product> pageProductByCategory(int pageNo, Integer categoryId);
 
+     Page<Product> findProductByAdmin(int pageNo, String keyword) ;
      Page<Product> searchProducts(int pageNo, String keyword) ;
 
      Page<Product> searchProductByOption(int pageNo, String category, String sortOption, String color, Double minPrice, Double maxPrice);

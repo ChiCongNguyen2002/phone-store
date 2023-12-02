@@ -162,6 +162,14 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.pageProductByCategory(pageable, categoryId);
     }
 
+    @Override
+    public Page<Product> findProductByAdmin(int pageNo, String keyword) {
+        Pageable pageable = PageRequest.of(pageNo, 4);
+        List<Product> products = transfer(productRepository.findProductByAdmin(keyword.trim()));
+        Page<Product> productPages = toPage(products, pageable);
+        return productPages;
+    }
+
     public Page<Product> searchProducts(int pageNo, String keyword) {
         Pageable pageable = PageRequest.of(pageNo, 4);
         List<Product> products = transfer(productRepository.findProductsByKeywordWithMinMaxPrice(keyword.trim()));
