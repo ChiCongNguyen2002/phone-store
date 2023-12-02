@@ -44,7 +44,8 @@
                     <div class="card-header">
                         <div class="row">
                             <div class="col-md-6 col-xs-12">
-                                <button type="button" class="btn btn-success" data-toggle="modal"
+                                <button style="margin-top: 10px;" type="button" class="btn btn-success"
+                                        data-toggle="modal"
                                         data-target="#addModal"
                                         data-whatever="@mdo">Tạo mới
                                 </button>
@@ -63,7 +64,9 @@
                                             <button type="submit" class="btn btn-primary"
                                                     style="margin: 10px"><i class="fas fa-search"></i>
                                             </button>
-                                            <button type="button" onclick="window.location.href='/search-category/0?keyword='" class="btn btn-dark ml-2"><i class="fas fa-undo"></i></button>
+                                            <button type="button"
+                                                    onclick="window.location.href='/search-category/0?keyword='"
+                                                    class="btn btn-dark ml-2"><i class="fas fa-undo"></i></button>
                                         </div>
                                     </div>
                                 </form>
@@ -140,7 +143,7 @@
 </a>
 
 <!--Add Modal-->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
     <form id="categoryForm" th:action="@{/add-category}" method="post" th:object="${categoryNew}">
         <div class="modal-dialog" role="document">
@@ -148,10 +151,13 @@
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleAddCategoryModalLabel">Tạo Danh Mục</h5>
                 </div>
+
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="recipient-name" class="col-form-label">Tên Danh Mục:</label>
-                        <input type="text" class="form-control" th:field="*{name}" id="recipient-name" required>
+                        <label for="recipient-name" class="col-md-8 control-label">Tên Danh Mục:</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" th:field="*{name}" id="recipient-name" required>
+                        </div>
                     </div>
 
                     <div class="form-group">
@@ -186,7 +192,7 @@
                 <h5 class="modal-title" id="exampleModalLabel">Cập Nhật Danh Mục</h5>
             </div>
             <div class="modal-body">
-                <form id="categoryFormEdit" th:action="@{/update-category}" method="put">
+                <form id="categoryFormEdit" th:action="@{/update-category}" method="get">
                     <div class="form-group">
                         <label for="idEdit" class="col-form-label">ID</label>
                         <input type="text" class="form-control" id="idEdit" name="id" readonly required>

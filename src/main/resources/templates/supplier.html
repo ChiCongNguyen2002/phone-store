@@ -83,6 +83,7 @@
                             <td>
                                 <a id="editButton" th:href="@{/findByIdSupplier/{id}(id=${supplier.Id})}"
                                    class="btn btn-primary"><i class="fas fa-edit"></i></a>
+                                <a th:href="@{/delete-supplier(id = ${supplier.Id})}" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>
                             </td>
                         </tr>
                     </table>

@@ -14,8 +14,8 @@ public class Category {
     @ManyToOne
     @JoinColumn(name = "supplierId")
     private Supplier supplier;
-
     private Integer status;
+
     public void setSupplier(Supplier supplier) {
         this.supplier = supplier;
     }
@@ -30,12 +30,6 @@ public class Category {
     public void setName(String name) {
         this.name = name;
     }
-
-    public Category(String name,Integer status) {
-        this.name = name;
-        this.status = status;
-    }
-
     public Category() {
     }
 }

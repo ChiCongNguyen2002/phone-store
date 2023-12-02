@@ -73,17 +73,25 @@ public class CouponController {
     @PostMapping("/add-coupon")
     public String add(@ModelAttribute("couponNew") Coupon coupon, Model model, RedirectAttributes attributes) {
         try {
-            couponService.save(coupon);
+            Coupon coup = couponService.findByCode(coupon.getCode());
+            if (coup == null) {
+                couponService.save(coupon);
+            } else if(coup.getStatus() == 0){
+                couponService.updateStatus(coup.getId());
+            }else if(coup.getStatus() == 1){
+                attributes.addFlashAttribute("error", "Mã Code Đã Tồn Tại Vui lòng nhập Mã khác!");
+                return "redirect:/search-coupon/0?keyword=";
+            }
             model.addAttribute("couponNew", coupon);
             attributes.addFlashAttribute("success", "Added successfully");
         } catch (DataIntegrityViolationException e1) {
             e1.printStackTrace();
-            attributes.addFlashAttribute("failed", "Duplicate name of category, please check again!");
+            attributes.addFlashAttribute("error", "Duplicate name of category, please check again!");
         } catch (Exception e2) {
             e2.printStackTrace();
-            attributes.addFlashAttribute("failed", "Error Server");
+            attributes.addFlashAttribute("error", "Error Server");
         }
-        return "redirect:/coupon/0";
+        return "redirect:/search-coupon/0?keyword=";
     }
 
     @RequestMapping(value = "/findByIdCoupon/{id}", method = {RequestMethod.PUT, RequestMethod.GET})
@@ -117,7 +125,7 @@ public class CouponController {
             e.printStackTrace();
             attributes.addFlashAttribute("failed", "Failed to deleted");
         }
-        return "redirect:/coupon/0";
+        return "redirect:/search-coupon/0?keyword=";
     }
 
     @RequestMapping(value = "/enable-coupon", method = {RequestMethod.PUT, RequestMethod.GET})
@@ -129,7 +137,7 @@ public class CouponController {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("error", "Enabled failed!");
         }
-        return "redirect:/coupon/0";
+        return "redirect:/search-coupon/0?keyword=";
     }
 
     @GetMapping("/search-coupon/{pageNo}")

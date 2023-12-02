@@ -15,6 +15,6 @@ public interface EmployeeRepository extends JpaRepository<Employee,Integer> {
     @Query("SELECT e from Employee e where status = 1")
     Page<Employee> pageEmployee(Pageable pageable);
 
-    @Query("SELECT e from Employee e where CONCAT(e.fullname,e.address,e.phone,e.email,e.salary) like %?1%")
+    @Query("SELECT e from Employee e where e.status = 1 and CONCAT(e.fullname,e.address,e.phone,e.email,e.salary) like %?1%")
     List<Employee> searchEmployee(String keyword);
 }

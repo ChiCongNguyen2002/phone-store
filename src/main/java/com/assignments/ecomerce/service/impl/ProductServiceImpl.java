@@ -66,10 +66,16 @@ public class ProductServiceImpl implements ProductService {
             }
 
             String photoFileName = StringUtils.cleanPath(photo.getOriginalFilename() != null ? photo.getOriginalFilename() : "unknown_photo_file");
-            Path photoTargetPath = uploadPath.resolve(photoFileName);
-            Files.copy(photo.getInputStream(), photoTargetPath, StandardCopyOption.REPLACE_EXISTING);
+            /*Path photoTargetPath = uploadPath.resolve(photoFileName);*/
+           /* Files.copy(photo.getInputStream(), photoTargetPath, StandardCopyOption.REPLACE_EXISTING);*/
 
-            newProduct.setImage(photoFileName);
+            System.out.println("photo:"+photoFileName);
+            if (!photo.isEmpty()) {
+                newProduct.setImage(photoFileName);
+            } else {
+                newProduct.setImage(photoFileName);
+            }
+
             newProduct.setName(product.getName());
             newProduct.setPrice(product.getPrice());
             newProduct.setDescription(product.getDescription());
@@ -110,16 +116,13 @@ public class ProductServiceImpl implements ProductService {
     public Product update(MultipartFile photo, Product product) {
         try {
             Path uploadPath = Paths.get("src", "main", "resources", "static", "img");
-
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
             }
-
             String photoFileName = StringUtils.cleanPath(photo.getOriginalFilename() != null ? photo.getOriginalFilename() : "unknown_photo_file");
-
             Path photoTargetPath = uploadPath.resolve(photoFileName);
-
             Product productUpdate = productRepository.getById(product.getId());
+
             String productImage = productUpdate.getImage();
             if (!photo.isEmpty()) {
                 productUpdate.setImage(photoFileName);
@@ -133,9 +136,7 @@ public class ProductServiceImpl implements ProductService {
             productUpdate.setCategory(product.getCategory());
             productUpdate.setQuantity(product.getQuantity());
             productUpdate.setColor(product.getColor());
-
             productRepository.save(productUpdate);
-
             return productUpdate;
         } catch (Exception e) {
             e.printStackTrace();

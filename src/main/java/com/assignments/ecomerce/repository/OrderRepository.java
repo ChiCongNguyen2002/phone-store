@@ -43,12 +43,12 @@ public interface OrderRepository extends JpaRepository<Orders, Integer> {
             "ORDER BY sumQuantity DESC")
     List<Object[]> getTop10ProductsWithSumQuantity(@Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo);
 
-/*    @Query("SELECT e.name, e.phoneNumber, e.address, e.email , e.salary , SUM(od.quantity) AS totalQuantity " +
+   /* @Query("SELECT u.name, u.phoneNumber, u.address, u.email , SUM(od.quantity) AS totalQuantity " +
             "FROM OrderDetail od " +
-            "JOIN od.employee e " +
             "JOIN od.order o " +
+            "JOIN o.user u " +
             "WHERE o.orderDate BETWEEN :dateFrom AND :dateTo " +
-            "GROUP BY e.name, e.phoneNumber, e.address, e.email, e.salary " +
+            "GROUP BY u.name, u.phoneNumber, u.address, u.email  " +
             "ORDER BY totalQuantity DESC")
     List<Object[]> findTop5EmployeesByTotalQuantity(@Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo);*/
 

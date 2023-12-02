@@ -51,8 +51,7 @@
                                         </div>
 
                                         <div class="col-md-4 d-flex align-items-center">
-                                            <button type="submit" class="btn btn-primary"
-                                                    style="margin: 10px"><i class="fas fa-search"></i>
+                                            <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i>
                                             </button>
                                             <button type="button" onclick="window.location.href='/search-employee/0?keyword='" class="btn btn-dark ml-2"><i class="fas fa-undo"></i></button>
                                         </div>
@@ -89,7 +88,7 @@
                         <td th:text="${employee.salary}"></td>
                         <td>
                             <a id="editButton" th:href="@{/findByIdEmployee/{id}(id=${employee.id})}" class="btn btn-primary"><i class="fas fa-edit"></i></a>
-                            <a th:href="@{/status-employee(id = ${employee.id})}" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>
+                            <a th:href="@{/delete-employee(id = ${employee.id})}" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>
                         </td>
                     </tr>
                 </table>
@@ -139,22 +138,22 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">New Employee</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Thêm Nhân Viên</h5>
                 </div>
                 <div class="modal-body">
 
                     <div class="form-group">
-                        <label for="nameAdd" class="col-form-label">Name:</label>
+                        <label for="nameAdd" class="col-form-label">Tên Nhân Viên:</label>
                         <input type="text" class="form-control"  th:field = "*{fullname}" id="nameAdd" name="name" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="phoneAdd" class="col-form-label">Phone Number:</label>
+                        <label for="phoneAdd" class="col-form-label">Số Điện Thoại:</label>
                         <input type="text" class="form-control"  th:field = "*{phone}" id="phoneAdd" name="phoneNumber" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="addressAdd" class="col-form-label">Address:</label>
+                        <label for="addressAdd" class="col-form-label">Địa Chỉ:</label>
                         <input type="text" class="form-control"  th:field = "*{address}"  id="addressAdd" name="address" required>
                     </div>
 
@@ -164,13 +163,13 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="salaryAdd" class="col-form-label">Salary:</label>
+                        <label for="salaryAdd" class="col-form-label">Lương:</label>
                         <input type="text" class="form-control"  th:field = "*{salary}" id="salaryAdd" name="email" required>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" onclick="SaveEmoloyee(event)">Save</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-primary" onclick="SaveEmoloyee(event)">Lưu Lại</button>
                 </div>
             </div>
         </div>
@@ -184,27 +183,26 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Edit Employee</h5>
+                    <h5 class="modal-title">Sửa Nhân Viên</h5>
                 </div>
                 <div class="modal-body">
-
                     <div class="form-group">
                         <label for="idEdit" class="col-form-label">Id:</label>
                         <input type="text" class="form-control"  id="idEdit" name="id" readonly required>
                     </div>
 
                     <div class="form-group">
-                        <label for="fullnameEdit" class="col-form-label">Name:</label>
+                        <label for="fullnameEdit" class="col-form-label">Tên Nhân Viên:</label>
                         <input type="text" class="form-control"  id="fullnameEdit" name="fullname" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="phoneEdit" class="col-form-label">Phone Number:</label>
-                        <input type="text" class="form-control"  id="phoneEdit" name="phoneNumber" required>
+                        <label for="phoneEdit" class="col-form-label">Số Điện Thoại:</label>
+                        <input type="text" class="form-control"  id="phoneEdit" name="phone" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="addressEdit" class="col-form-label">Address:</label>
+                        <label for="addressEdit" class="col-form-label">Địa Chỉ:</label>
                         <input type="text" class="form-control"  id="addressEdit" name="address" required>
                     </div>
 
@@ -214,13 +212,13 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="salaryEdit" class="col-form-label">Salary:</label>
-                        <input type="text" class="form-control"  id="salaryEdit" name="salary" required>
+                        <label for="salaryEdit" class="col-form-label">Lương:</label>
+                        <input type="text" class="form-control" id="salaryEdit" name="salary" required>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" onclick="SaveEmoloyeeEdit(event)">Save</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-primary" onclick="SaveEmoloyeeEdit(event)">Lưu Lại</button>
                 </div>
             </div>
         </div>

@@ -55,7 +55,7 @@
                                                         <div class="item-price">
                                                             <div class="price-box">
                                                             <span class="regular-price">
-                                                                <span class="price" th:text="${formattedPrices[__${index.index}__] + ' VNĐ'}"></span>
+                                                                <span class="price" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + 'VNĐ'}"></span>
                                                             </span>
                                                             </div>
                                                         </div>

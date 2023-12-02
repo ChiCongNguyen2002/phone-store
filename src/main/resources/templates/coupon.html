@@ -32,7 +32,7 @@
                     <div class="card-header">
                         <div class="row">
                             <div class="col-md-6 col-xs-12">
-                                <button type="button" class="btn btn-success" data-toggle="modal"
+                                <button style="margin-top: 10px;" type="button" class="btn btn-success" data-toggle="modal"
                                         data-target="#addModal"
                                         data-whatever="@mdo">Tạo mới
                                 </button>
@@ -60,7 +60,7 @@
                     </div>
 
 
-                    <p th:if="${size == 0} ">No Products</p>
+                    <p th:if="${size == 0} ">No Coupons</p>
                     <div th:if="${success}" class="text-center alert alert-success">
                         <p th:text="${success}"></p>
                     </div>
@@ -87,6 +87,7 @@
                             <td>
                                 <a id="editButton" th:href="@{/findByIdCoupon/{id}(id=${coupon.Id})}"
                                    class="btn btn-primary"><i class="fas fa-edit"></i></a>
+                                <a th:href="@{/delete-coupon(id = ${coupon.Id})}" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>
                             </td>
                         </tr>
                     </table>
@@ -142,7 +143,6 @@
                     <h5 class="modal-title" id="exampleModalLabel">Tạo Khuyến Mãi</h5>
                 </div>
                 <div class="modal-body">
-
                     <div class="form-group">
                         <label for="code" class="col-form-label">Code:</label>
                         <input id="code" type="text" class="form-control" th:field="*{code}" name="couponCode" required>
@@ -150,20 +150,17 @@
 
                     <div class="form-group">
                         <label for="countAdd" class="col-form-label">Số Lượng:</label>
-                        <input id="countAdd" type="text" class="form-control" th:field="*{count}" name="couponCount"
-                               required>
+                        <input id="countAdd" type="text" class="form-control" th:field="*{count}" name="couponCount" required>
                     </div>
 
                     <div class="form-group">
                         <label for="promotionAdd" class="col-form-label">Phần Trăm Khuyến Mãi:</label>
-                        <input id="promotionAdd" type="text" class="form-control" th:field="*{promotion}"
-                               name="couponPromotion" required>
+                        <input id="promotionAdd" type="text" class="form-control" th:field="*{promotion}" name="couponPromotion" required>
                     </div>
 
                     <div class="form-group">
                         <label for="descriptionAdd" class="col-form-label">Mô Tả:</label>
-                        <input id="descriptionAdd" type="text" class="form-control" th:field="*{description}"
-                               name="couponDescription" required>
+                        <input id="descriptionAdd" type="text" class="form-control" th:field="*{description}"name="couponDescription" required>
                     </div>
 
                 </div>

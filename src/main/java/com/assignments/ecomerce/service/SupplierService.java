@@ -1,6 +1,7 @@
 
 package com.assignments.ecomerce.service;
 
+import com.assignments.ecomerce.model.Coupon;
 import com.assignments.ecomerce.model.Supplier;
 import com.assignments.ecomerce.repository.SupplierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,14 +29,15 @@ public interface SupplierService {
 
      void deleteById(Integer id);
 
-     void enableById(Integer id);
-
      Page<Supplier> searchSuppliers(int pageNo, String keyword);
 
     Page toPage(List<Supplier> list, Pageable pageable);
 
      List<Supplier> transfer(List<Supplier> suppliers);
 
-     Supplier updateStatus(Integer id);
+    Supplier findByNameOrPhoneNumber(String name,String phoneNumber);
+
+
+    Supplier updateStatus(Integer id);
 }
 

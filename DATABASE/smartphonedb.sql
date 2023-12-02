@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 26, 2023 at 02:22 PM
+-- Generation Time: Dec 02, 2023 at 08:13 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -53,9 +53,10 @@ CREATE TABLE `category` (
 --
 
 INSERT INTO `category` (`id`, `name`, `supplierId`, `status`) VALUES
-(30, 'IPHONE', 4, 1),
+(30, 'IPHONE', 1, 1),
 (31, 'SAMSUNG', 2, 1),
-(32, 'VIVO', 1, 1);
+(32, 'VIVO', 5, 1),
+(39, 'IPHONE1', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -80,7 +81,32 @@ INSERT INTO `coupon` (`id`, `code`, `count`, `promotion`, `description`, `status
 (1, 'CM3', 40, '3', 'Khuyến mãi 3%', 1),
 (2, 'CM4', 30, '10', 'Khuyến mãi 10%', 1),
 (3, 'CM5', 5, '5', 'Khuyến mãi 5%', 1),
-(4, 'CM6', 6, '6', 'Khuyến mãi 6%', 1);
+(4, 'CM6', 6, '6', 'Khuyến mãi 6%', 0),
+(11, '1', -1, '1', '1', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `customer`
+--
+
+CREATE TABLE `customer` (
+  `id` int(11) NOT NULL,
+  `fullname` varchar(50) NOT NULL,
+  `address` varchar(200) NOT NULL,
+  `phone` varchar(10) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `userId` int(11) NOT NULL,
+  `statusCustomer` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `customer`
+--
+
+INSERT INTO `customer` (`id`, `fullname`, `address`, `phone`, `email`, `userId`, `statusCustomer`) VALUES
+(1, 'Nguyen Chi Cong', 'Cà Mau', '0948399484', 'congkhpro291002@gmail.com', 7, 1),
+(2, 'Nguyen Van Tien Dụng', 'Binh Chanh', '0948399484', 'tiendung2209@gmail.com', 7, 1);
 
 -- --------------------------------------------------------
 
@@ -91,8 +117,21 @@ INSERT INTO `coupon` (`id`, `code`, `count`, `promotion`, `description`, `status
 CREATE TABLE `employee` (
   `id` int(11) NOT NULL,
   `userId` int(11) NOT NULL,
-  `salary` double NOT NULL
+  `fullname` varchar(50) NOT NULL,
+  `address` varchar(200) NOT NULL,
+  `phone` varchar(10) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `salary` double NOT NULL,
+  `status` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `employee`
+--
+
+INSERT INTO `employee` (`id`, `userId`, `fullname`, `address`, `phone`, `email`, `salary`, `status`) VALUES
+(1, 11, 'Nguyễn Đình Thịnh', 'Đồng Nai', '0912111222', 'chicong123@gmail.com', 2500000, 1),
+(2, 11, 'Vo Van Huan', 'Vung Tau', '0948399484', 'congkhpro291002@gmail.com', 2500000, 1);
 
 -- --------------------------------------------------------
 
@@ -113,7 +152,8 @@ CREATE TABLE `forgot_password_token` (
 --
 
 INSERT INTO `forgot_password_token` (`id`, `token`, `isuUsed`, `expireTime`, `user_id`) VALUES
-(1, '26477600-a2f8-4cff-a529-9f4790c03d89', 0, '2023-11-22 23:13:10', 0);
+(1, '26477600-a2f8-4cff-a529-9f4790c03d89', 0, '2023-11-22 23:13:10', 0),
+(2, '31c83e68-0237-4013-9c47-f7ee72741415', 1, '2023-12-02 02:01:50', 7);
 
 -- --------------------------------------------------------
 
@@ -136,7 +176,7 @@ CREATE TABLE `orderdetail` (
 INSERT INTO `orderdetail` (`id`, `orderId`, `productId`, `quantity`, `unitPrice`) VALUES
 (22, 7, 131, 2, 20000),
 (23, 8, 132, 4, 13000000),
-(24, 7, 132, 1, 230000);
+(24, 9, 132, 1, 230000);
 
 -- --------------------------------------------------------
 
@@ -162,11 +202,10 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `userId`, `orderDate`, `Status`, `couponId`, `paymentMethod`, `total`, `ShipName`, `ShipAddress`, `ShipPhoneNumber`) VALUES
-(7, 11, '2022-10-22', 5, 1, 'COD', 1500000, 'Dinh Thinh', 'Ca Mau', '0941124123'),
-(8, 8, '2023-11-24', 4, 2, 'COD', 1500000, 'Tan Duy', 'Cà Mau', '0129293493'),
-(9, 7, '2023-10-05', 1, 1, 'COD', 1500000, 'Ngoc So', 'Ca Mau', '0129294393'),
-(10, 11, '2023-08-22', 1, 1, 'COD', 1500000, 'Dinh Thinh', 'Ca Mau', '0941124123'),
-(11, 11, '2023-06-22', 1, 1, 'COD', 1500000, 'Dinh Thinh', 'Ca Mau', '0941124123');
+(7, 11, '2022-10-22', 2, 1, 'COD', 1500000, 'Dinh Thinh', 'Ca Mau', '0941124123'),
+(8, 8, '2023-11-24', 1, 2, 'COD', 1500000, 'Tan Duy', 'Cà Mau', '0129293493'),
+(9, 7, '2023-10-05', 5, 1, 'COD', 1500000, 'Ngoc So', 'Ca Mau', '0129294393'),
+(10, 11, '2023-08-22', 5, 1, 'COD', 1500000, 'Khoa', 'DAK LAK', '0941124123');
 
 -- --------------------------------------------------------
 
@@ -192,14 +231,19 @@ CREATE TABLE `product` (
 
 INSERT INTO `product` (`id`, `name`, `price`, `Image`, `description`, `categoryId`, `quantity`, `color`, `status`) VALUES
 (131, 'iPhone 15 Pro Max 256GB', 34920000, 'IPhone_1.jpeg', 'iPhone 15 Pro Max đem lại một diện mạo hoàn toàn mới và sở hữu nhiều tính năng ưu việt cùng công nghệ tiên tiến. Hãy khám phá các đánh giá chi tiết về sản phẩm về khía cạnh thiết kế, màn hình, hiệu năng, thời lượng pin và bộ camera độc đáo qua các thông tin dưới đây!', 30, 100, 'đen', 1),
-(132, 'iPhone 15 Pro Max 256GB', 34290000, 'IPhone_2.jpeg', 'Đẹp Xứng Đáng với chất lượng', 30, 100, 'xanh', 1),
+(132, 'iPhone 15 Pro Max 256GB', 34290000, 'IPhone_2.png', 'Đẹp Xứng Đáng với chất lượng', 30, 100, 'xanh', 1),
 (133, 'iPhone 15 Pro Max 256GB', 34290000, 'IPhone_3.jpeg', 'Đẹp Xanh', 30, 100, 'Trắng', 1),
-(134, 'SAM SUNG GALAXY ULTRA S23', 25400000, 'SamSung_1.jpeg', 'Đen Đẹp', 31, 3, 'Đen', 1),
-(135, 'SAM SUNG GALAXY S21', 9490000, 'SamSung_3.jpeg', 'Đen Đẹp Ngầu', 31, 3, 'Đen', 1),
-(136, 'IPHONE 13 PROMAX', 35000000, 'IPhone_4.jpeg', 'Đen Đep Ngầu', 30, 100, 'Đen', 1),
-(137, 'IPHONE 14', 25000000, 'IPhone_2.jpeg', 'Xanh Đen', 30, 5, 'xanh', 1),
-(138, 'SAMSUNG GALAXY', 35000000, 'SamSung_3.jpeg', 'Đen ngầu', 31, 3, 'Đen', 1),
-(139, 'IPhone 15 Pro Max 256GB', 2600000, 'IPhone_5.png', 'iPhone 15 Pro Max đem lại một diện mạo hoàn toàn mới và sở hữu nhiều tính năng ưu việt cùng công nghệ tiên tiến. Hãy khám phá các đánh giá chi tiết về sản phẩm về khía cạnh thiết kế, màn hình, hiệu năng, thời lượng pin và bộ camera độc đáo qua các thông tin dưới đây!', 30, 2, 'Trắng TiTan', 1);
+(142, 'iPhone 15 Plus VN/a', 25000000, 'iphone-15-plus-black-thumbtz-650x650.png.png', 'iPhone 15 Plus VN/a', 30, 100, 'đen', 1),
+(143, 'iPhone 15 Plus VN/a', 25590000, 'iphone-15-plus yellow.png', 'iPhone 15 Plus VN/a', 30, 100, 'Vàng', 1),
+(144, 'iPhone 15 Plus VN/a', 25590000, 'iphone15pink.jpg', 'iPhone 15 Plus VN/a', 30, 100, 'hồng', 1),
+(145, 'Samsung Galaxy S23 Ultra 8/256GB', 25900000, 'SamsungGalaxyS23_BLACK.png', 'Samsung Galaxy S23 Ultra 8/256GB', 31, 100, 'Đen', 1),
+(146, 'Samsung Galaxy S23 Ultra 8/256GB', 25590000, 'SamsungGalaxyS23_WHITE.png', 'Samsung Galaxy S23 Ultra 8/256GB', 31, 100, 'Trắng', 1),
+(147, 'Samsung Galaxy S23 Ultra 8/256GB', 25590000, 'SamsungGalaxyS23_GREEN.png', 'Samsung Galaxy S23 Ultra 8/256GB', 31, 100, 'xanh lá', 1),
+(149, 'Samsung Galaxy A54 5G 8/128GB', 8690000, 'SamsungGalaxyA5_BLACK.png', 'Samsung Galaxy A54 5G 8/128GB', 31, 100, 'đen', 1),
+(150, 'Samsung Galaxy A54 5G 8/128GB', 8690000, 'SamsungGalaxyA5_TIM.png', 'Samsung Galaxy A54 5G 8/128GB', 31, 100, 'Tím', 1),
+(151, 'Vivo V29e 8GB-256GB', 8690000, 'Vivo_V29e.png', 'Vivo V29e 8GB-256GB', 32, 100, 'xanh', 1),
+(152, 'Vivo Y17s 4/128GB', 3890000, 'Vivo_Y17s.png', 'Vivo Y17s 4/128GB', 32, 100, 'Tím', 1),
+(153, 'Vivo Y36 8-128GB', 5490000, 'Vivo_Y36.png', 'Vivo Y36 8-128GB', 32, 100, 'xanh', 1);
 
 -- --------------------------------------------------------
 
@@ -257,7 +301,8 @@ CREATE TABLE `supplier` (
 INSERT INTO `supplier` (`Id`, `Name`, `PhoneNumber`, `Address`, `status`) VALUES
 (1, 'Apple', '0816089161', 'Ca Mau', 1),
 (2, 'Samsung', '0765433120', 'Ha Noi', 1),
-(4, 'IPHONE', '0386431800', 'Ca Mau', 1);
+(5, 'Vivo APEX', '0785346410', 'Ha Noi', 1),
+(11, 'Apple', '0912111222', '1', 0);
 
 -- --------------------------------------------------------
 
@@ -272,7 +317,7 @@ CREATE TABLE `user` (
   `fullname` varchar(30) NOT NULL,
   `address` varchar(100) NOT NULL,
   `phone` varchar(10) NOT NULL,
-  `role` enum('ADMIN','USER') NOT NULL
+  `role` enum('ADMIN','USER','EMPLOYEE') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -280,10 +325,10 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `email`, `password`, `fullname`, `address`, `phone`, `role`) VALUES
-(7, 'congkhpro291002@gmail.com', '$2a$10$AsMAjMnlq.6HRBQb0tXrou3lNKAw6YaismGBXHzBdHW6tMOOIaOwq', 'Nguyễn Đình Thịnh', 'Ca Mau', '0948399484', 'USER'),
+(7, 'congkhpro291002@gmail.com', '$2a$10$4zzxBP0Ot2GonLPW4mNnz.BkeS9tX0ZWM5FL4rPHc607QNVyzUGgm', 'Nguyễn Đình Thịnh', 'Ca Mau', '0948399484', 'USER'),
 (8, 'congnguyen@gmail.com', '$2a$10$/RK4hgagmY7w/8CyYhQ.E.qcgFiI1ANppwn3Pq6l0oOFRjwvUOxSm', 'Nguyễn Chí Công', 'Cà Mau', '0948831177', 'USER'),
 (9, 'admin@gmail.com', '$2a$10$cFfZBkooDqE7HzlM0b9dm.CGFs7XE3bpUVPB.iSIJyB/OnQKIPAHm', 'Nguyễn Chí Công', 'Bến Tre', '0912111222', 'ADMIN'),
-(11, 'chicong123@gmail.com', '$2a$10$fvULYA6JnR2wssmuqEE.rOdXJ0/yK1poTTI2NqfB.qmizyWiWxPNS', 'chi cong', 'Đắk Lắk', '0386431800', 'USER');
+(11, 'chicong123@gmail.com', '$2a$10$fvULYA6JnR2wssmuqEE.rOdXJ0/yK1poTTI2NqfB.qmizyWiWxPNS', 'chi cong', 'Đắk Lắk', '0386431800', 'EMPLOYEE');
 
 --
 -- Indexes for dumped tables
@@ -309,6 +354,13 @@ ALTER TABLE `category`
 --
 ALTER TABLE `coupon`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `customer`
+--
+ALTER TABLE `customer`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_fk_3` (`userId`);
 
 --
 -- Indexes for table `employee`
@@ -385,25 +437,31 @@ ALTER TABLE `cartitem`
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `coupon`
 --
 ALTER TABLE `coupon`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT for table `customer`
+--
+ALTER TABLE `customer`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `employee`
 --
 ALTER TABLE `employee`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `forgot_password_token`
 --
 ALTER TABLE `forgot_password_token`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `orderdetail`
@@ -421,7 +479,7 @@ ALTER TABLE `orders`
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=140;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=155;
 
 --
 -- AUTO_INCREMENT for table `review`
@@ -439,7 +497,7 @@ ALTER TABLE `shoppingcart`
 -- AUTO_INCREMENT for table `supplier`
 --
 ALTER TABLE `supplier`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `user`
@@ -463,6 +521,12 @@ ALTER TABLE `cartitem`
 --
 ALTER TABLE `category`
   ADD CONSTRAINT `s` FOREIGN KEY (`supplierId`) REFERENCES `supplier` (`Id`);
+
+--
+-- Constraints for table `customer`
+--
+ALTER TABLE `customer`
+  ADD CONSTRAINT `user_fk_3` FOREIGN KEY (`userId`) REFERENCES `user` (`id`);
 
 --
 -- Constraints for table `employee`

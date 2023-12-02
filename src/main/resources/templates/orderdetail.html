@@ -24,33 +24,40 @@
 
             <!-- Begin Page Content -->
             <div class="container-fluid">
-
-                <h2>Thông tin người nhận</h2>
-
-                <table class="table table-bordered">
+                <div class="card mb-12">
+                    <h1 class="mt-4">Thông Tin Người Nhận</h1>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item"><a style="color: #0779e4;" href="/search-order/0?keyword=">Trang
+                            chủ</a></li>
+                        <li class="breadcrumb-item active">Thông Tin Người Nhận</li>
+                    </ol>
+                    <div class="card-header">
+                        <a class="btn btn-success" href="/search-order/0?keyword=">Về danh sách</a>
+                    </div>
+                    <table class="table table-bordered">
                         <tr th:each="orders : ${listOrder}">
-                        <td class="font-weight-bold">Tên người đặt</td>
-                        <td th:text="${orders.user.fullname}"></td>
-                    </tr>
-                    <tr th:each="orders : ${listOrder}">
-                        <td class="font-weight-bold">Tên người nhận</td>
-                        <td th:text="${orders.ShipName}"></td>
-                    </tr>
-                    <tr th:each="orders : ${listOrder}">
-                        <td class="font-weight-bold">Địa chỉ người nhận</td>
-                        <td th:text="${orders.ShipAddress}"></td>
-                    </tr>
-                    <tr th:each="orders : ${listOrder}">
-                        <td class="font-weight-bold">Số điện thoại người nhận</td>
-                        <td th:text="${orders.ShipPhoneNumber}"></td>
-                    </tr>
-                    <tr th:each="orders : ${listOrder}">
-                        <td class="font-weight-bold">Ngày đặt</td>
-                        <td th:text="${orders.orderDate}"></td>
-                    </tr>
-                    <tr th:each="orders : ${listOrder}">
-                        <td class="font-weight-bold">Trạng thái</td>
-                        <td>
+                            <td class="font-weight-bold">Tên người đặt</td>
+                            <td th:text="${orders.user.fullname}"></td>
+                        </tr>
+                        <tr th:each="orders : ${listOrder}">
+                            <td class="font-weight-bold">Tên người nhận</td>
+                            <td th:text="${orders.ShipName}"></td>
+                        </tr>
+                        <tr th:each="orders : ${listOrder}">
+                            <td class="font-weight-bold">Địa chỉ người nhận</td>
+                            <td th:text="${orders.ShipAddress}"></td>
+                        </tr>
+                        <tr th:each="orders : ${listOrder}">
+                            <td class="font-weight-bold">Số điện thoại người nhận</td>
+                            <td th:text="${orders.ShipPhoneNumber}"></td>
+                        </tr>
+                        <tr th:each="orders : ${listOrder}">
+                            <td class="font-weight-bold">Ngày đặt</td>
+                            <td th:text="${orders.orderDate}"></td>
+                        </tr>
+                        <tr th:each="orders : ${listOrder}">
+                            <td class="font-weight-bold">Trạng thái</td>
+                            <td>
                              <span th:switch="${orders.Status}">
                                     <span th:case="1">Đang chờ duyệt</span>
                                     <span th:case="2"></span>
@@ -59,50 +66,44 @@
                                     <span th:case="5"></span>
                                     <span th:case="*" th:text="..."></span>
                                 </span>
-                        </td>
-                    </tr>
-                    <tr th:each="orders,index : ${listOrder}">
-                        <td class="font-weight-bold">Giá trị đơn hàng</td>
-                        <td  th:text="${formattedPrices[__${index.index}__] + ' VNĐ'}"></td>
-                    </tr>
-                </table>
-
-                <div>
-                    <table class="styled-table">
-                        <tr>
-                            <th>ID</th>
-                            <th>Ảnh Sản Phẩm</th>
-                            <th>Tên Sản Phẩm</th>
-                            <th>Số lượng mua</th>
-                            <th>Giá bán</th>
-                        </tr>
-
-                            <tr th:each="orderdetail,index : ${listOrderDetail}">
-                            <td th:text="${orderdetail.order.id}"></td>
-                            <td>
-                                <img class="product-image"  style="height: 150px; width: 150px;"
-                                     th:src="@{'/img/' + ${orderdetail.product.getImage()}}" alt="Product Image">
                             </td>
-                            <td th:text="${orderdetail.product.getName()}"></td>
-                            <td th:text="${orderdetail.quantity}"></td>
-                            <td th:text="${formattedPriceDetail[__${index.index}__] + ' VNĐ'}"></td>
+                        </tr>
+                        <tr th:each="orders,index : ${listOrder}">
+                            <td class="font-weight-bold">Giá trị đơn hàng</td>
+                            <td th:text="${formattedPrices[__${index.index}__] + ' VNĐ'}"></td>
                         </tr>
                     </table>
+
                     <div>
+                        <table class="styled-table">
+                            <tr>
+                                <th>ID</th>
+                                <th>Ảnh Sản Phẩm</th>
+                                <th>Tên Sản Phẩm</th>
+                                <th>Số lượng mua</th>
+                                <th>Giá bán</th>
+                            </tr>
+
+                            <tr th:each="orderdetail,index : ${listOrderDetail}">
+                                <td th:text="${orderdetail.order.id}"></td>
+                                <td>
+                                    <img class="product-image" style="height: 150px; width: 150px;"
+                                         th:src="@{'/img/' + ${orderdetail.product.getImage()}}" alt="Product Image">
+                                </td>
+                                <td th:text="${orderdetail.product.getName()}"></td>
+                                <td th:text="${orderdetail.quantity}"></td>
+                                <td th:text="${formattedPriceDetail[__${index.index}__] + ' VNĐ'}"></td>
+                            </tr>
+                        </table>
+                        <div>
+                        </div>
+                        <!-- /.container-fluid -->
+
                     </div>
-                    <!-- /.container-fluid -->
-
+                    <!-- End of Main Content -->
                 </div>
-                <!-- End of Main Content -->
-
-                <!-- Footer -->
-                <footer th:replace="~{fragments::footer}">
-                </footer>
-                <!-- End of Footer -->
-
+                <!-- End of Content Wrapper -->
             </div>
-            <!-- End of Content Wrapper -->
-
         </div>
         <!-- End of Page Wrapper -->
 

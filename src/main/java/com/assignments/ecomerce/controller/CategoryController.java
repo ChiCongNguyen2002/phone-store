@@ -37,15 +37,20 @@ public class CategoryController {
     }
 
     @PostMapping("/add-category")
-    public String add(@ModelAttribute("categoryNew") Category category, Model model, RedirectAttributes attributes) {
+    public String add(@ModelAttribute("categoryNew") Category category,
+                      Model model,
+                      RedirectAttributes attributes) {
         try {
-            String name = category.getName();
             Category categ = categoryService.findByName(category.getName());
             if (categ == null) {
                 categoryService.save(category);
-            } else {
+            } else if(categ.getStatus() == 0){
                 categoryService.updateStatus(categ.getId());
+            }else if(categ.getStatus() == 1){
+                attributes.addFlashAttribute("failed", "Tên Danh Mục Đã Tồn Tại Vui lòng nhập tên khác!");
+                return "redirect:/search-category/0?keyword=";
             }
+
             model.addAttribute("categoryNew", category);
             attributes.addFlashAttribute("success", "Added successfully");
         } catch (DataIntegrityViolationException e1) {
@@ -55,7 +60,7 @@ public class CategoryController {
             e2.printStackTrace();
             attributes.addFlashAttribute("failed", "Error Server");
         }
-        return "redirect:/category/0";
+        return "redirect:/search-category/0?keyword=";
     }
 
     @RequestMapping(value = "/findByIdCategory/{id}", method = {RequestMethod.PUT, RequestMethod.GET})
@@ -76,7 +81,7 @@ public class CategoryController {
             e.printStackTrace();
             attributes.addFlashAttribute("failed", "Error server");
         }
-        return "redirect:/category/0";
+        return "redirect:/search-category/0?keyword=";
     }
 
     @RequestMapping(value = "/status-category", method = {RequestMethod.PUT, RequestMethod.GET})
@@ -88,7 +93,7 @@ public class CategoryController {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("error", "Enabled failed!");
         }
-        return "redirect:/category/0";
+        return "redirect:/search-category/0?keyword=";
     }
 
     @GetMapping("/search-category/{pageNo}")
@@ -96,6 +101,8 @@ public class CategoryController {
                                  @RequestParam("keyword") String keyword,
                                  Model model, Principal principal, HttpSession session) {
         Page<Category> listCategory = categoryService.searchCategory(pageNo, keyword);
+        List<Supplier> listSuppliers =  supplierService.getAllSuppliers();
+        model.addAttribute("listSuppliers", listSuppliers);
         session.setAttribute("keyword", keyword);
         model.addAttribute("keyword", keyword);
         model.addAttribute("size", listCategory.getSize());

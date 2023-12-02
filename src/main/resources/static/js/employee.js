@@ -7,11 +7,11 @@ $('document').ready(function (){
             type: 'GET',
             success: function (employee, status) {
                 $('#idEdit').val(employee.id);
-                $('#fullnameEdit').val(employee.name);
-                $('#phoneEdit').val(employee.phoneNumber);
+                $('#fullnameEdit').val(employee.fullname);
+                $('#phoneEdit').val(employee.phone);
                 $('#addressEdit').val(employee.address);
                 $('#emailEdit').val(employee.email);
-                 $('#salaryEdit').val(employee.email);
+                $('#salaryEdit').val(employee.salary);
                 $('#editModal').modal();
             },
             error: function (xhr, status, error) {
@@ -21,18 +21,7 @@ $('document').ready(function (){
     });
 });
 
-$('document').ready(function (){
-    $('table #deleteButton').on('click', function (event){
-        event.preventDefault();
-        var href = $(this).attr('href');
-        $.get(href, function (category, status){
-            $('#idDelete').val(category.id);
-        });
-        $('#deleteModal').modal();
-    });
-});
-
-function saveCustomer(event) {
+function SaveEmoloyee(event) {
   event.preventDefault();
 
   var name = document.getElementById("nameAdd").value;
@@ -49,10 +38,6 @@ function saveCustomer(event) {
     return;
   }
 
-if (!nameRegex.test(name)) {
-    alert("Tên không hợp lệ Vui lòng nhập tên khác" );
-     return;
-  }
   if (!phoneRegex.test(phone)) {
     alert("Số điện thoại không hợp lệ Vui Lòng nhập số khác");
      return;
@@ -65,7 +50,7 @@ if (!nameRegex.test(name)) {
   document.getElementById("customerForm").submit();
 }
 
-function saveCustomerEdit(event) {
+function SaveEmoloyeeEdit(event) {
   event.preventDefault();
 
   var name = document.getElementById("fullnameEdit").value;
@@ -82,10 +67,6 @@ function saveCustomerEdit(event) {
     return;
   }
 
-if (!nameRegex.test(name)) {
-    alert("Tên không hợp lệ Vui lòng nhập tên khác" );
-     return;
-  }
   if (!phoneRegex.test(phone)) {
     alert("Số điện thoại không hợp lệ Vui Lòng nhập số khác");
      return;

@@ -1,5 +1,6 @@
 package com.assignments.ecomerce.service.impl;
 
+import com.assignments.ecomerce.model.Coupon;
 import com.assignments.ecomerce.model.Customer;
 import com.assignments.ecomerce.model.Employee;
 import com.assignments.ecomerce.repository.EmployeeRepository;
@@ -29,6 +30,35 @@ public class EmployeeServiceImpl implements EmployeeService {
         List<Employee> employees = transfer(employeeRepository.searchEmployee(keyword.trim()));
         Page<Employee> employeePages = toPage(employees, pageable);
         return employeePages;
+    }
+
+    @Override
+    public Employee findById(Integer id) {
+        return employeeRepository.findById(id).get();
+    }
+
+    @Override
+    public Employee update(Employee employee) {
+        Employee employeeSave = null;
+        try {
+            employeeSave = employeeRepository.findById(employee.getId()).get();
+            employeeSave.setFullname(employee.getFullname());
+            employeeSave.setPhone(employee.getPhone());
+            employeeSave.setAddress(employee.getAddress());
+            employeeSave.setEmail(employee.getEmail());
+            employeeSave.setSalary(employee.getSalary());
+            employeeSave.setStatus(1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return employeeRepository.save(employeeSave);
+    }
+
+    @Override
+    public void deleteById(Integer id) {
+        Employee employee = employeeRepository.getById(id);
+        employee.setStatus(0);
+        employeeRepository.save(employee);
     }
 
     private Page toPage(List<Employee> list, Pageable pageable) {

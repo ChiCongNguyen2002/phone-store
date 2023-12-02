@@ -1,4 +1,4 @@
-/*function saveProduct(event) {
+function saveProduct(event) {
   event.preventDefault(); // Ngăn chặn hành vi gửi biểu mẫu mặc định
 
   var name = document.getElementById("nameAdd").value;
@@ -8,17 +8,22 @@
   var description = document.getElementById("description").value;
   var photoFile = document.getElementById("photo_file").files[0];
 
-  // Kiểm tra các trường bắt buộc
-  if (name === "" || color === "" || quantity === "" || price === "" || description === "" || !photoFile) {
-    alert("Vui lòng điền đầy đủ thông tin và chọn tệp tin ảnh");
-    return;
-  }
+// Kiểm tra nếu số lượng không được để trống và phải là số nguyên dương
+if (quantity.trim() === "" || !Number.isInteger(parseInt(quantity)) || parseInt(quantity) <= 0) {
+  alert("Vui lòng nhập số lượng sản phẩm hợp lệ.");
+  return;
+}
 
-  // Kiểm tra định dạng số của quantity và price
-  if (isNaN(quantity) || isNaN(price)) {
-    alert("Số lượng và giá phải là số");
-    return;
-  }
+// Kiểm tra nếu giá không được để trống và phải là số dương
+if (price.trim() === "" || isNaN(parseFloat(price)) || parseFloat(price) <= 0) {
+  alert("Vui lòng nhập giá sản phẩm hợp lệ.");
+  return;
+}
+
+if (/\d/.test(color)) {
+  alert("Màu không được chứa số.");
+  return;
+}
 
   // Kiểm tra định dạng tệp tin ảnh
   var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
@@ -36,7 +41,7 @@
 
   // Nếu không có lỗi, gửi biểu mẫu
   document.getElementById("productForm").submit();
-}*/
+}
 
 function slideOne() {
   var slider1 = document.getElementById("slider-1");

@@ -34,4 +34,8 @@ public interface CouponService {
     Page toPage(List<Coupon> list, Pageable pageable);
 
     List<Coupon> transfer(List<Coupon> coupons);
+
+    Coupon findByCode(String code);
+
+    Coupon updateStatus(Integer id);
 }

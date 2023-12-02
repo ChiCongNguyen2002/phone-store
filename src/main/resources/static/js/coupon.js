@@ -43,19 +43,27 @@ function saveCoupon(event) {
     alert("Vui lòng điền đầy đủ thông tin");
     return;
   }
+   // Kiểm tra nếu số lượng không được để trống và phải là số nguyên dương
+     if (count.trim() === "" || !Number.isInteger(parseInt(count)) || parseInt(count) <= 0) {
+       alert("Vui lòng nhập số lượng sản phẩm hợp lệ.");
+       return;
+     }
   document.getElementById("couponForm").submit();
 }
 
 function saveCouponEdit(event) {
   event.preventDefault();
-
   var code = document.getElementById("codeEdit").value;
    var count = document.getElementById("countEdit").value;
    var promotion = document.getElementById("promotionEdit").value;
    var description = document.getElementById("descriptionEdit").value;
-
    if (code === "" || count === "" || promotion === "" || description === "") {
      alert("Vui lòng điền đầy đủ thông tin");
+     return;
+   }
+   // Kiểm tra nếu số lượng không được để trống và phải là số nguyên dương
+   if (count.trim() === "" || !Number.isInteger(parseInt(count)) || parseInt(count) <= 0) {
+     alert("Vui lòng nhập số lượng sản phẩm hợp lệ.");
      return;
    }
   document.getElementById("editForm").submit();

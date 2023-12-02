@@ -1,5 +1,6 @@
 package com.assignments.ecomerce.service.impl;
 
+import com.assignments.ecomerce.model.Category;
 import com.assignments.ecomerce.model.Coupon;
 import com.assignments.ecomerce.repository.CouponRepository;
 import com.assignments.ecomerce.service.CouponService;
@@ -44,6 +45,7 @@ public class CouponServiceImpl implements CouponService {
             couponSave.setCount(coupon.getCount());
             couponSave.setPromotion(coupon.getPromotion());
             couponSave.setDescription(coupon.getDescription());
+            couponSave.setStatus(1);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -52,6 +54,7 @@ public class CouponServiceImpl implements CouponService {
 
     public void deleteById(Integer id) {
         Coupon coupon = couponRepository.getById(id);
+        coupon.setStatus(0);
         couponRepository.save(coupon);
     }
 
@@ -90,5 +93,17 @@ public class CouponServiceImpl implements CouponService {
             CouponList.add(newCoupon);
         }
         return CouponList;
+    }
+
+    @Override
+    public Coupon findByCode(String code) {
+        return couponRepository.findByCode(code);
+    }
+
+    @Override
+    public Coupon updateStatus(Integer id) {
+        Coupon couponUpdate = couponRepository.getById(id);
+        couponUpdate.setStatus(1);
+        return couponRepository.save(couponUpdate);
     }
 }

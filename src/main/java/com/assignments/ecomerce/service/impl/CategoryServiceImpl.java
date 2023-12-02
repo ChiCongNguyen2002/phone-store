@@ -36,15 +36,17 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.findById(id).get();
     }
 
-    public Category findByName(String name){
+    public Category findByName(String name) {
         return categoryRepository.findByName(name);
     }
+
     public Category update(Category category) {
         Category categoryUpdate = null;
         try {
             categoryUpdate = categoryRepository.findById(category.getId()).get();
             categoryUpdate.setName(category.getName());
             categoryUpdate.setSupplier(category.getSupplier());
+            categoryUpdate.setStatus(1);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -52,14 +54,8 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     public Category updateStatus(Integer id) {
-
-        Category categoryUpdate = null;
-        try {
-            categoryUpdate = categoryRepository.findById(id).get();
-            categoryUpdate.setStatus(1);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Category categoryUpdate = categoryRepository.getById(id);
+        categoryUpdate.setStatus(1);
         return categoryRepository.save(categoryUpdate);
     }
 
@@ -94,6 +90,7 @@ public class CategoryServiceImpl implements CategoryService {
             newCategory.setId(category.getId());
             newCategory.setName(category.getName());
             newCategory.setSupplier(category.getSupplier());
+            newCategory.setStatus(1);
             categoryList.add(newCategory);
         }
         return categoryList;

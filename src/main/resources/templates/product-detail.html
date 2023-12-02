@@ -87,7 +87,7 @@
                     </div>
 
                     <div>
-                        <h3 th:text="${formattedPrice.replace(',', '.') + ' VNĐ'}" class="product-price"></h3>
+                        <h3 th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + 'VNĐ'}" class="product-price"></h3>
                         <span th:if="${productDetail.quantity <= 0}" class="product-available">Hết hàng</span>
                         <div class="quantity">
                             <button class="minus-btn" onclick="decreaseQuantity()">-</button>
@@ -134,7 +134,7 @@
                                         </tr>
                                         <tr>
                                             <th>Giá:</th>
-                                            <td th:text="${formattedPrice.replace(',', '.') + ' VNĐ'}"></td>
+                                            <td th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + 'VNĐ'}"></td>
                                         </tr>
                                         <tr>
                                             <th>Chi tiết sản phẩm:</th>

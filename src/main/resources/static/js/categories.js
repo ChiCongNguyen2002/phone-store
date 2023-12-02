@@ -31,9 +31,14 @@ function saveCategory(event) {
 function saveCategoryEdit(event) {
   event.preventDefault();
   var name = document.getElementById("nameEdit").value;
+  var supplier = document.getElementById("supplierEdit").value;
   if (name === "") {
     alert("Tên Danh Mục không được để trống");
     return;
   }
+  if (supplier === "") {
+      alert("Nhà cung cấp không được để trống");
+      return;
+    }
    document.getElementById("categoryFormEdit").submit();
 }

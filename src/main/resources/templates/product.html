@@ -30,7 +30,7 @@
                     <div class="card-header">
                         <div class="row">
                             <div class="col-md-6 col-xs-12">
-                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addModal"
+                                <button style="margin-top: 10px;" type="button" class="btn btn-success" data-toggle="modal" data-target="#addModal"
                                         data-whatever="@mdo">Tạo mới
                                 </button>
                             </div>
@@ -208,8 +208,8 @@
                         <div class="col-md-8">
                             <!-- File Button -->
                             <div class="form-group">
-                                <label class="col-md-4 control-label" for="photo_file">IMAGE</label>
-                                <div class="col-md-4">
+                                <label class="col-md-8 control-label" for="photo_file">IMAGE</label>
+                                <div class="col-md-8">
                                     <input id="photo_file" type="file" name="photo_file" accept="image/*" required/>
                                 </div>
                             </div>
@@ -218,7 +218,7 @@
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="submit" class="btn btn-primary" onclick="saveProduct(event)">Save</button>
                     </div>
                 </div>
             </div>

@@ -1,6 +1,7 @@
 
 package com.assignments.ecomerce.service.impl;
 
+import com.assignments.ecomerce.model.Coupon;
 import com.assignments.ecomerce.model.Supplier;
 import com.assignments.ecomerce.repository.SupplierRepository;
 import com.assignments.ecomerce.service.SupplierService;
@@ -25,7 +26,7 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     public Page<Supplier> pageSupplier(int pageNo) {
-        Pageable pageable = PageRequest.of(pageNo, 5);
+        Pageable pageable = PageRequest.of(pageNo, 4);
         return supplierRepository.pageSupplier(pageable);
     }
 
@@ -48,16 +49,12 @@ public class SupplierServiceImpl implements SupplierService {
 
     public void deleteById(Integer id) {
         Supplier supplier = supplierRepository.getById(id);
-        supplierRepository.save(supplier);
-    }
-
-    public void enableById(Integer id) {
-        Supplier supplier = supplierRepository.getById(id);
+        supplier.setStatus(0);
         supplierRepository.save(supplier);
     }
 
     public Page<Supplier> searchSuppliers(int pageNo, String keyword) {
-        Pageable pageable = PageRequest.of(pageNo, 5);
+        Pageable pageable = PageRequest.of(pageNo, 4);
         List<Supplier> supplier = transfer(supplierRepository.searchSupplier(keyword.trim()));
         Page<Supplier> supplierPages = toPage(supplier, pageable);
         return supplierPages;
@@ -87,14 +84,15 @@ public class SupplierServiceImpl implements SupplierService {
         return supplierList;
     }
 
+    @Override
+    public Supplier findByNameOrPhoneNumber(String name,String phoneNumber) {
+        return supplierRepository.findByNameOrPhoneNumber(name,phoneNumber);
+    }
+
+    @Override
     public Supplier updateStatus(Integer id) {
-        Supplier supplierUpdate = null;
-        try {
-            supplierUpdate = supplierRepository.findById(id).get();
-            supplierUpdate.setStatus(1);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Supplier supplierUpdate = supplierRepository.getById(id);
+        supplierUpdate.setStatus(1);
         return supplierRepository.save(supplierUpdate);
     }
 

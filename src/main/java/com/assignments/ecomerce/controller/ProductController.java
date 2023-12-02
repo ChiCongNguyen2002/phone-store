@@ -19,11 +19,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import java.security.Principal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -70,10 +68,7 @@ public class ProductController {
         List<Category> categories = categoryService.getAllCategory();
         List<Review> reviews = reviewService.getByProduct(product);
         User user = userService.findByEmailUser(principal.getName());
-
-        System.out.println("user " + user.getId());
         List<Product> productColor = productService.getListColorByNameProduct(product.getName());
-
         int countReview = reviewService.countReviews(product);
         Double calculateAverageRating = reviewService.calculateAverageRating(product);
 
@@ -104,29 +99,21 @@ public class ProductController {
 
     @GetMapping("/ViewByCategory/{pageNo}")
     public String ViewByCategory(@PathVariable("pageNo") int pageNo,
-                                 @RequestParam("categoryId") Integer categoryId, Model model) {
+                                 @RequestParam("categoryId") Integer categoryId, Model model,Principal principal) {
         List<Category> categories = categoryService.getAllCategory();
         Page<Product> listProducts = productService.pageProductByCategory(pageNo, categoryId);
         Category category = categoryService.findById(categoryId);
+        UserDetails userDetails = null;
+        if (principal != null) {
+            userDetails = userDetailsService.loadUserByUsername(principal.getName());
+        }
+        model.addAttribute("userDetails", userDetails);
         model.addAttribute("category", category);
         model.addAttribute("categories", categories);
         model.addAttribute("size", listProducts.getSize());
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", listProducts.getTotalPages());
-
-        List<String> formattedPrices = new ArrayList<>();
-        DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols(Locale.getDefault());
-        decimalFormatSymbols.setGroupingSeparator('.');
-        DecimalFormat decimalFormat = new DecimalFormat("#,###", decimalFormatSymbols);
-
-        for (Product product : listProducts.getContent()) {
-            String formattedPrice = decimalFormat.format(product.getPrice());
-            formattedPrices.add(formattedPrice);
-        }
-
         model.addAttribute("listProducts", listProducts.getContent());
-        model.addAttribute("formattedPrices", formattedPrices);
-
         return "subcategory";
     }
 
@@ -163,7 +150,7 @@ public class ProductController {
     @GetMapping("/search-productByAdmin/{pageNo}")
     public String searchProductByAdmin(@PathVariable("pageNo") int pageNo,
                                 @RequestParam("keyword") String keyword,
-                                Model model, Principal principal, HttpSession session) {
+                                Model model, HttpSession session) {
 
         Page<Product> listProducts = productService.findProductByAdmin(pageNo, keyword);
         List<Category> categories = categoryService.getAllCategory();
@@ -181,7 +168,7 @@ public class ProductController {
     @GetMapping("/search-products/{pageNo}")
     public String searchProduct(@PathVariable("pageNo") int pageNo,
                                 @RequestParam("keyword") String keyword,
-                                Model model, Principal principal, HttpSession session) {
+                                Model model, HttpSession session) {
 
         Page<Product> listProducts = productService.searchProducts(pageNo, keyword);
         List<Category> categories = categoryService.getAllCategory();
@@ -217,6 +204,11 @@ public class ProductController {
 
         List<Category> categories = categoryService.getAllCategory();
         Page<Product> listProducts = productService.searchProductByOption(pageNo, category, sortOption, color, minPrice, maxPrice);
+        UserDetails userDetails = null;
+        if (principal != null) {
+            userDetails = userDetailsService.loadUserByUsername(principal.getName());
+        }
+        model.addAttribute("userDetails", userDetails);
         model.addAttribute("color", color);
         model.addAttribute("minPrice", minPrice);
         model.addAttribute("maxPrice", maxPrice);
@@ -229,47 +221,32 @@ public class ProductController {
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", listProducts.getTotalPages());
         model.addAttribute("productNew", new Product());
-        List<String> formattedPrices = new ArrayList<>();
-        DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols(Locale.getDefault());
-        decimalFormatSymbols.setGroupingSeparator('.');
-        DecimalFormat decimalFormat = new DecimalFormat("#,###", decimalFormatSymbols);
-        for (Product product : listProducts.getContent()) {
-            String formattedPrice = decimalFormat.format(product.getPrice());
-            formattedPrices.add(formattedPrice);
-        }
-
         model.addAttribute("listProducts", listProducts.getContent());
-        model.addAttribute("formattedPrices", formattedPrices);
         return "searchByOption";
     }
 
     @GetMapping("/search-productByKeyword/{pageNo}")
     public String searchProductByCategory(@PathVariable("pageNo") int pageNo,
                                           @RequestParam("keyword") String keyword,
-                                          Model model, Principal principal, HttpSession session) {
+                                          Model model, HttpSession session,Principal principal) {
         Page<Product> listProducts = productService.searchProducts(pageNo, keyword);
         List<Category> categories = categoryService.getAllCategory();
         double minPrice = productService.getMinPrice(listProducts);
         double maxPrice = productService.getMaxPrice(listProducts);
         double defaultMinPrice = productService.getMinPrice(listProducts);
         double defaultMaxPrice = productService.getMaxPrice(listProducts);
+        UserDetails userDetails = null;
+        if (principal != null) {
+            userDetails = userDetailsService.loadUserByUsername(principal.getName());
+        }
+        model.addAttribute("userDetails", userDetails);
         session.setAttribute("keyword", keyword);
         model.addAttribute("keyword", keyword);
         model.addAttribute("categories", categories);
         model.addAttribute("size", listProducts.getSize());
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", listProducts.getTotalPages());
-        List<String> formattedPrices = new ArrayList<>();
-        DecimalFormatSymbols decimalFormatSymbol_2 = new DecimalFormatSymbols(Locale.getDefault());
-        decimalFormatSymbol_2.setGroupingSeparator('.');
-        DecimalFormat decimalFormat_2 = new DecimalFormat("#,###", decimalFormatSymbol_2);
-        for (Product product : listProducts.getContent()) {
-            String formattedPrice = decimalFormat_2.format(product.getPrice());
-            formattedPrices.add(formattedPrice);
-        }
-
         model.addAttribute("listProducts", listProducts.getContent());
-        model.addAttribute("formattedPrices", formattedPrices);
         model.addAttribute("minPrice", minPrice);
         model.addAttribute("maxPrice", maxPrice);
         model.addAttribute("defaultMinPrice", 9490000);
@@ -278,7 +255,7 @@ public class ProductController {
     }
 
     @GetMapping("/detail-product/{id}")
-    public String DetailProducts(@PathVariable("id") Integer id, Model model) {
+    public String DetailProducts(@PathVariable("id") Integer id, Model model,Principal principal) {
         Product newProduct = productService.getById(id);
         Double price = newProduct.getPrice();
         DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols(Locale.getDefault());
@@ -286,6 +263,11 @@ public class ProductController {
         DecimalFormat decimalFormat = new DecimalFormat("#,###", decimalFormatSymbols);
         String formattedPrice = decimalFormat.format(price);
         List<Category> categories = categoryService.getAllCategory();
+        UserDetails userDetails = null;
+        if (principal != null) {
+            userDetails = userDetailsService.loadUserByUsername(principal.getName());
+        }
+        model.addAttribute("userDetails", userDetails);
         model.addAttribute("formattedPrice", formattedPrice);
         model.addAttribute("categories", categories);
         model.addAttribute("listProducts", newProduct);
@@ -308,7 +290,7 @@ public class ProductController {
             e2.printStackTrace();
             attributes.addFlashAttribute("failed", "Error Server");
         }
-        return "redirect:/product/0";
+        return "redirect:/search-productByAdmin/0?keyword=";
     }
 
     @GetMapping("/update-product/{id}")
@@ -338,7 +320,7 @@ public class ProductController {
             e.printStackTrace();
             attributes.addFlashAttribute("error", "Failed to update");
         }
-        return "redirect:/search-products/0?keyword=";
+        return "redirect:/search-productByAdmin/0?keyword=";
     }
 
     @RequestMapping(value = "/status-product", method = {RequestMethod.PUT, RequestMethod.GET})
@@ -351,6 +333,6 @@ public class ProductController {
             redirectAttributes.addFlashAttribute("error", "Deleted failed!");
         }
 
-        return "redirect:/search-products/0?keyword=";
+        return "redirect:/search-productByAdmin/0?keyword=";
     }
 }
