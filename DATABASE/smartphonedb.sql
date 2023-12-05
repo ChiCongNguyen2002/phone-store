@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 05, 2023 at 05:13 AM
+-- Generation Time: Dec 05, 2023 at 02:44 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -202,9 +202,9 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `userId`, `orderDate`, `Status`, `couponId`, `paymentMethod`, `total`, `ShipName`, `ShipAddress`, `ShipPhoneNumber`) VALUES
-(7, 11, '2023-10-22', 1, 1, 'COD', 2500000, 'Dinh Thinh', 'Ca Mau', '0941124123'),
-(8, 8, '2023-11-24', 1, 2, 'COD', 2000000, 'Tan Duy', 'Cà Mau', '0129293493'),
-(9, 7, '2023-10-05', 1, 1, 'COD', 1500000, 'Ngoc So', 'Ca Mau', '0129294393');
+(7, 11, '2023-10-22', 5, 1, 'COD', 2500000, 'Dinh Thinh', 'Ca Mau', '0941124123'),
+(8, 8, '2023-11-24', 2, 2, 'COD', 2000000, 'Tan Duy', 'Cà Mau', '0129293493'),
+(9, 7, '2023-10-05', 4, 1, 'COD', 1500000, 'Ngoc So', 'Ca Mau', '0129294393');
 
 -- --------------------------------------------------------
 
@@ -264,7 +264,9 @@ CREATE TABLE `review` (
 --
 
 INSERT INTO `review` (`id`, `userId`, `productId`, `rating`, `DateReview`, `comments`) VALUES
-(31, 11, 131, 5, '2023-11-26 12:16:34', 'Tốt');
+(31, 11, 131, 5, '2023-11-26 12:16:34', 'Tốt'),
+(32, 9, 142, 5, '2023-12-05 08:58:12', 'san pham tot'),
+(33, 7, 142, 2, '2023-12-05 08:59:13', 'san pham binh thuong');
 
 -- --------------------------------------------------------
 
@@ -484,7 +486,7 @@ ALTER TABLE `product`
 -- AUTO_INCREMENT for table `review`
 --
 ALTER TABLE `review`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `shoppingcart`
@@ -502,7 +504,7 @@ ALTER TABLE `supplier`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- Constraints for dumped tables
