@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 02, 2023 at 08:13 PM
+-- Generation Time: Dec 05, 2023 at 05:13 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -81,8 +81,7 @@ INSERT INTO `coupon` (`id`, `code`, `count`, `promotion`, `description`, `status
 (1, 'CM3', 40, '3', 'Khuyến mãi 3%', 1),
 (2, 'CM4', 30, '10', 'Khuyến mãi 10%', 1),
 (3, 'CM5', 5, '5', 'Khuyến mãi 5%', 1),
-(4, 'CM6', 6, '6', 'Khuyến mãi 6%', 0),
-(11, '1', -1, '1', '1', 0);
+(13, 'C', 1, '1', '1', 0);
 
 -- --------------------------------------------------------
 
@@ -106,7 +105,7 @@ CREATE TABLE `customer` (
 
 INSERT INTO `customer` (`id`, `fullname`, `address`, `phone`, `email`, `userId`, `statusCustomer`) VALUES
 (1, 'Nguyen Chi Cong', 'Cà Mau', '0948399484', 'congkhpro291002@gmail.com', 7, 1),
-(2, 'Nguyen Van Tien Dụng', 'Binh Chanh', '0948399484', 'tiendung2209@gmail.com', 7, 1);
+(2, 'Nguyen Van Tien Dụng', 'Binh Chanh', '0948399484', 'tiendung2209@gmail.com', 8, 1);
 
 -- --------------------------------------------------------
 
@@ -130,8 +129,7 @@ CREATE TABLE `employee` (
 --
 
 INSERT INTO `employee` (`id`, `userId`, `fullname`, `address`, `phone`, `email`, `salary`, `status`) VALUES
-(1, 11, 'Nguyễn Đình Thịnh', 'Đồng Nai', '0912111222', 'chicong123@gmail.com', 2500000, 1),
-(2, 11, 'Vo Van Huan', 'Vung Tau', '0948399484', 'congkhpro291002@gmail.com', 2500000, 1);
+(2, 11, 'Võ Văn Huấn', 'Vung Tau', '0948399484', 'congkhpro291002@gmail.com', 2500000, 1);
 
 -- --------------------------------------------------------
 
@@ -153,7 +151,8 @@ CREATE TABLE `forgot_password_token` (
 
 INSERT INTO `forgot_password_token` (`id`, `token`, `isuUsed`, `expireTime`, `user_id`) VALUES
 (1, '26477600-a2f8-4cff-a529-9f4790c03d89', 0, '2023-11-22 23:13:10', 0),
-(2, '31c83e68-0237-4013-9c47-f7ee72741415', 1, '2023-12-02 02:01:50', 7);
+(2, '31c83e68-0237-4013-9c47-f7ee72741415', 1, '2023-12-02 02:01:50', 7),
+(3, '436af7e9-3b8e-4e38-a187-06690f8b8fe8', 0, '2023-12-03 21:34:36', 7);
 
 -- --------------------------------------------------------
 
@@ -176,7 +175,8 @@ CREATE TABLE `orderdetail` (
 INSERT INTO `orderdetail` (`id`, `orderId`, `productId`, `quantity`, `unitPrice`) VALUES
 (22, 7, 131, 2, 20000),
 (23, 8, 132, 4, 13000000),
-(24, 9, 132, 1, 230000);
+(24, 9, 132, 1, 230000),
+(25, 9, 142, 2, 20000);
 
 -- --------------------------------------------------------
 
@@ -202,10 +202,9 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `userId`, `orderDate`, `Status`, `couponId`, `paymentMethod`, `total`, `ShipName`, `ShipAddress`, `ShipPhoneNumber`) VALUES
-(7, 11, '2022-10-22', 2, 1, 'COD', 1500000, 'Dinh Thinh', 'Ca Mau', '0941124123'),
-(8, 8, '2023-11-24', 1, 2, 'COD', 1500000, 'Tan Duy', 'Cà Mau', '0129293493'),
-(9, 7, '2023-10-05', 5, 1, 'COD', 1500000, 'Ngoc So', 'Ca Mau', '0129294393'),
-(10, 11, '2023-08-22', 5, 1, 'COD', 1500000, 'Khoa', 'DAK LAK', '0941124123');
+(7, 11, '2023-10-22', 1, 1, 'COD', 2500000, 'Dinh Thinh', 'Ca Mau', '0941124123'),
+(8, 8, '2023-11-24', 1, 2, 'COD', 2000000, 'Tan Duy', 'Cà Mau', '0129293493'),
+(9, 7, '2023-10-05', 1, 1, 'COD', 1500000, 'Ngoc So', 'Ca Mau', '0129294393');
 
 -- --------------------------------------------------------
 
@@ -300,9 +299,9 @@ CREATE TABLE `supplier` (
 
 INSERT INTO `supplier` (`Id`, `Name`, `PhoneNumber`, `Address`, `status`) VALUES
 (1, 'Apple', '0816089161', 'Ca Mau', 1),
-(2, 'Samsung', '0765433120', 'Ha Noi', 1),
+(2, 'Samsung', '0785431800', 'Ha Noi', 1),
 (5, 'Vivo APEX', '0785346410', 'Ha Noi', 1),
-(11, 'Apple', '0912111222', '1', 0);
+(12, 'Apple', '0912111222', '11', 0);
 
 -- --------------------------------------------------------
 
@@ -443,7 +442,7 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT for table `coupon`
 --
 ALTER TABLE `coupon`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `customer`
@@ -461,13 +460,13 @@ ALTER TABLE `employee`
 -- AUTO_INCREMENT for table `forgot_password_token`
 --
 ALTER TABLE `forgot_password_token`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `orderdetail`
 --
 ALTER TABLE `orderdetail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `orders`
@@ -497,7 +496,7 @@ ALTER TABLE `shoppingcart`
 -- AUTO_INCREMENT for table `supplier`
 --
 ALTER TABLE `supplier`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `user`
