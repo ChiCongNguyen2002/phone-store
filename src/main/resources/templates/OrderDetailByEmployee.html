@@ -1,15 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org/">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="~{fragments::header}">
-
 </head>
-
 <body id="page-top">
-
 <!-- Page Wrapper -->
 <div id="wrapper">
-    <!-- Sidebar -->
-    <ul th:replace="~{fragments::sidebar}">
+    <ul th:replace="~{indexEmployee::sidebar}">
     </ul>
     <!-- End of Sidebar -->
     <!-- Content Wrapper -->
@@ -21,18 +18,16 @@
             <nav th:replace="~{fragments::top-navbar}">
             </nav>
             <!-- End of Topbar -->
-
             <!-- Begin Page Content -->
             <div class="container-fluid">
                 <div class="card mb-12">
                     <h1 class="mt-4">Thông Tin Người Nhận</h1>
                     <ol class="breadcrumb mb-4">
-                        <li class="breadcrumb-item"><a style="color: #0779e4;" href="/search-order/0?keyword=">Trang
-                            chủ</a></li>
+                        <li class="breadcrumb-item"><a style="color: #0779e4;" href="/search-order-ByEmployee/0?keyword=">Trang chủ</a></li>
                         <li class="breadcrumb-item active">Thông Tin Người Nhận</li>
                     </ol>
                     <div class="card-header">
-                        <a class="btn btn-success" href="/search-order/0?keyword=">Về danh sách</a>
+                        <a class="btn btn-success" href="/search-order-ByEmployee/0?keyword=">Về danh sách</a>
                     </div>
                     <table class="table table-bordered">
                         <tr th:each="orders : ${listOrder}">
@@ -104,17 +99,17 @@
                 <!-- End of Content Wrapper -->
             </div>
         </div>
-        <!-- End of Page Wrapper -->
     </div>
 </div>
-    <!-- Scroll to Top Button-->
-    <a th:replace="~{fragments::scroll}">
-    </a>
+        <!-- End of Page Wrapper -->
+
+        <!-- Scroll to Top Button-->
+        <a th:replace="~{fragments::scroll}">
+        </a>
 
 
-    <!-- Bootstrap core JavaScript-->
-    <div th:replace="~{fragments::script}"></div>
-
+        <!-- Bootstrap core JavaScript-->
+        <div th:replace="~{fragments::script}"></div>
 </body>
 
 </html>

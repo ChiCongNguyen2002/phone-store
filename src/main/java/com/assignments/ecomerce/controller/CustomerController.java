@@ -48,7 +48,7 @@ public class CustomerController {
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", listCustomer.getTotalPages());
         model.addAttribute("customerNew", new Customer());
-        return "customer";
+        return "CustomerManager";
     }
 
     @RequestMapping(value = "/block-customer", method = {RequestMethod.PUT, RequestMethod.GET})

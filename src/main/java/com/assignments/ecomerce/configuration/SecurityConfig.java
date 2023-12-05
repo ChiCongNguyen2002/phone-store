@@ -28,7 +28,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request -> request.requestMatchers("/index")
                         .hasAuthority("ADMIN")
                         .requestMatchers("/indexUser").hasAuthority("USER")
-                        .requestMatchers("/indexEmployee").hasAuthority("EMPLOYEE")
+                        .requestMatchers("/search-customer-ByEmployee/0?keyword=").hasAuthority("EMPLOYEE")
                         .requestMatchers("/*","/indexUser","/registration","/reset-password","/password-request","/css/**", "/dist/**", "/fonts/**",
                                 "/img/**", "/js/**", "/less/**", "/lib/**", "/pages/**",
                                 "/scss/**", "/themes/**", "/vendor/**").permitAll()

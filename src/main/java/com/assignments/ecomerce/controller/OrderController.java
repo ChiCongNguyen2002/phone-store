@@ -43,16 +43,6 @@ public class OrderController {
     @GetMapping("/order/{pageNo}")
     public String getAllOrder(@PathVariable("pageNo") int pageNo, Model model, Principal principal) {
         Page<Orders> listOrder = orderService.pageOrders(pageNo);
-        List<String> formattedPrices = new ArrayList<>();
-        DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols(Locale.getDefault());
-        decimalFormatSymbols.setGroupingSeparator('.');
-        DecimalFormat decimalFormat = new DecimalFormat("#,###", decimalFormatSymbols);
-
-        for (Orders orders : listOrder) {
-            String formattedPrice = decimalFormat.format(orders.getTotal());
-            formattedPrices.add(formattedPrice);
-        }
-        model.addAttribute("formattedPrices", formattedPrices);
         model.addAttribute("listOrder", listOrder);
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", listOrder.getTotalPages());
@@ -105,16 +95,6 @@ public class OrderController {
                 break;
         }
         Page<Orders> listOrder = orderService.pageOrders(pageNo);
-        List<String> formattedPrices = new ArrayList<>();
-        DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols(Locale.getDefault());
-        decimalFormatSymbols.setGroupingSeparator('.');
-        DecimalFormat decimalFormat = new DecimalFormat("#,###", decimalFormatSymbols);
-
-        for (Orders orders : listOrder) {
-            String formattedPrice = decimalFormat.format(orders.getTotal());
-            formattedPrices.add(formattedPrice);
-        }
-        model.addAttribute("formattedPrices", formattedPrices);
         model.addAttribute("size", listOrder.getSize());
         model.addAttribute("listOrder", listOrder);
         model.addAttribute("currentPage", pageNo);
@@ -130,16 +110,6 @@ public class OrderController {
         orderService.save(order);
 
         Page<Orders> listOrder = orderService.pageOrders(pageNo);
-        List<String> formattedPrices = new ArrayList<>();
-        DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols(Locale.getDefault());
-        decimalFormatSymbols.setGroupingSeparator('.');
-        DecimalFormat decimalFormat = new DecimalFormat("#,###", decimalFormatSymbols);
-
-        for (Orders orders : listOrder) {
-            String formattedPrice = decimalFormat.format(orders.getTotal());
-            formattedPrices.add(formattedPrice);
-        }
-        model.addAttribute("formattedPrices", formattedPrices);
         model.addAttribute("size", listOrder.getSize());
         model.addAttribute("listOrder", listOrder);
         model.addAttribute("currentPage", pageNo);
@@ -155,20 +125,6 @@ public class OrderController {
         orderService.save(order);
         User user = userService.findByEmailUser(principal.getName());
         Page<Orders> listOrder = orderService.pageOrdersById(pageNo, user.getId());
-        List<String> formattedPrices = new ArrayList<>();
-        DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols(Locale.getDefault());
-        decimalFormatSymbols.setGroupingSeparator('.');
-        DecimalFormat decimalFormat = new DecimalFormat("#,###", decimalFormatSymbols);
-
-        for (Orders orders : listOrder) {
-            String formattedPrice = decimalFormat.format(orders.getTotal());
-            formattedPrices.add(formattedPrice);
-        }
-        UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
-        List<Category> categories = categoryService.getAllCategory();
-        model.addAttribute("categories", categories);
-        model.addAttribute("userDetails", userDetails);
-        model.addAttribute("formattedPrices", formattedPrices);
         model.addAttribute("size", listOrder.getSize());
         model.addAttribute("listOrder", listOrder);
         model.addAttribute("currentPage", pageNo);
@@ -188,5 +144,46 @@ public class OrderController {
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", listOrder.getTotalPages());
         return "order";
+    }
+
+    @GetMapping("/search-order-by-timeByEmployee/{pageNo}")
+    public String searchOrderByTimeByEmployee(@PathVariable("pageNo") int pageNo,
+                                    @RequestParam("dateFrom") @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateFrom,
+                                    @RequestParam("dateTo") @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateTo,
+                                    Model model, Principal principal) {
+        Page<Orders> listOrder = orderService.searchOrdersByTime(pageNo, dateFrom,dateTo);
+        model.addAttribute("size", listOrder.getSize());
+        model.addAttribute("listOrder", listOrder);
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", listOrder.getTotalPages());
+        return "redirect:/search-order-ByEmployee/0?keyword=";
+    }
+
+    @GetMapping("/UpdateOrderStatusByEmployee/{pageNo}/{id}")
+    public String UpdateOrderStatusByEmployee(@PathVariable("pageNo") int pageNo,
+                                    @PathVariable("id") Integer id, Model model) {
+        Orders order = orderService.getById(id);
+        int status = order.getStatus();
+        switch (status)
+        {
+            case 1:
+                order.setStatus(2);
+                orderService.save(order);
+                break;
+            case 2:
+                order.setStatus(3);
+                orderService.save(order);
+                break;
+            case 3:
+                order.setStatus(4);
+                orderService.save(order);
+                break;
+        }
+        Page<Orders> listOrder = orderService.pageOrders(pageNo);
+        model.addAttribute("size", listOrder.getSize());
+        model.addAttribute("listOrder", listOrder);
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", listOrder.getTotalPages());
+        return "redirect:/search-order-ByEmployee/0?keyword=";
     }
 }

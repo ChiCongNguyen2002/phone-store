@@ -34,25 +34,20 @@ public class OrderDetailController {
         }
         model.addAttribute("listOrder", listOrder);
         List<OrderDetail> listOrderDetail = orderDetailService.findAllByOrderId(orderId);
-
-        List<String> formattedPrices = new ArrayList<>();
-        List<String> formattedPriceDetail = new ArrayList<>();
-        DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols(Locale.getDefault());
-        decimalFormatSymbols.setGroupingSeparator('.');
-        DecimalFormat decimalFormat = new DecimalFormat("#,###", decimalFormatSymbols);
-
-        for (Orders orders : listOrder) {
-            String formattedPrice = decimalFormat.format(orders.getTotal());
-            formattedPrices.add(formattedPrice);
-        }
-
-        for (OrderDetail orderDetail : listOrderDetail) {
-            String formattedPrice = decimalFormat.format(orderDetail.getUnitPrice());
-            formattedPriceDetail.add(formattedPrice);
-        }
-        model.addAttribute("formattedPrices", formattedPrices);
-        model.addAttribute("formattedPriceDetail", formattedPriceDetail);
         model.addAttribute("listOrderDetail", listOrderDetail);
         return "orderdetail";
+    }
+
+    @PostMapping("/orderdetailByEmployee")
+    public String getAllOrderDetailByEmployee(@RequestParam("orderId") Integer orderId, Model model) {
+        List<Orders> listOrder = new ArrayList<>();
+        Orders order = orderService.getOrderById(orderId);
+        if (order != null) {
+            listOrder.add(order);
+        }
+        model.addAttribute("listOrder", listOrder);
+        List<OrderDetail> listOrderDetail = orderDetailService.findAllByOrderId(orderId);
+        model.addAttribute("listOrderDetail", listOrderDetail);
+        return "OrderDetailByEmployee";
     }
 }
