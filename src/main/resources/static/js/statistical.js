@@ -99,21 +99,15 @@ function displayChart() {
     yearSelectContainer.style.display = "none";
     hideAllDivs();
 
-
     if (selectOption === "top10Products") {
         showDiv("top10ProductsDiv");
     }else if (selectOption === "top5Users") {
         showDiv("top5UsersDiv");
-    }else if (selectOption === "top5Employees") {
-        showDiv("top5EmployeesDiv");
     }else if (selectOption === "weeklyRevenue") {
         showDiv("weeklyRevenueDiv");
-        // Hiển thị dữ liệu và cập nhật div "weeklyRevenueDiv"
     }else if (selectOption === "monthlyRevenue") {
         yearSelectContainer.style.display = "inline";
         yearSelect.innerHTML = ""; // Xóa tất cả các tùy chọn hiện tại
-
-        // Tạo các tùy chọn từ dateFrom và dateTo
         var dateFromSelect = document.getElementById("dateFrom");
         var dateToSelect = document.getElementById("dateTo");
         var currentYear = new Date().getFullYear();
@@ -143,13 +137,12 @@ function hideAllDivs() {
     var div2 = document.getElementById("top10ProductsDiv");
     var div3 = document.getElementById("monthlyRevenueDiv");
     var div4 = document.getElementById("weeklyRevenueDiv");
-    var div5 = document.getElementById("top5EmployeesDiv");
+
     div1.style.display = "none";
     div2.style.display = "none";
     div3.style.display = "none";
     div4.style.display = "none";
-    div5.style.display = "none";
-    chart_content.style.display = "none"
+    chart_content.style.display = "none";
 }
 
 function showChart(){
@@ -157,6 +150,7 @@ function showChart(){
     var div_current = document.getElementById(divId_current);
     div_current.style.display = "none";
 }
+
 function showDiv(divId) {
     var div = document.getElementById(divId);
     divId_current = divId;

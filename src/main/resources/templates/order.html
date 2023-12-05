@@ -92,7 +92,7 @@
                             <span th:switch="${orders.status}">
                                 <span th:case="1">
                                     <button class="btn btn-success btn-update-status">
-                                        <a th:href="@{'/UpdateOrderStatus/0/' + ${orders.Id}}">Duyệt đơn</a>
+                                        <a th:href="@{'/UpdateOrderStatus/0/' + ${orders.Id}}">Xác Nhận</a>
                                     </button>
                                     <button class="btn btn-danger btn-cancel">
                                         <a th:href="@{'/CancelOrderStatus/0/' + ${orders.Id}}">Hủy đơn</a>

@@ -36,6 +36,15 @@ public class User {
     public User() {
     }
 
+    public User(String email, String password, String role, String fullname, String address, String phone) {
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.fullname = fullname;
+        this.address = address;
+        this.phone = phone;
+    }
+
     public void setId(Integer id) {
         this.id = id;
     }

@@ -55,7 +55,6 @@
                         <select id="chartType" name="chartType" onchange="displayChart()">
                             <option value="top10Products">Top 10 Sản Phẩm Bán Chạy Nhất</option>
                             <option value="top5Users">Top 5 Khách hàng mua hàng nhiều nhất</option>
-                            <option value="top5Employees">Top 5 Nhân Viên bán chạy nhất</option>
                             <option value="monthlyRevenue">Doanh Thu theo tháng</option>
                             <option value="weeklyRevenue">Doanh Thu theo thứ trong tuần</option>
                         </select>
@@ -72,27 +71,6 @@
 
                     <button class="show_chart" onclick="showChart()">Xem dạng biểu đồ</button>
                 </div>
-            </div>
-
-            <div id="top5EmployeesDiv">
-                <table class="styled-table">
-                    <thead>
-                    <tr>
-                        <th>Top</th>
-                        <th>Tên Nhân Viên</th>
-                        <th>Tổng Tiền</th>
-                        <th>Số lượng</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="user,index : ${top5Employees}">
-                        <td th:text="${index.count}"></td>
-                        <td th:text="${user.fullname}"></td>
-                        <td th:text="${user.total}"></td>
-                        <td th:text="${user.sumQuantity}"></td>
-                    </tr>
-                    </tbody>
-                </table>
             </div>
 
             <div id="top5UsersDiv">
@@ -206,44 +184,59 @@
 <script>
     var tableRows = document.querySelectorAll("#monthlyRevenueDiv tbody tr");
     var tableRowProducts = document.querySelectorAll("#top10ProductsDiv tbody tr");
-    var tableRowProducts = document.querySelectorAll("#weeklyRevenueDiv tbody tr");
-
+    var tableRowWeekly = document.querySelectorAll("#weeklyRevenueDiv tbody tr");
+    var tableRowCustomer = document.querySelectorAll("#top5UsersDiv tbody tr");
 
     var data_chart = [];
     var data_chartProduct = [];
-    var data_chartWeekly= [];
+    var data_chartWeekly = [];
+    var data_chartCustomer = [];
 
      tableRows.forEach(function(row) {
          var month = row.cells[0].innerText; // Lấy giá trị từ cột đầu tiên
          var sumTotal = parseInt(row.cells[1].innerText); // Lấy giá trị từ cột thứ hai
-
          // Thêm giá trị month và sumTotal vào mảng data_chart
          data_chart.push({
              y: sumTotal,
              label: month
          });
+         console.log(data_chart);
      });
 
     tableRowProducts.forEach(function(row) {
-         var month = row.cells[0].innerText; // Lấy giá trị từ cột đầu tiên
-         var sumTotal = parseInt(row.cells[1].innerText); // Lấy giá trị từ cột thứ hai
-
+         var name = row.cells[1].innerText; // Lấy giá trị từ cột đầu tiên
+         var sumTotal = parseInt(row.cells[3].innerText); // Lấy giá trị từ cột thứ hai
          // Thêm giá trị month và sumTotal vào mảng data_chart
-         data_chart.push({
+         data_chartProduct.push({
              y: sumTotal,
-             label: month
+             label: name
          });
+          console.log(data_chartProduct);
      });
 
-    tableRowProducts.forEach(function(row) {
-         var month = row.cells[0].innerText; // Lấy giá trị từ cột đầu tiên
-         var sumTotal = parseInt(row.cells[1].innerText); // Lấy giá trị từ cột thứ hai
+    tableRowWeekly.forEach(function(row) {
+         var week = row.cells[0].innerText; // Lấy giá trị từ cột đầu tiên
+         var sumTotalMonday = parseInt(row.cells[1].innerText); // Lấy giá trị từ cột thứ hai
+
 
          // Thêm giá trị month và sumTotal vào mảng data_chart
-         data_chart.push({
+         data_chartWeekly.push({
              y: sumTotal,
-             label: month
+             label: week
          });
+         console.log(data_chartWeekly);
+     });
+
+    tableRowCustomer.forEach(function(row) {
+         var fullname = row.cells[1].innerText; // Lấy giá trị từ cột đầu tiên
+         var sumTotal = parseInt(row.cells[2].innerText); // Lấy giá trị từ cột thứ hai
+
+         // Thêm giá trị month và sumTotal vào mảng data_chart
+         data_chartCustomer.push({
+             y: sumTotal,
+             label: fullname
+         });
+         console.log(data_chartCustomer);
      });
 
 </script>

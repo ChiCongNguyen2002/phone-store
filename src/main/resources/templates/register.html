@@ -29,6 +29,7 @@
                         <div th:if="${passwordError}">
                             <p class="alert alert-danger" th:text="${passwordError}"></p>
                         </div>
+
                         <form th:action="@{/registration}" method="post" role="form" th:object="${user}">
                             <div class="form-group">
                                 <label for="fullname">Fullname:</label>
@@ -86,6 +87,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <button type="submit" class="btn btn-primary btn-block">Register</button>
                         </form>
 

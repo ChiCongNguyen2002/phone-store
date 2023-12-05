@@ -159,18 +159,18 @@
     const initialMinPrice = parseInt(minPriceInput.value);
     const initialMaxPrice = parseInt(maxPriceInput.value);
     var stepSize = 3500000;
+    var numSteps = Math.floor((maxPrice - minPrice) / stepSize);
 
-    // Tạo thanh trượt noUiSlider
     noUiSlider.create(priceRange, {
         start: [minPrice, maxPrice],
         connect: true,
+        step: stepSize,
         range: {
             'min': minPrice,
             'max': maxPrice
         }
     });
 
-    // Cập nhật giá trị minPrice và maxPrice khi kéo thanh trượt
     priceRange.noUiSlider.on('update', function (values, handle) {
         minPrice = parseInt(values[0]);
         maxPrice = parseInt(values[1]);
@@ -178,50 +178,22 @@
         maxPriceInput.value = maxPrice;
     });
 
-    // Thay đổi giá trị minPrice hoặc maxPrice khi kéo thanh trượt
-    priceRange.noUiSlider.on('slide', function (values, handle) {
-        var range = maxPrice - minPrice;
-        var numSteps = Math.round(range / stepSize);
-        var stepIncrement = range / numSteps;
-
-        if (handle === 0) {
-            minPrice = parseInt(values[0]);
-            maxPrice = minPrice + stepIncrement * numSteps;
-        } else {
-            maxPrice = parseInt(values[1]);
-            minPrice = maxPrice - stepIncrement * numSteps;
-        }
-
-        priceRange.noUiSlider.set([minPrice, maxPrice]);
-    });
-
-    var filterButton = document.getElementById('filterButton');
+var filterButton = document.getElementById('filterButton');
     filterButton.addEventListener('click', function (event) {
         event.preventDefault();
-
-        // Thực hiện bộ lọc dữ liệu
-
-        // Lấy giá trị minPrice và maxPrice từ khoảng giá mới được chọn
         var selectedMinPrice = parseInt(minPriceInput.value);
         var selectedMaxPrice = parseInt(maxPriceInput.value);
-
-        // Kiểm tra và gán lại giá trị maxPrice nếu cần
         if (selectedMinPrice > selectedMaxPrice) {
             selectedMaxPrice = selectedMinPrice;
         }
-
-        // Cập nhật lại range của thanh trượt
         priceRange.noUiSlider.updateOptions({
             range: {
                 'min': minPrice,
                 'max': maxPrice
             }
         });
-
-        // Cập nhật giá trị minPrice và maxPrice trên thanh trượt
         priceRange.noUiSlider.set([selectedMinPrice, selectedMaxPrice]);
-
-        // Gửi form
+        console.log('Tìm kiếm với khoảng giá:', selectedMinPrice, '-', selectedMaxPrice);
         document.getElementById('formSearch').submit();
     });
 </script>

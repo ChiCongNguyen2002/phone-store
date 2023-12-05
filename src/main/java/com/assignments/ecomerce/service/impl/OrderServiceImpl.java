@@ -91,12 +91,12 @@ public class OrderServiceImpl implements OrderService {
         switch (chartType) {
             case "top5Employees":
                 List<Object[]> resultEmployee = orderRepository.getTop5EmployeesWithSumQuantity(dateFrom, dateTo);
-                List<TopEmployee> top5Employee = new ArrayList<>();
+                List<TopCustomer> top5Employee = new ArrayList<>();
                 for (Object[] result : resultEmployee) {
                     String fullname = (String) result[0];
                     Double total = (Double) result[1];
                     Long sumQuantity = (Long) result[2];
-                    TopEmployee topEmployee = new TopEmployee(fullname, total, sumQuantity);
+                    TopCustomer topEmployee = new TopCustomer(fullname, total, sumQuantity);
                     top5Employee.add(topEmployee);
                 }
                 return new ArrayList<>(top5Employee);

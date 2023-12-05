@@ -43,7 +43,6 @@ public class UserController {
         if (user != null) {
             model.addAttribute("userexist", user);
             return "register";
-
         }
         userService.save(userDto);
         model.addAttribute("message","Registered successfully");
@@ -101,7 +100,7 @@ public class UserController {
         model.addAttribute("listUser", listUser);
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", listUser.getTotalPages());
-        model.addAttribute("customerNew", new Customer());
+        model.addAttribute("accountNew", new UserDTO());
         return "accountAdmin";
     }
 
@@ -110,16 +109,5 @@ public class UserController {
         return "permission";
     }
 
-    @PostMapping("/add-account")
-    public String AddAccount(@ModelAttribute("accountNew") UserDTO userDto, Model model) {
-        User user = userService.findByEmail(userDto.getEmail());
-        if (user != null) {
-            model.addAttribute("userexist", user);
-            return "redirect:/search-user/0?keyword=";
-        }
-        userService.save(userDto);
-        model.addAttribute("message","Registered successfully");
-        model.addAttribute("accountNew", userDto);
-        return "redirect:/search-user/0?keyword=";
-    }
+
 }

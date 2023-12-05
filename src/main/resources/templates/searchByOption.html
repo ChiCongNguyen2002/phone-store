@@ -99,8 +99,7 @@
                                                         <div class="item-price">
                                                             <div class="price-box">
                                                             <span class="regular-price">
-                                                                <span class="price"
-                                                                      th:text="${formattedPrices[__${index.index}__] + ' VNĐ'}"></span>
+                                                                <span class="price" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + 'VNĐ'}"></span>
                                                             </span>
                                                             </div>
                                                         </div>
@@ -146,56 +145,54 @@
 </div>
 
 <footer th:replace="~{indexUser::footer}"></footer>
-<!--<script th:inline="javascript">
-    /*<![CDATA[*/
-    document.addEventListener("DOMContentLoaded", function() {
-        var minPriceInput = document.getElementById("minPrice");
-        var maxPriceInput = document.getElementById("maxPrice");
-        var minPriceDefaultInput = document.getElementById("minPriceDefault");
-        var maxPriceDefaultInput = document.getElementById("maxPriceDefault");
+<script>
+    var minPrice = parseInt([[${minPrice}]]);
+    var maxPrice = parseInt([[${maxPrice}]]);
+    var priceRange = document.getElementById('multi6');
+    var minPriceInput = document.getElementById('minPrice');
+    var maxPriceInput = document.getElementById('maxPrice');
+    var defaultMinPriceInput = document.getElementById('minPriceDefault').value;
+    var defaultMaxPriceInput = document.getElementById('maxPriceDefault').value;
+    const initialMinPrice = parseInt(minPriceInput.value);
+    const initialMaxPrice = parseInt(maxPriceInput.value);
+    var stepSize = 3500000;
+    var numSteps = Math.floor((maxPrice - minPrice) / stepSize);
 
-        // Lấy giá trị của các trường input
-        var minPrice = Number(minPriceInput.value);
-        var maxPrice = Number(maxPriceInput.value);
-        var minPriceDefault = Number(minPriceDefaultInput.value);
-        var maxPriceDefault = Number(maxPriceDefaultInput.value);
-
-         // Khởi tạo thanh trượt giá
-        var slider = document.getElementById("multi6");
-        noUiSlider.create(slider, {
-            start: [minPrice, maxPrice],
-            connect: true,
-            range: {
-                'min': minPriceDefault,
-                'max': maxPriceDefault
-            }
-        });
-
-        // Cập nhật giá trị khi thanh trượt di chuyển
-        slider.noUiSlider.on("update", function(values, handle) {
-            if (handle === 0) {
-                minPriceInput.value = Math.round(values[0]);
-            }
-            if (handle === 1) {
-                maxPriceInput.value = Math.round(values[1]);
-            }
-        });
-
-        // Đặt giá trị mặc định ở vị trí cuối của hai đầu thanh trượt
-        slider.noUiSlider.on("end", function() {
-            var currentValues = slider.noUiSlider.get();
-            if (currentValues[0] === currentValues[1]) {
-                slider.noUiSlider.set([currentValues[0], maxPriceDefault]);
-            }
-        });
-
-        // Gửi form khi nhấn nút Lọc
-        var filterButton = document.getElementById("filterButton");
-        filterButton.addEventListener("click", function() {
-            document.getElementById("formSearch").submit();
-        });
+    noUiSlider.create(priceRange, {
+        start: [minPrice, maxPrice],
+        connect: true,
+        step: stepSize,
+        range: {
+            'min': minPrice,
+            'max': maxPrice
+        }
     });
-    /*]]>*/
-</script>-->
+
+    priceRange.noUiSlider.on('update', function (values, handle) {
+        minPrice = parseInt(values[0]);
+        maxPrice = parseInt(values[1]);
+        minPriceInput.value = minPrice;
+        maxPriceInput.value = maxPrice;
+    });
+
+var filterButton = document.getElementById('filterButton');
+    filterButton.addEventListener('click', function (event) {
+        event.preventDefault();
+        var selectedMinPrice = parseInt(minPriceInput.value);
+        var selectedMaxPrice = parseInt(maxPriceInput.value);
+        if (selectedMinPrice > selectedMaxPrice) {
+            selectedMaxPrice = selectedMinPrice;
+        }
+        priceRange.noUiSlider.updateOptions({
+            range: {
+                'min': minPrice,
+                'max': maxPrice
+            }
+        });
+        priceRange.noUiSlider.set([selectedMinPrice, selectedMaxPrice]);
+        console.log('Tìm kiếm với khoảng giá:', selectedMinPrice, '-', selectedMaxPrice);
+        document.getElementById('formSearch').submit();
+    });
+</script>
 </body>
 </html>

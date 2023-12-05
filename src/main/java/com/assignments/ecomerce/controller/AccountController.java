@@ -1,5 +1,6 @@
 package com.assignments.ecomerce.controller;
 
+import com.assignments.ecomerce.dto.UserDTO;
 import com.assignments.ecomerce.model.Category;
 import com.assignments.ecomerce.model.OrderDetail;
 import com.assignments.ecomerce.model.Orders;
@@ -9,6 +10,7 @@ import com.assignments.ecomerce.service.OrderDetailService;
 import com.assignments.ecomerce.service.OrderService;
 import com.assignments.ecomerce.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -101,5 +103,26 @@ public class AccountController {
             attributes.addFlashAttribute("error", "Failed to update");
         }
         return "redirect:/EditAccount/" + pageNo + "/" + userId;
+    }
+
+    @PostMapping("/add-account")
+    public String AddAccount(@ModelAttribute("accountNew") User userDto, Model model,RedirectAttributes attributes) {
+/*      User user = userService.findByEmail(userDto.getEmail());
+        if (user != null) {
+            model.addAttribute("userexist", user);
+            return "redirect:/search-user/0?keyword=";
+        }*/
+        try {
+        userService.save(userDto);
+        model.addAttribute("accountNew", userDto);
+        attributes.addFlashAttribute("success", "Added successfully");
+        } catch (DataIntegrityViolationException e1) {
+            e1.printStackTrace();
+            attributes.addFlashAttribute("failed", "Duplicate name of category, please check again!");
+        } catch (Exception e2) {
+            e2.printStackTrace();
+            attributes.addFlashAttribute("failed", "Error Server");
+        }
+        return "redirect:/search-user/0?keyword=";
     }
 }

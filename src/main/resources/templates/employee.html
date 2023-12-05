@@ -36,13 +36,6 @@
                     <div class="card-header">
                         <div class="row">
                             <div class="col-md-6 col-xs-12">
-                                <button type="button" class="btn btn-success" data-toggle="modal"
-                                        data-target="#addModal"
-                                        data-whatever="@mdo">Tạo mới
-                                </button>
-                            </div>
-
-                            <div class="col-md-6 col-xs-12">
                                 <form method="get">
                                     <div class="row">
                                         <div class="col-md-8 d-flex align-items-center">
@@ -140,7 +133,6 @@
                     <h5 class="modal-title" id="exampleModalLabel">Thêm Nhân Viên</h5>
                 </div>
                 <div class="modal-body">
-
                     <div class="form-group">
                         <label for="nameAdd" class="col-form-label">Tên Nhân Viên:</label>
                         <input type="text" class="form-control"  th:field = "*{fullname}" id="nameAdd" name="name" required>
@@ -184,6 +176,7 @@
                 <div class="modal-header">
                     <h5 class="modal-title">Sửa Nhân Viên</h5>
                 </div>
+
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="idEdit" class="col-form-label">Id:</label>
@@ -215,6 +208,7 @@
                         <input type="text" class="form-control" id="salaryEdit" name="salary" required>
                     </div>
                 </div>
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
                     <button type="submit" class="btn btn-primary" onclick="SaveEmoloyeeEdit(event)">Lưu Lại</button>

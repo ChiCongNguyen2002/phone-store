@@ -1,8 +1,6 @@
 package com.assignments.ecomerce.service.impl;
 
 import com.assignments.ecomerce.dto.UserDTO;
-import com.assignments.ecomerce.model.Customer;
-import com.assignments.ecomerce.model.Product;
 import com.assignments.ecomerce.model.User;
 import com.assignments.ecomerce.repository.UserRepository;
 import com.assignments.ecomerce.service.UserService;
@@ -13,11 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +29,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User save(UserDTO userDto) {
-        User user = new User(userDto.getEmail(), passwordEncoder.encode(userDto.getPassword()), userDto.getFullname());
+        User user = new User(
+                userDto.getEmail(),
+                passwordEncoder.encode(userDto.getPassword()),
+                userDto.getRole(),
+                userDto.getFullname(),
+                userDto.getAddress(),
+                userDto.getPhone());
         return userRepository.save(user);
     }
 
@@ -111,6 +111,7 @@ public class UserServiceImpl implements UserService {
             newUser.setAddress(customer.getAddress());
             newUser.setPhone(customer.getPhone());
             newUser.setEmail(customer.getEmail());
+            newUser.setRole(customer.getRole());
             customerList.add(newUser);
         }
         return customerList;
