@@ -49,10 +49,11 @@
                         </form>
 
 
-                        <button type="submit" onclick="Export()" style="background-color: green;">Xuất File Excel</button>
+                        <button type="submit" onclick="Export()" style="background-color: green;">Xuất File Excel
+                        </button>
                     </div>
 
-                    <p th:if="${size == 0} ">No Products</p>
+                    <p th:if="${size == 0} ">No Orders</p>
                     <div th:if="${success}" class="text-center alert alert-success">
                         <p th:text="${success}"></p>
                     </div>
@@ -60,7 +61,7 @@
                         <p th:text="${error}"></p>
                     </div>
 
-                    <table class="styled-table">
+                    <table class="styled-table" th:if="${size > 0}">
                         <tr>
                             <th>ID</th>
                             <th>Khách hàng</th>
@@ -215,6 +216,7 @@
     var dateTo = document.getElementById("dateTo");
 
     function Export(){
+
         const table = document.querySelector('table');
             const rows = table.querySelectorAll('tr');
 

@@ -74,6 +74,26 @@
                 </div>
             </div>
 
+            <div id="top5EmployeesDiv">
+                <table class="styled-table">
+                    <thead>
+                    <tr>
+                        <th>Top</th>
+                        <th>Tên Nhân Viên</th>
+                        <th>Tổng Tiền</th>
+                        <th>Số lượng</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="user,index : ${top5Employees}">
+                        <td th:text="${index.count}"></td>
+                        <td th:text="${user.fullname}"></td>
+                        <td th:text="${user.total}"></td>
+                        <td th:text="${user.sumQuantity}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
 
             <div id="top5UsersDiv">
                 <table class="styled-table">
@@ -81,14 +101,16 @@
                     <tr>
                         <th>Top</th>
                         <th>Tên</th>
-                        <th>Email</th>
+                        <th>Tổng Tiền</th>
+                        <th>Số lượng</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="user,index : ${top5Users}">
                         <td th:text="${index.count}"></td>
                         <td th:text="${user.fullname}"></td>
-                        <td th:text="${user.email}"></td>
+                        <td th:text="${user.total}"></td>
+                        <td th:text="${user.sumQuantity}"></td>
                     </tr>
                     </tbody>
                 </table>
@@ -100,6 +122,7 @@
                     <tr>
                         <th>Top</th>
                         <th>Tên</th>
+                        <th>Hình ảnh</th>
                         <th>Giá</th>
                     </tr>
                     </thead>
@@ -108,7 +131,10 @@
                     <tr th:each="product,index : ${top10Products}">
                         <td th:text="${index.count}"></td>
                         <td th:text="${product.Name}"></td>
-                        <td th:text="${formattedPrices[__${index.index}__] + ' VNĐ'}"></td>
+                        <td>
+                            <img class="product-image" th:src="@{'../../img/' + ${product.image}}" alt="Product Image">
+                        </td>
+                        <td th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + 'VNĐ'}"></td>
                     </tr>
                     </tbody>
                 </table>
@@ -179,7 +205,13 @@
 <div th:replace="~{fragments::script}"></div>
 <script>
     var tableRows = document.querySelectorAll("#monthlyRevenueDiv tbody tr");
+    var tableRowProducts = document.querySelectorAll("#top10ProductsDiv tbody tr");
+    var tableRowProducts = document.querySelectorAll("#weeklyRevenueDiv tbody tr");
+
+
     var data_chart = [];
+    var data_chartProduct = [];
+    var data_chartWeekly= [];
 
      tableRows.forEach(function(row) {
          var month = row.cells[0].innerText; // Lấy giá trị từ cột đầu tiên
@@ -191,6 +223,29 @@
              label: month
          });
      });
+
+    tableRowProducts.forEach(function(row) {
+         var month = row.cells[0].innerText; // Lấy giá trị từ cột đầu tiên
+         var sumTotal = parseInt(row.cells[1].innerText); // Lấy giá trị từ cột thứ hai
+
+         // Thêm giá trị month và sumTotal vào mảng data_chart
+         data_chart.push({
+             y: sumTotal,
+             label: month
+         });
+     });
+
+    tableRowProducts.forEach(function(row) {
+         var month = row.cells[0].innerText; // Lấy giá trị từ cột đầu tiên
+         var sumTotal = parseInt(row.cells[1].innerText); // Lấy giá trị từ cột thứ hai
+
+         // Thêm giá trị month và sumTotal vào mảng data_chart
+         data_chart.push({
+             y: sumTotal,
+             label: month
+         });
+     });
+
 </script>
 <script th:src="@{/js/statistical.js}"></script>
 <script th:src="@{/js/canvasjs.min.js}"></script>

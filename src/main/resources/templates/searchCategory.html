@@ -79,7 +79,7 @@
                     <div class="product-grid-area">
                         <ul class="thumbnails">
                             <li class="span3 item col-lg-3 col-md-4 col-sm-6 col-xs-6"
-                                th:each="product,index : ${listProducts}">
+                                th:each="product : ${listProducts}">
                                 <div class="product-item">
                                     <div class="item-inner">
                                         <a th:href="@{/product-details/{id}(id=${product.id})}">
@@ -100,8 +100,7 @@
                                                         <div class="item-price">
                                                             <div class="price-box">
                                                             <span class="regular-price">
-                                                                <span class="price"
-                                                                      th:text="${formattedPrices[__${index.index}__] + ' VNĐ'}"></span>
+                                                                <span class="price" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + 'VNĐ'}"></span>
                                                             </span>
                                                             </div>
                                                         </div>

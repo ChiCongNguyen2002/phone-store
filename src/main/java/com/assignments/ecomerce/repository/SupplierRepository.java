@@ -25,5 +25,8 @@ public interface SupplierRepository extends JpaRepository<Supplier,Integer> {
 
     @Query(value = "SELECT s FROM Supplier s WHERE s.status = 1 and s.name = ?1 OR s.phoneNumber = ?2")
     Supplier findByNameOrPhoneNumber(String name, String phoneNumber);
+
+    @Query(value = "SELECT s FROM Supplier s WHERE s.status = 1 and s.name = ?1")
+    Supplier findByName(String name);
 }
 

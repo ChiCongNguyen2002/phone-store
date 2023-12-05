@@ -1,5 +1,6 @@
 package com.assignments.ecomerce.controller;
 
+import com.assignments.ecomerce.model.Category;
 import com.assignments.ecomerce.model.Coupon;
 import com.assignments.ecomerce.model.Customer;
 import com.assignments.ecomerce.model.Employee;
@@ -66,6 +67,33 @@ public class EmployeeController {
             redirectAttributes.addFlashAttribute("error", "Deleted failed!");
         }
 
+        return "redirect:/search-employee/0?keyword=";
+    }
+
+    @PostMapping("/add-employee")
+        public String add(@ModelAttribute("employeeNew") Employee employee,
+                      Model model,
+                      RedirectAttributes attributes) {
+        try {
+            Employee employee1 = employeeService.findByPhoneAndEmail(employee.getPhone(),employee.getEmail());
+            if (employee1 == null) {
+                employeeService.save(employee);
+            } else if(employee1.getStatus() == 0){
+                employeeService.updateStatus(employee1.getId());
+            }else if(employee1.getStatus() == 1){
+                attributes.addFlashAttribute("failed", "Tên Danh Mục Đã Tồn Tại Vui lòng nhập tên khác!");
+                return "redirect:/search-employee/0?keyword=";
+            }
+
+            model.addAttribute("employeeNew", employee);
+            attributes.addFlashAttribute("success", "Added successfully");
+        } catch (DataIntegrityViolationException e1) {
+            e1.printStackTrace();
+            attributes.addFlashAttribute("failed", "Duplicate name of category, please check again!");
+        } catch (Exception e2) {
+            e2.printStackTrace();
+            attributes.addFlashAttribute("failed", "Error Server");
+        }
         return "redirect:/search-employee/0?keyword=";
     }
 }

@@ -29,8 +29,7 @@ public class User {
         this.fullname = fullname;
     }
 
-    public User(String email,String fullname) {
-        this.email = email;
+    public User(String fullname) {
         this.fullname = fullname;
     }
 

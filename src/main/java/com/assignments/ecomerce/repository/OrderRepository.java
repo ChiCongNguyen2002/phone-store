@@ -16,7 +16,7 @@ public interface OrderRepository extends JpaRepository<Orders, Integer> {
     @Query(value = "SELECT COUNT(*) FROM orders", nativeQuery = true)
     int countOrders();
 
-    @Query("SELECT o from Orders o WHERE o.orderDate BETWEEN :dateFrom AND :dateTo ")
+    @Query("SELECT o from Orders o WHERE o.orderDate BETWEEN :dateFrom AND :dateTo")
     List<Orders> searchOrdersByTime(@Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo);
 
     @Query("SELECT o from Orders o")
@@ -25,32 +25,42 @@ public interface OrderRepository extends JpaRepository<Orders, Integer> {
     @Query("SELECT o FROM Orders o WHERE o.user.id = :userId")
     Page<Orders> pageOrdersById(Pageable pageable, @Param("userId") Integer userId);
 
-    @Query("SELECT u.email, u.fullname,SUM(od.quantity) AS sumQuantity " +
+    @Query("SELECT u.fullname,o.total,SUM(od.quantity) AS sumQuantity " +
             "FROM OrderDetail od " +
             "JOIN od.order o " +
             "JOIN o.user u " +
             "WHERE o.orderDate BETWEEN :dateFrom AND :dateTo " +
-            "GROUP BY u.email, u.fullname " +
+            "GROUP BY u.fullname " +
             "ORDER BY sumQuantity DESC")
     List<Object[]> getTop5UsersWithSumQuantity(@Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo);
 
-    @Query("SELECT p.name, p.price, p.description, p.quantity, p.color, SUM(od.quantity) AS sumQuantity " +
+    @Query("SELECT p.name, p.price, p.image, SUM(od.quantity) AS sumQuantity " +
             "FROM OrderDetail od " +
             "JOIN od.product p " +
             "JOIN od.order o " +
             "WHERE o.orderDate BETWEEN :dateFrom AND :dateTo " +
-            "GROUP BY p.name, p.price, p.description, p.quantity, p.color " +
+            "GROUP BY p.name, p.price, p.image " +
             "ORDER BY sumQuantity DESC")
     List<Object[]> getTop10ProductsWithSumQuantity(@Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo);
 
-   /* @Query("SELECT u.name, u.phoneNumber, u.address, u.email , SUM(od.quantity) AS totalQuantity " +
+/*    @Query(value = "SELECT u.fullname,o.total,SUM(od.quantity) AS totalQuantity " +
+            "FROM OrderDetail od " +
+            "JOIN orders o ON o.id = od.orderId " +
+            "JOIN user u ON o.userId = u.id " +
+            "JOIN employee e ON e.userId = u.id " +
+            "WHERE o.orderDate BETWEEN :dateFrom AND :dateTo " +
+            "GROUP BY u.fullname,o.total,od.quantity " +
+            "ORDER BY totalQuantity DESC", nativeQuery = true)
+    List<Object[]> getTop5EmployeesWithSumQuantity(@Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo);*/
+
+    @Query("SELECT u.fullname,o.total,SUM(od.quantity) AS sumQuantity " +
             "FROM OrderDetail od " +
             "JOIN od.order o " +
             "JOIN o.user u " +
             "WHERE o.orderDate BETWEEN :dateFrom AND :dateTo " +
-            "GROUP BY u.name, u.phoneNumber, u.address, u.email  " +
-            "ORDER BY totalQuantity DESC")
-    List<Object[]> findTop5EmployeesByTotalQuantity(@Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo);*/
+            "GROUP BY u.fullname " +
+            "ORDER BY sumQuantity DESC")
+    List<Object[]> getTop5EmployeesWithSumQuantity(@Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo);
 
     @Query(value = "SELECT temp.month, IFNULL(o.year, :userYear) AS year, COALESCE(o.sumTotal, 0.0) AS sumTotal " +
             "FROM (" +

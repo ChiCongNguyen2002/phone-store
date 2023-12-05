@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -43,19 +44,19 @@ public class OrderServiceImpl implements OrderService {
     }
 
     public Page<Orders> pageOrders(int pageNo) {
-        Pageable pageable = PageRequest.of(pageNo, 5);
+        Pageable pageable = PageRequest.of(pageNo, 4);
         return orderRepository.pageOrders(pageable);
     }
 
     @Override
     public Page<Orders> pageOrdersById(int pageNo, Integer userId) {
-        Pageable pageable = PageRequest.of(pageNo, 5);
-        return orderRepository.pageOrdersById(pageable,userId);
+        Pageable pageable = PageRequest.of(pageNo, 4);
+        return orderRepository.pageOrdersById(pageable, userId);
     }
 
     public Page<Orders> searchOrders(int pageNo, String keyword) {
-        Pageable pageable = PageRequest.of(pageNo, 5);
-        List<Orders> order = transfer(orderRepository.searchOrders(keyword));
+        Pageable pageable = PageRequest.of(pageNo, 4);
+        List<Orders> order = transfer(orderRepository.searchOrders(keyword.trim()));
         Page<Orders> orderPages = toPage(order, pageable);
         return orderPages;
     }
@@ -65,8 +66,7 @@ public class OrderServiceImpl implements OrderService {
             return Page.empty();
         }
         int startIndex = (int) pageable.getOffset();
-        int endIndex = ((pageable.getOffset() + pageable.getPageSize()) > list.size())
-                ? list.size() : (int) (pageable.getOffset() + pageable.getPageSize());
+        int endIndex = ((pageable.getOffset() + pageable.getPageSize()) > list.size()) ? list.size() : (int) (pageable.getOffset() + pageable.getPageSize());
         List subList = list.subList(startIndex, endIndex);
         return new PageImpl(subList, pageable, list.size());
     }
@@ -89,27 +89,36 @@ public class OrderServiceImpl implements OrderService {
 
     public List<Object> getData(Date dateFrom, Date dateTo, int year, String chartType) {
         switch (chartType) {
+            case "top5Employees":
+                List<Object[]> resultEmployee = orderRepository.getTop5EmployeesWithSumQuantity(dateFrom, dateTo);
+                List<TopEmployee> top5Employee = new ArrayList<>();
+                for (Object[] result : resultEmployee) {
+                    String fullname = (String) result[0];
+                    Double total = (Double) result[1];
+                    Long sumQuantity = (Long) result[2];
+                    TopEmployee topEmployee = new TopEmployee(fullname, total, sumQuantity);
+                    top5Employee.add(topEmployee);
+                }
+                return new ArrayList<>(top5Employee);
             case "top5Users":
                 List<Object[]> results = orderRepository.getTop5UsersWithSumQuantity(dateFrom, dateTo);
-                List<User> users = new ArrayList<>();
+                List<TopCustomer> tops = new ArrayList<>();
                 for (Object[] result : results) {
-                    String email = (String) result[0];
-                    String fullname = (String) result[1];
-                    User user = new User(email, fullname);
-                    users.add(user);
+                    String fullname = (String) result[0];
+                    Double total = (Double) result[1];
+                    Long sumQuantity = (Long) result[2];
+                    TopCustomer topCustomer = new TopCustomer(fullname, total, sumQuantity);
+                    tops.add(topCustomer);
                 }
-                return new ArrayList<>(users);
+                return new ArrayList<>(tops);
             case "top10Products":
                 List<Object[]> resultProduct = orderRepository.getTop10ProductsWithSumQuantity(dateFrom, dateTo);
                 List<Product> products = new ArrayList<>();
-
                 for (Object[] result : resultProduct) {
                     String name = (String) result[0];
                     Double price = (Double) result[1];
-                    Integer quantity = (Integer) result[3];
-                    String description = (String) result[2];
-                    String color = (String) result[4];
-                    Product product = new Product(name, price, quantity, description, color);
+                    String image = (String) result[2];
+                    Product product = new Product(name, price, image);
                     products.add(product);
                 }
                 return new ArrayList<>(products);
@@ -147,7 +156,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     public Page<Orders> searchOrdersByTime(int pageNo, Date dateFrom, Date dateTo) {
-        Pageable pageable = PageRequest.of(pageNo, 5);
+        Pageable pageable = PageRequest.of(pageNo, 4);
         List<Orders> order = transfer(orderRepository.searchOrdersByTime(dateFrom, dateTo));
         Page<Orders> orderPages = toPage(order, pageable);
         return orderPages;

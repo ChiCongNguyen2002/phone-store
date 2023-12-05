@@ -8,7 +8,6 @@ var divId_current = "";
 var name_chart = "Doanh thu";
 var chart = null;
 
-// Kiểm tra xem có giá trị lưu trong localStorage hay không
 if (savedFromDate === null) {
   savedFromDate = defaultFromDate;
 }
@@ -105,6 +104,8 @@ function displayChart() {
         showDiv("top10ProductsDiv");
     }else if (selectOption === "top5Users") {
         showDiv("top5UsersDiv");
+    }else if (selectOption === "top5Employees") {
+        showDiv("top5EmployeesDiv");
     }else if (selectOption === "weeklyRevenue") {
         showDiv("weeklyRevenueDiv");
         // Hiển thị dữ liệu và cập nhật div "weeklyRevenueDiv"
@@ -142,10 +143,12 @@ function hideAllDivs() {
     var div2 = document.getElementById("top10ProductsDiv");
     var div3 = document.getElementById("monthlyRevenueDiv");
     var div4 = document.getElementById("weeklyRevenueDiv");
+    var div5 = document.getElementById("top5EmployeesDiv");
     div1.style.display = "none";
     div2.style.display = "none";
     div3.style.display = "none";
     div4.style.display = "none";
+    div5.style.display = "none";
     chart_content.style.display = "none"
 }
 

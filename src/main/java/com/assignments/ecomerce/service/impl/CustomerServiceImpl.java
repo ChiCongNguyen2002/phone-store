@@ -3,6 +3,7 @@ package com.assignments.ecomerce.service.impl;
 import com.assignments.ecomerce.model.Category;
 import com.assignments.ecomerce.model.Customer;
 import com.assignments.ecomerce.model.Product;
+import com.assignments.ecomerce.model.Supplier;
 import com.assignments.ecomerce.repository.CustomerRepository;
 import com.assignments.ecomerce.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,29 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = customerRepository.getById(id);
         customer.setStatusCustomer(1);
         customerRepository.save(customer);
+    }
+
+    @Override
+    public Customer findByPhoneAndEmail(String phone, String email) {
+        return customerRepository.findByPhoneAndEmail(phone,email);
+    }
+
+    @Override
+    public Customer save(Customer customer) {
+        customer.setStatusCustomer(1);
+        return customerRepository.save(customer);
+    }
+
+    @Override
+    public Customer updateStatus(Integer id) {
+        Customer customer = customerRepository.getById(id);
+        customer.setStatusCustomer(1);
+        return customerRepository.save(customer);
+    }
+
+    @Override
+    public Customer findById(Integer id) {
+        return customerRepository.getById(id);
     }
 
     private Page toPage(List<Customer> list, Pageable pageable) {

@@ -54,62 +54,65 @@
 
             <div class="col-md-5">
                 <div class="product-details">
-                    <h2 class="product-name" th:text="${productDetail.name}"></h2>
-                    <div class="contain">
-                        <div>
-                            <p><span th:text="${calculateAverageRating}"></span></p>
-                        </div>
-                        <div>
+                    <form th:action="@{/add-to-cart}" method="POST">
+                        <h2 class="product-name" th:text="${productDetail.name}"></h2>
+                        <div class="contain">
+                            <div>
+                                <p><span th:text="${calculateAverageRating}"></span></p>
+                            </div>
                             <div>
                                 <div>
-                                    <img class="star-icon" src="/img/star.png" alt="Star"
-                                         th:each="star : ${#numbers.sequence(1, 5)}"
-                                         th:if="${star - 0.5 &lt;= calculateAverageRating}"/>
-                                    <img class="star-icon" src="/img/star_2.png" alt="Star"
-                                         th:each="star : ${#numbers.sequence(1, 5)}"
-                                         th:if="${star - 0.5 &gt; calculateAverageRating}"/>
+                                    <div>
+                                        <img class="star-icon" src="/img/star.png" alt="Star"
+                                             th:each="star : ${#numbers.sequence(1, 5)}"
+                                             th:if="${star - 0.5 &lt;= calculateAverageRating}"/>
+                                        <img class="star-icon" src="/img/star_2.png" alt="Star"
+                                             th:each="star : ${#numbers.sequence(1, 5)}"
+                                             th:if="${star - 0.5 &gt; calculateAverageRating}"/>
+                                    </div>
                                 </div>
                             </div>
+                            <div>
+                                <p> | <span th:text="${countReview} +' Đánh Giá'"></span></p>
+                            </div>
                         </div>
+                        <p>Màu sắc: <span id="selectedColor"></span></p>
+                        <div id="colorList">
+                            <label th:each="product : ${productColor}" class="image-radio-label">
+                                <input type="radio" name="color" class="image-radio-input"
+                                       onclick="updateSelectedColor(this)">
+                                <img class="product-image" style="height: 50px; width: 50px;"
+                                     th:src="@{'/img/' + ${product.image}}">
+                                <span class="color-span" th:text="${product.color}"></span>
+                            </label>
+                        </div>
+
                         <div>
-                            <p> | <span th:text="${countReview} +' Đánh Giá'"></span></p>
+                            <h3 th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + 'VNĐ'}"
+                                class="product-price"></h3>
+                            <span th:if="${productDetail.quantity <= 0}" class="product-available">Hết hàng</span>
+                            <div class="quantity">
+                                <button class="minus-btn" onclick="decreaseQuantity()">-</button>
+                                <input type="text" id="quantity-input" class="quantity-input" value="1">
+                                <button class="plus-btn" onclick="increaseQuantity()">+</button>
+                                <span class="product-available" th:text="${productDetail.quantity + ' Sản Phẩm Có Sẵn'}"
+                                      th:if="${productDetail.quantity > 0}"></span>
+                                <span id="quantity-error" style="display: none; color: red;"></span>
+                            </div>
                         </div>
-                    </div>
-                    <p>Màu sắc: <span id="selectedColor"></span></p>
-                    <div id="colorList">
-                        <label th:each="product : ${productColor}" class="image-radio-label">
-                            <input type="radio" name="color" class="image-radio-input"
-                                   onclick="updateSelectedColor(this)">
-                            <img class="product-image" style="height: 50px; width: 50px;"
-                                 th:src="@{'/img/' + ${product.image}}">
-                            <span class="color-span" th:text="${product.color}"></span>
-                        </label>
-                    </div>
 
-                    <div>
-                        <h3 th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + 'VNĐ'}" class="product-price"></h3>
-                        <span th:if="${productDetail.quantity <= 0}" class="product-available">Hết hàng</span>
-                        <div class="quantity">
-                            <button class="minus-btn" onclick="decreaseQuantity()">-</button>
-                            <input type="text" id="quantity-input" class="quantity-input" value="1">
-                            <button class="plus-btn" onclick="increaseQuantity()">+</button>
-                            <span class="product-available" th:text="${productDetail.quantity + ' Sản Phẩm Có Sẵn'}"
-                                  th:if="${productDetail.quantity > 0}"></span>
-                            <span id="quantity-error" style="display: none; color: red;"></span>
+                        <ul class="product-links">
+                            <li>Danh mục:</li>
+                            <li th:text="${productDetail.category.name}"></li>
+                        </ul>
+                        <div class="price-box-bar">
+                            <div class="add-to-cart" style="margin-top:10px">
+                                <button type="submit" class="add-to-cart" th:value="${productDetail.id}"><i
+                                        class="fa fa-shopping-cart"></i> thêm vào giỏ hàng
+                                </button>
+                            </div>
                         </div>
-                    </div>
-
-                    <ul class="product-links">
-                        <li>Danh mục:</li>
-                        <li th:text="${productDetail.category.name}"></li>
-                    </ul>
-                    <div class="price-box-bar">
-                        <div class="add-to-cart" style="margin-top:10px">
-                            <button class="add-to-cart-btn" th:value="${productDetail.id}"><i
-                                    class="fa fa-shopping-cart"></i> thêm vào giỏ hàng
-                            </button>
-                        </div>
-                    </div>
+                    </form>
                 </div>
             </div>
 
@@ -185,22 +188,26 @@
                                     </div>
                                     <form th:action="@{/add-review}" method="post" th:object="${reviewNew}">
                                         <div class="form-group">
-                                            <input type="hidden" class="form-control" id="user" name="user" th:value="${user != null ? user.id : ''}"  required>
+                                            <input type="hidden" class="form-control" id="user" name="user"
+                                                   th:value="${user != null ? user.id : ''}" required>
                                         </div>
 
                                         <div class="form-group">
-                                            <input type="hidden" class="form-control" id="product" name="product" th:value="${product != null ? product.id : ''}" required>
+                                            <input type="hidden" class="form-control" id="product" name="product"
+                                                   th:value="${product != null ? product.id : ''}" required>
                                         </div>
 
                                         <div class="form-group">
                                             <label for="message">Nội dung đánh giá</label>
-                                            <textarea class="form-control" id="message" th:field="*{comments}" name="message" required>
+                                            <textarea class="form-control" id="message" th:field="*{comments}"
+                                                      name="message" required>
                                             </textarea>
                                         </div>
 
                                         <div class="form-group">
                                             <label for="date-review">Ngày đánh giá</label>
-                                            <input type="text" name="date-review" id="date-review" th:field="*{DateReview}" readonly>
+                                            <input type="text" name="date-review" id="date-review"
+                                                   th:field="*{DateReview}" readonly>
                                         </div>
 
                                         <div class="form-group">

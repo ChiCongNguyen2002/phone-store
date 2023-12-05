@@ -14,25 +14,21 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
     @Autowired
     CustomSuccessHandler customSuccessHandler;
-
     @Autowired
     CustomUserDetailsService customUserDetailsService;
-
     @Bean
     public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(c -> c.disable())
                 .authorizeHttpRequests(request -> request.requestMatchers("/index")
                         .hasAuthority("ADMIN")
                         .requestMatchers("/indexUser").hasAuthority("USER")
+                        .requestMatchers("/indexEmployee").hasAuthority("EMPLOYEE")
                         .requestMatchers("/*","/indexUser","/registration","/reset-password","/password-request","/css/**", "/dist/**", "/fonts/**",
                                 "/img/**", "/js/**", "/less/**", "/lib/**", "/pages/**",
                                 "/scss/**", "/themes/**", "/vendor/**").permitAll()
@@ -44,9 +40,7 @@ public class SecurityConfig {
                 .logout(form -> form.invalidateHttpSession(true).clearAuthentication(true)
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                         .logoutSuccessUrl("/login?logout").permitAll());
-
         return http.build();
-
     }
 
     @Autowired

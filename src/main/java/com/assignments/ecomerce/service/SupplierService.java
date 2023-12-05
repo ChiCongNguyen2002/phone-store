@@ -24,20 +24,13 @@ public interface SupplierService {
      Page<Supplier> pageSupplier(int pageNo);
 
      Supplier findById(Integer id);
-
      Supplier update(Supplier supplier);
-
      void deleteById(Integer id);
-
      Page<Supplier> searchSuppliers(int pageNo, String keyword);
-
     Page toPage(List<Supplier> list, Pageable pageable);
-
      List<Supplier> transfer(List<Supplier> suppliers);
-
     Supplier findByNameOrPhoneNumber(String name,String phoneNumber);
-
-
+    Supplier findByName(String name);
     Supplier updateStatus(Integer id);
 }
 

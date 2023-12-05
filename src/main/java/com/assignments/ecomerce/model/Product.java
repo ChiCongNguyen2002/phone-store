@@ -82,12 +82,10 @@ public class Product {
         this.category = category;
     }
 
-    public Product(String name, Double price, Integer quantity, String description, String color) {
+    public Product(String name, Double price, String image) {
         this.name = name;
         this.price = price;
-        this.quantity = quantity;
-        this.description = description;
-        this.color = color;
+        this.image = image;
     }
 
     public Product(Integer id,String name, Double price, Integer quantity, String description, String color,String image) {

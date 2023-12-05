@@ -1,6 +1,5 @@
 package com.assignments.ecomerce.service.impl;
 
-import com.assignments.ecomerce.model.Coupon;
 import com.assignments.ecomerce.model.Customer;
 import com.assignments.ecomerce.model.Employee;
 import com.assignments.ecomerce.repository.EmployeeRepository;
@@ -14,10 +13,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
     private EmployeeRepository employeeRepository;
+
     @Override
     public Page<Employee> pageEmployee(int pageNo) {
         Pageable pageable = PageRequest.of(pageNo, 3);
@@ -59,6 +60,24 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = employeeRepository.getById(id);
         employee.setStatus(0);
         employeeRepository.save(employee);
+    }
+
+    @Override
+    public Employee findByPhoneAndEmail(String phone, String email) {
+        return employeeRepository.findByPhoneAndEmail(phone, email);
+    }
+
+    @Override
+    public Employee save(Employee employee) {
+        employee.setStatus(1);
+        return employeeRepository.save(employee);
+    }
+
+    @Override
+    public Employee updateStatus(Integer id) {
+        Employee employee = employeeRepository.getById(id);
+        employee.setStatus(1);
+        return employeeRepository.save(employee);
     }
 
     private Page toPage(List<Employee> list, Pageable pageable) {

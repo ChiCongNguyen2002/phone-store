@@ -6,6 +6,7 @@ import com.assignments.ecomerce.model.Product;
 import com.assignments.ecomerce.service.CustomerService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +25,21 @@ public class CustomerController {
                                 @RequestParam("keyword") String keyword,
                                 Model model, Principal principal, HttpSession session) {
 
+        Page<Customer> listCustomer = customerService.searchCustomer(pageNo, keyword);
+        session.setAttribute("keyword", keyword);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("size", listCustomer.getSize());
+        model.addAttribute("listCustomer", listCustomer);
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", listCustomer.getTotalPages());
+        model.addAttribute("customerNew", new Customer());
+        return "customer";
+    }
+
+    @GetMapping("/search-customer-ByEmployee/{pageNo}")
+    public String searchCustomerByEmployee(@PathVariable("pageNo") int pageNo,
+                                 @RequestParam("keyword") String keyword,
+                                 Model model, Principal principal, HttpSession session) {
         Page<Customer> listCustomer = customerService.searchCustomer(pageNo, keyword);
         session.setAttribute("keyword", keyword);
         model.addAttribute("keyword", keyword);
@@ -58,5 +74,4 @@ public class CustomerController {
         }
         return "redirect:/search-customer/0?keyword=";
     }
-
 }

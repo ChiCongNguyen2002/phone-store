@@ -82,7 +82,9 @@ public class ProductController {
        /* Product getProductByColorAndName = productService.getProductByColorAndName(product.getName(), product.getColor());
         System.out.println("color:" + productColor);
         model.addAttribute("getProductByColorAndName", getProductByColorAndName);*/
-
+        UserDetails userDetails = null;
+        userDetails = userDetailsService.loadUserByUsername(principal.getName());
+        model.addAttribute("userDetails", userDetails);
         model.addAttribute("user", user);
         model.addAttribute("countReview", countReview);
         model.addAttribute("calculateAverageRating", calculateAverageRating);

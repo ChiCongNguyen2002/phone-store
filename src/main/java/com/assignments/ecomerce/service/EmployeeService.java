@@ -1,9 +1,6 @@
 package com.assignments.ecomerce.service;
 
-import com.assignments.ecomerce.model.Category;
-import com.assignments.ecomerce.model.Coupon;
-import com.assignments.ecomerce.model.Customer;
-import com.assignments.ecomerce.model.Employee;
+import com.assignments.ecomerce.model.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,4 +17,10 @@ public interface EmployeeService {
     Employee update(Employee employee);
 
     void deleteById(Integer id);
+
+    Employee findByPhoneAndEmail(String phone, String email);
+
+    Employee save(Employee employee);
+
+    Employee updateStatus(Integer id);
 }

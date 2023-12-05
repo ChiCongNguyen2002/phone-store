@@ -47,10 +47,6 @@ function saveCustomer(event) {
     return;
   }
 
-if (!nameRegex.test(name)) {
-    alert("Tên không hợp lệ Vui lòng nhập tên khác" );
-     return;
-  }
   if (!phoneRegex.test(phone)) {
     alert("Số điện thoại không hợp lệ Vui Lòng nhập số khác");
      return;
@@ -79,10 +75,6 @@ function saveCustomerEdit(event) {
     return;
   }
 
-if (!nameRegex.test(name)) {
-    alert("Tên không hợp lệ Vui lòng nhập tên khác" );
-     return;
-  }
   if (!phoneRegex.test(phone)) {
     alert("Số điện thoại không hợp lệ Vui Lòng nhập số khác");
      return;

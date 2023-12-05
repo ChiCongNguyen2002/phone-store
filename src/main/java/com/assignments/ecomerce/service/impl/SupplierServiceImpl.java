@@ -90,6 +90,11 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
+    public Supplier findByName(String name) {
+        return supplierRepository.findByName(name);
+    }
+
+    @Override
     public Supplier updateStatus(Integer id) {
         Supplier supplierUpdate = supplierRepository.getById(id);
         supplierUpdate.setStatus(1);

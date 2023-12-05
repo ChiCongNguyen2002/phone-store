@@ -59,12 +59,11 @@
                             <td class="font-weight-bold">Trạng thái</td>
                             <td>
                              <span th:switch="${orders.Status}">
-                                    <span th:case="1">Đang chờ duyệt</span>
-                                    <span th:case="2"></span>
-                                    <span th:case="3"></span>
-                                    <span th:case="4"></span>
-                                    <span th:case="5"></span>
-                                    <span th:case="*" th:text="..."></span>
+                                    <span th:case="1">Đơn Hàng Đang chờ duyệt</span>
+                                    <span th:case="2">Đơn Hàng Đã duyệt</span>
+                                    <span th:case="3">Đơn Hàng Đang giao</span>
+                                    <span th:case="4">Đơn HàngĐã giao</span>
+                                    <span th:case="5">Đơn Hàng đã huỷ</span>
                                 </span>
                             </td>
                         </tr>

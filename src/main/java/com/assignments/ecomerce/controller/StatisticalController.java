@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -52,7 +50,7 @@ public class StatisticalController {
 
     @PostMapping("/ShowChartType")
     public String processForm(@RequestParam("dateFrom") @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateFrom,
-                               @RequestParam("dateTo") @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateTo,
+                              @RequestParam("dateTo") @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateTo,
                               @RequestParam(value = "year", defaultValue = "2023") int selectedYear,
                               @RequestParam("chartType") String chartType,
                               Model model) {
@@ -63,11 +61,16 @@ public class StatisticalController {
                 throw new IllegalArgumentException("No data available for the selected chart type: " + chartType);
             }
             Object firstData = chartData.get(0);
-
             switch (firstData.getClass().getSimpleName()) {
-                case "User":
-                    List<User> top5Users = chartData.stream()
-                            .map(p -> (User) p)
+                case "TopEmployee":
+                    List<TopEmployee> top5Employees = chartData.stream()
+                            .map(p -> (TopEmployee) p)
+                            .collect(Collectors.toList());
+                    model.addAttribute("top5Employees", top5Employees);
+                    break;
+                case "TopCustomer":
+                    List<TopCustomer> top5Users = chartData.stream()
+                            .map(p -> (TopCustomer) p)
                             .collect(Collectors.toList());
                     model.addAttribute("top5Users", top5Users);
                     break;
@@ -75,19 +78,7 @@ public class StatisticalController {
                     List<Product> topProducts = chartData.stream()
                             .map(p -> (Product) p)
                             .collect(Collectors.toList());
-
-                    List<String> formattedPrices = new ArrayList<>();
-                    DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols(Locale.getDefault());
-                    decimalFormatSymbols.setGroupingSeparator('.');
-                    DecimalFormat decimalFormat = new DecimalFormat("#,###", decimalFormatSymbols);
-
-                    for (Product product : topProducts) {
-                        String formattedPrice = decimalFormat.format(product.getPrice());
-                        formattedPrices.add(formattedPrice);
-                    }
-
                     model.addAttribute("top10Products", topProducts);
-                    model.addAttribute("formattedPrices", formattedPrices);
                     break;
                 case "MonthlyRevenue":
                     List<MonthlyRevenue> topMonth = chartData.stream()

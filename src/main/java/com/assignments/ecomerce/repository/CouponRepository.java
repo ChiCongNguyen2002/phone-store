@@ -18,6 +18,6 @@ public interface CouponRepository extends JpaRepository<Coupon,Integer> {
     @Query("SELECT p from Coupon p where p.status = 1 and CONCAT(p.code,p.count,p.promotion,p.description) like %?1%")
     List<Coupon> searchCoupon(String keyword);
 
-    @Query(value = "select c from Coupon c where c.code = ?1")
+    @Query(value = "select c from Coupon c where c.status = 1 and c.code = ?1")
     Coupon findByCode(String code);
 }

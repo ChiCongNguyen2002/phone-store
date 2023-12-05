@@ -79,6 +79,16 @@ public class UserController {
         return "statistical";
     }
 
+    @GetMapping("/indexEmployee")
+    public String userPageEmployee(Model model, Principal principal) {
+        UserDetails userDetails = null;
+        if (principal != null) {
+            userDetails = userDetailsService.loadUserByUsername(principal.getName());
+        }
+        model.addAttribute("userDetails", userDetails);
+        return "indexEmployee";
+    }
+
     @GetMapping("/search-user/{pageNo}")
     public String searchUser(@PathVariable("pageNo") int pageNo,
                                  @RequestParam("keyword") String keyword,
@@ -98,5 +108,18 @@ public class UserController {
     @GetMapping("/permission")
     public String permission() {
         return "permission";
+    }
+
+    @PostMapping("/add-account")
+    public String AddAccount(@ModelAttribute("accountNew") UserDTO userDto, Model model) {
+        User user = userService.findByEmail(userDto.getEmail());
+        if (user != null) {
+            model.addAttribute("userexist", user);
+            return "redirect:/search-user/0?keyword=";
+        }
+        userService.save(userDto);
+        model.addAttribute("message","Registered successfully");
+        model.addAttribute("accountNew", userDto);
+        return "redirect:/search-user/0?keyword=";
     }
 }

@@ -65,7 +65,18 @@ public class SupplierController {
     @GetMapping("/update-supplier")
     public String update(Supplier supplier, RedirectAttributes attributes) {
         try {
-            supplierService.update(supplier);
+            Supplier supp = supplierService.findByName(supplier.getName());
+            if (supp != null) {
+                if (!supp.getId().equals(supplier.getId())) {
+                    attributes.addFlashAttribute("error", "Tên Đã Tồn Tại. Vui lòng nhập Tên khác!");
+                    return "redirect:/search-supplier/0?keyword=";
+                } else {
+                    Supplier suppCoupon = supplierService.update(supplier);
+                }
+            } else {
+                Supplier suppCoupon = supplierService.update(supplier);
+            }
+
             attributes.addFlashAttribute("success", "Updated successfully");
         } catch (DataIntegrityViolationException e) {
             e.printStackTrace();

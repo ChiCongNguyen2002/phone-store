@@ -1,5 +1,8 @@
 package com.assignments.ecomerce.model;
 
+import lombok.Getter;
+
+@Getter
 public class WeeklyRevenue {
     private String weekDate;
     private Double mondayTotal;
@@ -22,64 +25,32 @@ public class WeeklyRevenue {
         this.sundayTotal = sundayTotal;
     }
 
-    public String getWeekDate() {
-        return weekDate;
-    }
-
     public void setWeekDate(String weekDate) {
         this.weekDate = weekDate;
-    }
-
-    public Double getMondayTotal() {
-        return mondayTotal;
     }
 
     public void setMondayTotal(Double mondayTotal) {
         this.mondayTotal = mondayTotal;
     }
 
-    public Double getTuesdayTotal() {
-        return tuesdayTotal;
-    }
-
     public void setTuesdayTotal(Double tuesdayTotal) {
         this.tuesdayTotal = tuesdayTotal;
-    }
-
-    public Double getWednesdayTotal() {
-        return wednesdayTotal;
     }
 
     public void setWednesdayTotal(Double wednesdayTotal) {
         this.wednesdayTotal = wednesdayTotal;
     }
 
-    public Double getThursdayTotal() {
-        return thursdayTotal;
-    }
-
     public void setThursdayTotal(Double thursdayTotal) {
         this.thursdayTotal = thursdayTotal;
-    }
-
-    public Double getFridayTotal() {
-        return fridayTotal;
     }
 
     public void setFridayTotal(Double fridayTotal) {
         this.fridayTotal = fridayTotal;
     }
 
-    public Double getSaturdayTotal() {
-        return saturdayTotal;
-    }
-
     public void setSaturdayTotal(Double saturdayTotal) {
         this.saturdayTotal = saturdayTotal;
-    }
-
-    public Double getSundayTotal() {
-        return sundayTotal;
     }
 
     public void setSundayTotal(Double sundayTotal) {

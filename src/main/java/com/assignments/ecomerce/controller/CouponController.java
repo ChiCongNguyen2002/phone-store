@@ -21,7 +21,6 @@ import java.util.List;
 
 @Controller
 public class CouponController {
-
     @Autowired
     UserDetailsService userDetailsService;
     @Autowired
@@ -30,6 +29,7 @@ public class CouponController {
     private CategoryService categoryService;
     @Autowired
     private CouponService couponService;
+
     @GetMapping("/coupon/{pageNo}")
     public String getAllCoupons(@PathVariable("pageNo") int pageNo, Model model) {
         Page<Coupon> listCoupon = couponService.pageCoupon(pageNo);
@@ -37,7 +37,6 @@ public class CouponController {
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", listCoupon.getTotalPages());
         model.addAttribute("couponNew", new Coupon());
-
         return "coupon";
     }
 
@@ -104,8 +103,18 @@ public class CouponController {
     @GetMapping("/update-coupon")
     public String update(Coupon coupon, RedirectAttributes attributes) {
         try {
-            couponService.update(coupon);
-            attributes.addFlashAttribute("success", "Updated successfully");
+            Coupon existingCoupon = couponService.findByCode(coupon.getCode());
+            if (existingCoupon != null) {
+                if (!existingCoupon.getId().equals(coupon.getId())) {
+                    attributes.addFlashAttribute("error", "Mã Code Đã Tồn Tại. Vui lòng nhập Mã khác!");
+                } else {
+                    Coupon updatedCoupon = couponService.update(coupon);
+                    attributes.addFlashAttribute("success", "Updated successfully");
+                }
+            } else {
+                Coupon updatedCoupon = couponService.update(coupon);
+                attributes.addFlashAttribute("success", "Updated successfully");
+            }
         } catch (DataIntegrityViolationException e) {
             e.printStackTrace();
             attributes.addFlashAttribute("failed", "Failed to update because duplicate name");
@@ -113,7 +122,7 @@ public class CouponController {
             e.printStackTrace();
             attributes.addFlashAttribute("failed", "Error server");
         }
-        return "redirect:/coupon/0";
+        return "redirect:/search-coupon/0?keyword=";
     }
 
     @RequestMapping(value = "/delete-coupon", method = {RequestMethod.DELETE, RequestMethod.GET})
@@ -124,18 +133,6 @@ public class CouponController {
         } catch (Exception e) {
             e.printStackTrace();
             attributes.addFlashAttribute("failed", "Failed to deleted");
-        }
-        return "redirect:/search-coupon/0?keyword=";
-    }
-
-    @RequestMapping(value = "/enable-coupon", method = {RequestMethod.PUT, RequestMethod.GET})
-    public String enabledProduct(Integer id, RedirectAttributes redirectAttributes, Principal principal) {
-        try {
-            couponService.enableById(id);
-            redirectAttributes.addFlashAttribute("success", "Enabled successfully!");
-        } catch (Exception e) {
-            e.printStackTrace();
-            redirectAttributes.addFlashAttribute("error", "Enabled failed!");
         }
         return "redirect:/search-coupon/0?keyword=";
     }

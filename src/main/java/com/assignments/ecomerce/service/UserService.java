@@ -15,6 +15,5 @@ public interface UserService {
     User findByEmailUser(String email);
     User getById(Integer id);
     User update(User user);
-
     Page<User> searchUser(int pageNo, String keyword);
 }

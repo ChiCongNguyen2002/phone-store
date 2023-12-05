@@ -28,6 +28,8 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
         }
         else if(roles.orElse("").equals("USER")){
             response.sendRedirect("/indexCustomer");
+        }else if(roles.orElse("").equals("EMPLOYEE")){
+            response.sendRedirect("/indexEmployee");
         }
         else {
             response.sendRedirect("/error");

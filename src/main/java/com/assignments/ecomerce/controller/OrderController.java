@@ -71,28 +71,18 @@ public class OrderController {
         return "order";
     }
 
-    @GetMapping("/search-order-by-time/{pageNo}")
-    public String searchOrderByTime(@PathVariable("pageNo") int pageNo,
-                                    @RequestParam("dateFrom") @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateFrom,
-                                    @RequestParam("dateTo") @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateTo,
-                                    Model model, Principal principal) {
-        Page<Orders> listOrder = orderService.searchOrdersByTime(pageNo, dateFrom,dateTo);
-        List<String> formattedPrices = new ArrayList<>();
-        DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols(Locale.getDefault());
-        decimalFormatSymbols.setGroupingSeparator('.');
-        DecimalFormat decimalFormat = new DecimalFormat("#,###", decimalFormatSymbols);
-
-        for (Orders orders : listOrder) {
-            String formattedPrice = decimalFormat.format(orders.getTotal());
-            formattedPrices.add(formattedPrice);
-        }
-        model.addAttribute("formattedPrices", formattedPrices);
+    @GetMapping("/search-order-ByEmployee/{pageNo}")
+    public String searchOrderByEmployee(@PathVariable("pageNo") int pageNo,
+                              @RequestParam("keyword") String keyword,
+                              Model model, Principal principal) {
+        Page<Orders> listOrder = orderService.searchOrders(pageNo, keyword);
         model.addAttribute("size", listOrder.getSize());
         model.addAttribute("listOrder", listOrder);
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", listOrder.getTotalPages());
-        return "order";
+        return "OrderManager";
     }
+
 
     @GetMapping("/UpdateOrderStatus/{pageNo}/{id}")
     public String UpdateOrderStatus(@PathVariable("pageNo") int pageNo,
@@ -129,7 +119,7 @@ public class OrderController {
         model.addAttribute("listOrder", listOrder);
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", listOrder.getTotalPages());
-        return "order";
+        return "redirect:/search-order/0?keyword=";
     }
 
     @GetMapping("/CancelOrderStatus/{pageNo}/{id}")
@@ -154,7 +144,7 @@ public class OrderController {
         model.addAttribute("listOrder", listOrder);
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", listOrder.getTotalPages());
-        return "order";
+        return "redirect:/search-order/0?keyword=";
     }
 
     @GetMapping("/CancelOrderStatusByUser/{pageNo}/{id}")
@@ -185,5 +175,18 @@ public class OrderController {
         model.addAttribute("totalPages", listOrder.getTotalPages());
         model.addAttribute("userDetail", user);
         return "accountUser";
+    }
+
+    @GetMapping("/search-order-by-time/{pageNo}")
+    public String searchOrderByTime(@PathVariable("pageNo") int pageNo,
+                                    @RequestParam("dateFrom") @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateFrom,
+                                    @RequestParam("dateTo") @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateTo,
+                                    Model model, Principal principal) {
+        Page<Orders> listOrder = orderService.searchOrdersByTime(pageNo, dateFrom,dateTo);
+        model.addAttribute("size", listOrder.getSize());
+        model.addAttribute("listOrder", listOrder);
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", listOrder.getTotalPages());
+        return "order";
     }
 }
