@@ -112,7 +112,7 @@
                         <td>
                             <img class="product-image" th:src="@{'../../img/' + ${product.image}}" alt="Product Image">
                         </td>
-                        <td th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + 'VNĐ'}"></td>
+                        <td th:text="${product.price}"></td>
                     </tr>
                     </tbody>
                 </table>
@@ -141,6 +141,7 @@
                     <thead>
                     <tr>
                         <th>Tuần</th>
+                        <th>Tổng Tiền</th>
                         <th>Thứ hai</th>
                         <th>Thứ ba</th>
                         <th>Thứ tư</th>
@@ -151,9 +152,9 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <!-- Lặp qua danh sách khách hàng -->
                     <tr th:each="revenue : ${weeklyRevenue}">
                         <td th:text="${revenue.weekDate}"></td>
+                        <td th:text="${revenue.sumTotal}"></td>
                         <td th:text="${revenue.mondayTotal}"></td>
                         <td th:text="${revenue.tuesdayTotal}"></td>
                         <td th:text="${revenue.wednesdayTotal}"></td>
@@ -165,6 +166,7 @@
                     </tbody>
                 </table>
             </div>
+
             <div id="chartContainer"></div>
         </div>
         <!-- End of Main Content -->
@@ -205,7 +207,7 @@
 
     tableRowProducts.forEach(function(row) {
          var name = row.cells[1].innerText; // Lấy giá trị từ cột đầu tiên
-         var sumTotal = parseInt(row.cells[3].innerText); // Lấy giá trị từ cột thứ hai
+         var sumTotal = parseInt(row.cells[3].innerText); // Lấy giá trị từ cột thứ ba
          // Thêm giá trị month và sumTotal vào mảng data_chart
          data_chartProduct.push({
              y: sumTotal,
@@ -216,13 +218,11 @@
 
     tableRowWeekly.forEach(function(row) {
          var week = row.cells[0].innerText; // Lấy giá trị từ cột đầu tiên
-         var sumTotalMonday = parseInt(row.cells[1].innerText); // Lấy giá trị từ cột thứ hai
-
-
+         var sumTotal = parseInt(row.cells[1].innerText);
          // Thêm giá trị month và sumTotal vào mảng data_chart
          data_chartWeekly.push({
-             y: sumTotal,
-             label: week
+             y: week,
+             label: sumTotal
          });
          console.log(data_chartWeekly);
      });

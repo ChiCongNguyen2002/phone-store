@@ -253,18 +253,12 @@ public class ProductController {
     @GetMapping("/detail-product/{id}")
     public String DetailProducts(@PathVariable("id") Integer id, Model model, Principal principal) {
         Product newProduct = productService.getById(id);
-        Double price = newProduct.getPrice();
-        DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols(Locale.getDefault());
-        decimalFormatSymbols.setGroupingSeparator('.');
-        DecimalFormat decimalFormat = new DecimalFormat("#,###", decimalFormatSymbols);
-        String formattedPrice = decimalFormat.format(price);
         List<Category> categories = categoryService.getAllCategory();
         UserDetails userDetails = null;
         if (principal != null) {
             userDetails = userDetailsService.loadUserByUsername(principal.getName());
         }
         model.addAttribute("userDetails", userDetails);
-        model.addAttribute("formattedPrice", formattedPrice);
         model.addAttribute("categories", categories);
         model.addAttribute("listProducts", newProduct);
         return "detail";

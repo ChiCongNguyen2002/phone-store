@@ -116,8 +116,9 @@ public class OrderServiceImpl implements OrderService {
                 List<Product> products = new ArrayList<>();
                 for (Object[] result : resultProduct) {
                     String name = (String) result[0];
-                    Double price = (Double) result[1];
+                    Integer price = (Integer) result[1];
                     String image = (String) result[2];
+                    System.out.println("price"+ price);
                     Product product = new Product(name, price, image);
                     products.add(product);
                 }
@@ -138,15 +139,18 @@ public class OrderServiceImpl implements OrderService {
                 List<WeeklyRevenue> weeklyRevenues = new ArrayList<>();
 
                 for (Object[] row : result) {
-                    String weekDate = (String) row[0];
-                    Double mondayTotal = (Double) row[1];
-                    Double tuesdayTotal = (Double) row[2];
-                    Double wednesdayTotal = (Double) row[3];
-                    Double thursdayTotal = (Double) row[4];
-                    Double fridayTotal = (Double) row[5];
-                    Double saturdayTotal = (Double) row[6];
-                    Double sundayTotal = (Double) row[7];
-                    WeeklyRevenue weeklyRevenue = new WeeklyRevenue(weekDate, mondayTotal, tuesdayTotal, wednesdayTotal, thursdayTotal, fridayTotal, saturdayTotal, sundayTotal);
+                    Double total = (Double) row[0];
+                    String weekDate = (String) row[1];
+                    String[] parts = weekDate.split(" - ");
+                    String weekNumber = parts[0];
+                    Double mondayTotal = (Double) row[2];
+                    Double tuesdayTotal = (Double) row[3];
+                    Double wednesdayTotal = (Double) row[4];
+                    Double thursdayTotal = (Double) row[5];
+                    Double fridayTotal = (Double) row[6];
+                    Double saturdayTotal = (Double) row[7];
+                    Double sundayTotal = (Double) row[8];
+                    WeeklyRevenue weeklyRevenue = new WeeklyRevenue(total,weekNumber, mondayTotal, tuesdayTotal, wednesdayTotal, thursdayTotal, fridayTotal, saturdayTotal, sundayTotal);
                     weeklyRevenues.add(weeklyRevenue);
                 }
                 return new ArrayList<>(weeklyRevenues);

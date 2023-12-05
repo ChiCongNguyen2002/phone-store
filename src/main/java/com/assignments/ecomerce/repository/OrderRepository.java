@@ -78,7 +78,7 @@ public interface OrderRepository extends JpaRepository<Orders, Integer> {
             "ORDER BY temp.month ASC", nativeQuery = true)
     List<Object[]> getMonthlyRevenue(@Param("startDate") Date startDate, @Param("endDate") Date endDate, @Param("userYear") int userYear);
 
-    @Query("SELECT CONCAT('Tuần',WEEK(o.orderDate), ' - ', " +
+    @Query("SELECT o.total,CONCAT(WEEK(o.orderDate), ' - ', " +
             "DATE_FORMAT(MIN(o.orderDate),'%d/%m/%Y'), ' - ', " +
             "DATE_FORMAT(MAX(o.orderDate),'%d/%m/%Y')) AS weekDate, " +
             "SUM(CASE WHEN DAYOFWEEK(o.orderDate) = 2 THEN o.total ELSE 0 END) AS Monday, " +

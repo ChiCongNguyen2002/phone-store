@@ -237,7 +237,7 @@ public class ProductServiceImpl implements ProductService {
         for (Object[] result : resultProduct) {
             Integer id = (Integer) result[0];
             String name = (String) result[1];
-            Double price = (Double) result[2];
+            Integer price = (Integer) result[2];
             String description = (String) result[3];
             Integer quantity = (Integer) result[4];
             String color = (String) result[5];

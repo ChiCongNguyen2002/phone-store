@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class WeeklyRevenue {
+    private Double sumTotal;
     private String weekDate;
     private Double mondayTotal;
     private Double tuesdayTotal;
@@ -13,8 +14,9 @@ public class WeeklyRevenue {
     private Double saturdayTotal;
     private Double sundayTotal;
 
-    public WeeklyRevenue(String weekDate, Double mondayTotal, Double tuesdayTotal, Double wednesdayTotal,
+    public WeeklyRevenue(Double sumTotal,String weekDate, Double mondayTotal, Double tuesdayTotal, Double wednesdayTotal,
                          Double thursdayTotal, Double fridayTotal, Double saturdayTotal, Double sundayTotal) {
+        this.sumTotal = sumTotal;
         this.weekDate = weekDate;
         this.mondayTotal = mondayTotal;
         this.tuesdayTotal = tuesdayTotal;
@@ -23,6 +25,10 @@ public class WeeklyRevenue {
         this.fridayTotal = fridayTotal;
         this.saturdayTotal = saturdayTotal;
         this.sundayTotal = sundayTotal;
+    }
+
+    public void setSumTotal(Double sumTotal) {
+        this.sumTotal = sumTotal;
     }
 
     public void setWeekDate(String weekDate) {
