@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 05, 2023 at 02:44 PM
+-- Generation Time: Dec 06, 2023 at 07:45 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -24,16 +24,25 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cartitem`
+-- Table structure for table `cartdetail`
 --
 
-CREATE TABLE `cartitem` (
-  `id` int(11) NOT NULL,
-  `shoppingCartId` int(11) NOT NULL,
+CREATE TABLE `cartdetail` (
+  `userId` int(11) NOT NULL,
   `productId` int(11) NOT NULL,
   `quantity` int(11) NOT NULL,
-  `price` double NOT NULL
+  `unitPrice` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `cartdetail`
+--
+
+INSERT INTO `cartdetail` (`userId`, `productId`, `quantity`, `unitPrice`) VALUES
+(7, 131, 3, 34920000),
+(7, 142, 1, 25000000),
+(7, 145, 4, 25900000),
+(7, 152, 6, 3890000);
 
 -- --------------------------------------------------------
 
@@ -161,8 +170,7 @@ INSERT INTO `forgot_password_token` (`id`, `token`, `isuUsed`, `expireTime`, `us
 --
 
 CREATE TABLE `orderdetail` (
-  `id` int(11) NOT NULL,
-  `orderId` int(11) DEFAULT NULL,
+  `orderId` int(11) NOT NULL,
   `productId` int(11) NOT NULL,
   `quantity` int(11) DEFAULT NULL,
   `unitPrice` double DEFAULT NULL
@@ -172,11 +180,8 @@ CREATE TABLE `orderdetail` (
 -- Dumping data for table `orderdetail`
 --
 
-INSERT INTO `orderdetail` (`id`, `orderId`, `productId`, `quantity`, `unitPrice`) VALUES
-(22, 7, 131, 2, 20000),
-(23, 8, 132, 4, 13000000),
-(24, 9, 132, 1, 230000),
-(25, 9, 142, 2, 20000);
+INSERT INTO `orderdetail` (`orderId`, `productId`, `quantity`, `unitPrice`) VALUES
+(7, 150, 2, 222);
 
 -- --------------------------------------------------------
 
@@ -271,19 +276,6 @@ INSERT INTO `review` (`id`, `userId`, `productId`, `rating`, `DateReview`, `comm
 -- --------------------------------------------------------
 
 --
--- Table structure for table `shoppingcart`
---
-
-CREATE TABLE `shoppingcart` (
-  `id` int(11) NOT NULL,
-  `customerId` int(11) NOT NULL,
-  `totalItems` int(11) NOT NULL,
-  `totalPrice` double NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `supplier`
 --
 
@@ -336,12 +328,11 @@ INSERT INTO `user` (`id`, `email`, `password`, `fullname`, `address`, `phone`, `
 --
 
 --
--- Indexes for table `cartitem`
+-- Indexes for table `cartdetail`
 --
-ALTER TABLE `cartitem`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `shopping_cart_fk` (`shoppingCartId`),
-  ADD KEY `product_fk_1` (`productId`);
+ALTER TABLE `cartdetail`
+  ADD PRIMARY KEY (`userId`,`productId`),
+  ADD KEY `fk_cart_product` (`productId`);
 
 --
 -- Indexes for table `category`
@@ -380,8 +371,7 @@ ALTER TABLE `forgot_password_token`
 -- Indexes for table `orderdetail`
 --
 ALTER TABLE `orderdetail`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `order_fk` (`orderId`),
+  ADD PRIMARY KEY (`orderId`,`productId`),
   ADD KEY `product_fk` (`productId`);
 
 --
@@ -407,12 +397,6 @@ ALTER TABLE `review`
   ADD KEY `product_fk_2` (`productId`);
 
 --
--- Indexes for table `shoppingcart`
---
-ALTER TABLE `shoppingcart`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `supplier`
 --
 ALTER TABLE `supplier`
@@ -427,12 +411,6 @@ ALTER TABLE `user`
 --
 -- AUTO_INCREMENT for dumped tables
 --
-
---
--- AUTO_INCREMENT for table `cartitem`
---
-ALTER TABLE `cartitem`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -465,12 +443,6 @@ ALTER TABLE `forgot_password_token`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `orderdetail`
---
-ALTER TABLE `orderdetail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
-
---
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
@@ -489,12 +461,6 @@ ALTER TABLE `review`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
--- AUTO_INCREMENT for table `shoppingcart`
---
-ALTER TABLE `shoppingcart`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
 -- AUTO_INCREMENT for table `supplier`
 --
 ALTER TABLE `supplier`
@@ -504,18 +470,18 @@ ALTER TABLE `supplier`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- Constraints for dumped tables
 --
 
 --
--- Constraints for table `cartitem`
+-- Constraints for table `cartdetail`
 --
-ALTER TABLE `cartitem`
-  ADD CONSTRAINT `product_fk_1` FOREIGN KEY (`productId`) REFERENCES `product` (`id`),
-  ADD CONSTRAINT `shopping_cart_fk` FOREIGN KEY (`shoppingCartId`) REFERENCES `shoppingcart` (`id`);
+ALTER TABLE `cartdetail`
+  ADD CONSTRAINT `fk_cart_product` FOREIGN KEY (`productId`) REFERENCES `product` (`id`),
+  ADD CONSTRAINT `fk_cart_user` FOREIGN KEY (`userId`) REFERENCES `user` (`id`);
 
 --
 -- Constraints for table `category`
