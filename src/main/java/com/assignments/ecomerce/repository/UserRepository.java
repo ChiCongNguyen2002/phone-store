@@ -1,6 +1,5 @@
 package com.assignments.ecomerce.repository;
 
-import com.assignments.ecomerce.model.Customer;
 import com.assignments.ecomerce.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -11,6 +10,9 @@ import java.util.List;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
     User findByEmail(String email);
+
+    User findByPhone(String phone);
+
     @Query("SELECT COUNT(u) FROM User u WHERE u.role = 'USER'")
     int countUsersByRole();
 

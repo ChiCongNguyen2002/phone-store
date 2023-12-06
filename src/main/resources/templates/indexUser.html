@@ -25,6 +25,8 @@
     <link href="//cdn.bootcss.com/noUiSlider/8.5.1/nouislider.min.css" rel="stylesheet"/>
     <script src="//cdn.bootcss.com/noUiSlider/8.5.1/nouislider.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link th:href="@{/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css">
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
@@ -57,8 +59,8 @@
 
             <ul class="header-links pull-right">
                 <li><a th:href="@{/login}" th:if="${userDetails == null}">Đăng nhập</a></li>
-                <li><a th:href="@{/register}" th:if="${userDetails == null}">Đăng ký</a></li>
-                <li><a th:href="@{/account/0}" th:if="${userDetails != null}" ><i class="fa fa-user-o userID" th:data-user-id="${userId}"></i>Tài khoản</a></li>
+                <li><a th:href="@{/registration}" th:if="${userDetails == null}">Đăng ký</a></li>
+                <li><a th:href="@{/account/0}" th:if="${userDetails != null}" ><i class="fa fa-user-o userID"></i>Tài khoản</a></li>
                 <li><a th:href="@{/logout}" th:if="${userDetails != null}">Đăng xuất</a></li>
             </ul>
 
@@ -116,8 +118,7 @@
             <ul class="main-nav nav navbar-nav">
                 <li class="active"><a th:href="@{/indexCustomer}">Trang chủ</a></li>
                 <li th:each="category : ${categories}">
-                    <a th:href="@{/ViewByCategory/0(categoryId=${category.id})}"
-                       class="btn btn-primary btn-edit"
+                    <a th:href="@{/ViewByCategory/0(categoryId=${category.id})}" class="btn btn-primary btn-edit"
                        th:text="${category.name}"></a>
                 </li>
                 <li><a th:href="@{/couponCustomer/0}">KHUYẾN MÃI</a></li>
@@ -463,12 +464,6 @@
 <script src="/js/nouislider.min.js"></script>
 <script src="/js/jquery.zoom.min.js"></script>
 <script src="/js/main.js"></script>
-<script src="/js/site.js"></script>
-<script src="/js/cart.js"></script>
-<script>
-    var siteController = new SiteController();
-    siteController.initialize();
-</script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script th:fragment="ajax_script">
     var iconElement = document.querySelector('.fa.fa-user-o.userID');

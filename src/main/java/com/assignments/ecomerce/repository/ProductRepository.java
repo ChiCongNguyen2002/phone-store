@@ -15,7 +15,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Query("SELECT od.product FROM OrderDetail od GROUP BY od.product.id ORDER BY SUM(od.quantity) DESC")
     List<Product> findTop10ByQuantitySold();
 
-    @Query("SELECT p.color,p.image FROM Product p WHERE p.name = :name")
+    @Query("SELECT p.color,p.image,p.id FROM Product p WHERE p.name = :name")
     List<Object[]> getListColorByNameProduct(@Param("name") String name);
 
     @Query("SELECT p FROM Product p WHERE p.name = :name AND p.color = :color")
@@ -81,4 +81,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             "GROUP BY p.id,p.name, p.price, p.description, p.quantity, p.color,p.image " +
             "ORDER BY sumQuantity DESC")
     List<Object[]> getTop10ProductsWithSumQuantity();
+
+    @Query("SELECT DISTINCT p FROM Product p JOIN p.category c WHERE p.status = 1 AND c.id = :categoryId GROUP BY p.name")
+    List<Product> findAllByCategoryId(@Param("categoryId") Integer categoryId);
 }

@@ -6,12 +6,15 @@ import com.assignments.ecomerce.service.ProductService;
 import com.assignments.ecomerce.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.Principal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Date;
@@ -25,17 +28,20 @@ public class StatisticalController {
     private ProductService productService;
     @Autowired
     private OrderService orderService;
-
+    @Autowired
+    UserDetailsService userDetailsService;
     @Autowired
     private UserService userService;
 
     @GetMapping("/statistical")
-    public String countProducts(Model model) {
+    public String countProducts(Model model, Principal principal) {
         int countProduct = productService.countProducts();
         int countUser = userService.countUsersByRole();
         int countOrder = orderService.countOrders();
-
         Double total = productService.getTotalRevenue();
+
+        UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
+        model.addAttribute("user", userDetails);
         model.addAttribute("total", total);
         model.addAttribute("countOrder", countOrder);
         model.addAttribute("countUser", countUser);
@@ -48,7 +54,7 @@ public class StatisticalController {
                               @RequestParam("dateTo") @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateTo,
                               @RequestParam(value = "year", defaultValue = "2023") int selectedYear,
                               @RequestParam("chartType") String chartType,
-                              Model model) {
+                              Model model, Principal principal) {
         List<Object> chartData = orderService.getData(dateFrom, dateTo, selectedYear, chartType);
 
         if (chartData != null) {
@@ -102,7 +108,8 @@ public class StatisticalController {
         decimalFormatSymbols.setGroupingSeparator('.');
         DecimalFormat decimalFormat = new DecimalFormat("#,###", decimalFormatSymbols);
         String formattedPrice = decimalFormat.format(total);
-
+        UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
+        model.addAttribute("user", userDetails);
         model.addAttribute("total", formattedPrice);
         model.addAttribute("countOrder", countOrder);
         model.addAttribute("countUser", countUser);

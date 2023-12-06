@@ -216,9 +216,8 @@
     var dateTo = document.getElementById("dateTo");
 
     function Export(){
-
         const table = document.querySelector('table');
-            const rows = table.querySelectorAll('tr');
+        const rows = table.querySelectorAll('tr');
 
             // Tạo workbook và worksheet
             const workbook = new ExcelJS.Workbook();
@@ -228,12 +227,24 @@
             rows.forEach(row => {
                 const rowData = [];
                 const cols = row.querySelectorAll('td, th');
-
-                cols.forEach(col => {
-                    rowData.push(col.innerText);
+                console.log(cols);
+                cols.forEach((col,index) => {
+                    if(index !== 5 && index !== 6)
+                        rowData.push(col.innerText);
                 });
 
                 worksheet.addRow(rowData);
+            });
+
+             worksheet.columns.forEach((column,index) => {
+                column.width = 10;
+                 if(index === 1 || index === 2){
+                    column.width = 20;
+                 }
+                 if(index === 4){
+                    column.width = 15;
+                 }
+                 // Đặt độ rộng mong muốn, đơn vị là ký tự
             });
 
             // Tạo Blob từ workbook
@@ -245,6 +256,7 @@
                     saveAs(blob, 'Order.xlsx');
                 });
     }
+
 
     function filterAndExport(){
         if(dateFrom.value == "" || dateTo.value == null){

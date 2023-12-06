@@ -102,6 +102,13 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
+    public Supplier getById(Integer id) {
+        Supplier supplier = supplierRepository.getById(id);
+        Supplier newSupplier = new Supplier(supplier.getId(), supplier.getName(), supplier.getPhoneNumber(), supplier.getAddress());
+        return newSupplier;
+    }
+
+    @Override
     public List<Supplier> getAllSuppliers() {
         return supplierRepository.findByStatusActivated();
     }

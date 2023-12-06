@@ -166,6 +166,15 @@ public class OrderServiceImpl implements OrderService {
         return orderPages;
     }
 
+    @Override
+    public Page<Orders> searchOrdersByTimeEmployee(int pageNo, Date dateFrom, Date dateTo) {
+        Pageable pageable = PageRequest.of(pageNo, 5);
+        List<Orders> order = transfer(orderRepository.searchOrdersByTimeEmployee(dateFrom, dateTo));
+        System.out.println(order.size());
+        Page<Orders> orderPages = toPage(order, pageable);
+        return orderPages;
+    }
+
     public List<Orders> searchOrdersByTimeToExcel(Date dateFrom, Date dateTo) {
         List<Orders> order = orderRepository.searchOrdersByTime(dateFrom, dateTo);
         return order;

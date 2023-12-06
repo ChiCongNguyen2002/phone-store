@@ -1,5 +1,6 @@
 package com.assignments.ecomerce.controller;
 
+import com.assignments.ecomerce.dto.UserDTO;
 import com.assignments.ecomerce.model.Category;
 import com.assignments.ecomerce.model.OrderDetail;
 import com.assignments.ecomerce.model.Orders;
@@ -41,10 +42,11 @@ public class AccountController {
 
     @GetMapping("/account/{pageNo}")
     public String showAccountUser(@PathVariable("pageNo") int pageNo, Model model, Principal principal) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
         User user = userService.findByEmailUser(principal.getName());
         Page<Orders> listOrder = orderService.pageOrdersById(pageNo, user.getId());
         List<Category> categories = categoryService.getAllCategory();
+        UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
+        model.addAttribute("name", userDetails);
         model.addAttribute("userId", user.getId());
         model.addAttribute("categories", categories);
         model.addAttribute("size", listOrder.getSize());
@@ -64,6 +66,7 @@ public class AccountController {
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
         User user1 = userService.findByEmailUser(principal.getName());
+        model.addAttribute("name", userDetails);
         model.addAttribute("userId", user1.getId());
         model.addAttribute("userDetails", userDetails);
         model.addAttribute("categories", categories);
@@ -77,12 +80,13 @@ public class AccountController {
         UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
         List<Category> categories = categoryService.getAllCategory();
         model.addAttribute("categories", categories);
+
         List<Orders> listOrder = new ArrayList<>();
         Orders order = orderService.getOrderById(orderId);
         if (order != null) {
             listOrder.add(order);
         }
-
+        model.addAttribute("name", userDetails);
         List<OrderDetail> listOrderDetail = orderDetailService.findAllByOrderId(orderId);
         User user = userService.findByEmailUser(principal.getName());
         model.addAttribute("userId", user.getId());
@@ -115,7 +119,7 @@ public class AccountController {
             return "redirect:/search-user/0?keyword=";
         }
         try {
-            userService.save(userDto);
+            userService.saveAdmin(userDto);
             model.addAttribute("accountNew", userDto);
             attributes.addFlashAttribute("success", "Added successfully");
         } catch (DataIntegrityViolationException e1) {

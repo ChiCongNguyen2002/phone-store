@@ -16,8 +16,11 @@ public interface OrderRepository extends JpaRepository<Orders, Integer> {
     @Query(value = "SELECT COUNT(*) FROM orders", nativeQuery = true)
     int countOrders();
 
-    @Query("SELECT o from Orders o WHERE o.orderDate BETWEEN :dateFrom AND :dateTo")
+    @Query("SELECT o from Orders o WHERE o.orderDate BETWEEN :dateFrom AND :dateTo ")
     List<Orders> searchOrdersByTime(@Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo);
+
+    @Query("SELECT o from Orders o WHERE o.orderDate BETWEEN :dateFrom AND :dateTo ")
+    List<Orders> searchOrdersByTimeEmployee(@Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo);
 
     @Query("SELECT o from Orders o")
     Page<Orders> pageOrders(Pageable pageable);

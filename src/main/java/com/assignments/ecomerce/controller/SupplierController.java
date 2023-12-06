@@ -7,6 +7,8 @@ import com.assignments.ecomerce.service.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,8 @@ import java.security.Principal;
 
 @Controller
 public class SupplierController {
+    @Autowired
+    UserDetailsService userDetailsService;
     @Autowired
     private SupplierService supplierService;
 
@@ -105,6 +109,8 @@ public class SupplierController {
                               @RequestParam("keyword") String keyword,
                               Model model, Principal principal) {
         Page<Supplier> listSupplier = supplierService.searchSuppliers(pageNo, keyword);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
+        model.addAttribute("user", userDetails);
         model.addAttribute("size", listSupplier.getSize());
         model.addAttribute("listSupplier", listSupplier);
         model.addAttribute("currentPage", pageNo);

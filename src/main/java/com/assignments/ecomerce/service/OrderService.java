@@ -37,6 +37,8 @@ public interface OrderService {
 
      Page<Orders> searchOrdersByTime(int pageNo, Date dateFrom, Date dateTo);
 
+     Page<Orders> searchOrdersByTimeEmployee(int pageNo, Date dateFrom, Date dateTo);
+
      List<Orders> searchOrdersByTimeToExcel(Date dateFrom, Date dateTo);
 
      Orders getById(Integer id) ;

@@ -43,7 +43,7 @@ public interface ProductService {
      int countProducts() ;
 
      Double getTotalRevenue() ;
-
+     List<Product> findAllByCategoryId(Integer categoryId);
      Page<Product> pageProducts(int pageNo);
      Page<Product> pageProductByCategory(int pageNo, Integer categoryId);
 

@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org/">
+<head th:replace="~{fragments::header}">
+    <link rel="stylesheet" th:href="@{/webjars/sweetalert2/11.0.19/sweetalert2.min.css}"/>
+
+</head>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+    <!-- Sidebar -->
+    <ul th:replace="~{fragments::sidebar}">
+    </ul>
+    <!-- End of Sidebar -->
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
+
+            <!-- Topbar -->
+            <nav th:replace="~{fragments::top-navbar}">
+            </nav>
+            <!-- End of Topbar -->
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+
+                <!-- Thêm vào phần thích hợp trong view của bạn -->
+                <div class="card mb-12">
+                    <h1 class="mt-4">Danh Sách Đơn Nhập Hàng</h1>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item"><a style="color: #0779e4;" href="/">Trang chủ</a></li>
+                        <li class="breadcrumb-item active">Danh Sách Đơn Nhập Hàng</li>
+                    </ol>
+
+                    <div class="check_style">
+                        <form class="order_style" th:action="@{/search-import-by-time/0}" id="filterOrder" method="get"
+                              onsubmit="filterAndExport(); return false;">
+                            <div class="filter-header">
+                                <label>Lọc theo ngày</label>
+                            </div>
+                            <div class="date-input">
+                                <label for="dateFrom">Từ ngày:</label>
+                                <input type="date" id="dateFrom" name="dateFrom">
+                            </div>
+                            <div class="date-input">
+                                <label for="dateTo">Đến ngày:</label>
+                                <input type="date" id="dateTo" name="dateTo">
+                            </div>
+                            <button class="order_style_2" type="submit">Lọc Hóa Đơn Nhập Hàng</button>
+                        </form>
+
+                        <button type="button" class="btn btn-success" data-toggle="modal"
+                                data-target="#addModal"
+                                data-whatever="@mdo">Tạo mới phiếu nhập
+                        </button>
+                        <button type="submit" onclick="Export()" style="background-color: green;">Xuất File Excel
+                        </button>
+                    </div>
+
+                    <div th:if="${success}" class="text-center alert alert-success">
+                        <p th:text="${success}"></p>
+                    </div>
+                    <div th:if="${error}" class="text-center alert alert-danger">
+                        <p th:text="${error}"></p>
+                    </div>
+
+                    <table class="styled-table">
+                        <tr>
+                            <th>ID</th>
+                            <th>Nhà Cung Cấp</th>
+                            <th>Ngày Nhập</th>
+                            <th>Tổng Giá Trị Đơn Nhập</th>
+                            <th>Thao Tác</th>
+                        </tr>
+
+                        <tr th:each="import,index : ${listImport}">
+                            <form id="importBillDetailForm" th:action="@{/import-bill-detail}" method="post">
+                                <input type="hidden" name="importId" th:value="${import.Id}">
+                                <td th:text="${import.Id}"></td>
+                                <td th:text="${import.supplier.getName()}"></td>
+                                <td th:text="${import.importDate}"></td>
+                                <td th:text="${#numbers.formatDecimal(import.total, 0, 'COMMA', 0, 'POINT') + 'VND'}"></td>
+                                <td>
+                                    <button type="submit">Xem Chi Tiết</button>
+                                </td>
+                            </form>
+                        </tr>
+
+                    </table>
+
+
+                    <!--Pagination  -->
+                    <nav aria-label="...">
+                        <ul class="pagination">
+                            <li th:if="${currentPage != 0}" class="page-item ">
+                                <a th:href="@{/search-import/{pageNo}(pageNo=${currentPage - 1}, keyword=${keyword})}"
+                                   class="page-link">Previous</a>
+                            </li>
+
+                            <th:block th:if="${totalPages > 1}">
+                                <li th:each="i : ${#numbers.sequence(0, totalPages-1)}"
+                                    th:classappend="${currentPage == i ? 'active' : ''}" class="page-item">
+                                    <a th:href="@{/search-import/{pageNo}(pageNo=${i}, keyword=${keyword})}"
+                                       class="page-link">
+                                        <span th:text="${i + 1}"></span>
+                                    </a>
+                                </li>
+                            </th:block>
+
+                            <li th:if="${currentPage + 1 != totalPages}" class="page-item">
+                                <a th:href="@{/search-import/{pageNo}(pageNo=${currentPage + 1},
+                                 keyword=${keyword})}" class="page-link">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <!--Pagination  -->
+                </div>
+                <!-- /.container-fluid -->
+            </div>
+        </div>
+        <!-- End of Main Content -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a th:replace="~{fragments::scroll}">
+</a>
+
+
+<!-- Add new -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div id="importBillForm">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Tạo Phiếu Nhập Hàng</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <label class="control-label col-md-4" for="supplier">Nhà Cung Cấp</label>
+                            <select id="supplier" name="supplier" class="form-control">
+                                <option th:each="supplier : ${suppliers}" th:value="${supplier.id}"
+                                        th:text="${supplier.name}"></option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label for="importDate" class="col-form-label mr-2">Ngày Nhập:</label>
+                            <input id="importDate" type="text" readonly class="form-control" name="importDate" value=""
+                                   required>
+                        </div>
+                    </div>
+
+                    <table class="table" id="productTable">
+                        <thead>
+                        <tr>
+                            <th>Loại Sản Phẩm</th>
+                            <th>Tên Sản Phẩm</th>
+                            <th>Màu Sắc</th>
+                            <th>Hình Ảnh</th>
+                            <th>Số Lượng</th>
+                            <th>Giá Nhập</th>
+                            <th>Tổng Tiền</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>
+                                <select id="category" name="productType[]" class="form-control">
+                                    <option value="">...</option>
+                                    <option th:each="category : ${categories}" th:value="${category.id}"
+                                            th:text="${category.name}"></option>
+                                </select>
+                            </td>
+                            <td>
+                                <select id="productName" name="productName[]" class="form-control">
+                                    <option value="">...</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select id="productColor" name="productColor[]" class="form-control">
+                                    <option value="">...</option>
+                                    <option value="">...</option>
+                                </select>
+                            </td>
+                            <td>
+                                <div name="productImage[]" id="productImage">
+                                </div>
+                            </td>
+                            <td><input type="number" class="form-control" name="productQuantity[]"
+                                       oninput="calculatePrice(this)" required></td>
+                            <td><input type="number" class="form-control" name="productPrice[]" readonly required></td>
+                            <td><input type="number" class="form-control" name="productAmount[]"
+                                       oninput="calculatePrice(this)" required></td>
+                            <td>
+                                <button type="button" class="btn btn-danger" onclick="removeRow(this)">Xóa</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="form-group row">
+                        <div class="col-md-10 offset-md-2">
+                            <button type="button" class="btn btn-primary" onclick="addRow()">Thêm Sản Phẩm</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-md-2 col-form-label">Tổng Tiền:</label>
+                    <div class="col-md-4">
+                        <span id="totalAmount">0</span>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-primary" onclick="saveImportBill()">Lưu Lại</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form id="importBillForm-Submit" th:action="@{/add-import}" method="get">
+</form>
+
+<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="successModalLabel">Success!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="successMessage"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Bootstrap core JavaScript-->
+<div th:replace="~{fragments::script}"></div>
+<style>
+    #popup {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 20px;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+    }
+
+
+    .form-control{
+        padding:0;
+    }
+    .btn-update-status {
+        background-color: #24dfc4;
+        color: #184d1b;
+        font-size: 14px;
+    }
+
+    .btn-cancel {
+        background-color: #FF0000;
+        color: white;
+        font-size: 14px;
+    }
+</style>
+
+<script>
+    <!--    function calculatePrice(input) {-->
+    <!--       var row = input.parentNode.parentNode;-->
+    <!--        var quantity = row.querySelector('input[name="productQuantity[]"]').value;-->
+    <!--        var totalAmount = row.querySelector('input[name="totalAmount[]"]').value;-->
+
+    <!--        // Tính giá bán: tổng tiền / số lượng-->
+    <!--        var productPrice = totalAmount / quantity;-->
+
+    <!--        // Hiển thị giá bán-->
+    <!--        row.querySelector('input[name="productPrice[]"]').value = productPrice-->
+    <!--   }-->
+
+    <!--   function calculateTotalAmount() {-->
+    <!--        var table = document.getElementById('productTable').getElementsByTagName('tbody')[0];-->
+    <!--        var rows = table.getElementsByTagName('tr');-->
+    <!--        var totalAmount = 0;-->
+
+    <!--        for (var i = 0; i < rows.length; i++) {-->
+    <!--            var row = rows[i];-->
+    <!--            var totalAmountInput = row.querySelector('input[name="totalAmount[]"]');-->
+    <!--            if (totalAmountInput) {-->
+    <!--                totalAmount += parseFloat(totalAmountInput.value) || 0;-->
+    <!--            }-->
+    <!--        }-->
+
+    <!--        document.getElementById('totalAmount').textContent = totalAmount.toFixed(2);-->
+    <!--    }-->
+
+</script>
+
+<script th:src="@{/js/exceljs.js}"></script>
+<script th:src="@{/js/FileSaver.js}"></script>
+<script th:src="@{/js/import.js}"></script>
+
+<script th:inline="javascript">
+    const timeElapsed = Date.now();
+    const today1 = new Date(timeElapsed);
+    today1.toDateString(); // "Sun Jun 14 2020"
+
+    document.getElementById("importDate").value = today1.toDateString();
+
+<!--    var viewDetailBtn = document.querySelector("#orderDetailForm button[type='submit']");-->
+<!--    var orderDetailForm = document.getElementById("orderDetailForm");-->
+<!--    var orderIdInput = orderDetailForm.querySelector("input[name='orderId']");-->
+
+<!--    viewDetailBtn.addEventListener("click", function(event) {-->
+<!--      event.preventDefault();-->
+
+<!--      var orderId = this.getAttribute("data-order-id");-->
+<!--      orderIdInput.value = orderId;-->
+
+<!--      orderDetailForm.submit();-->
+<!--    });-->
+
+      var successImportMessage = /*[[${successImportMessage}]]*/ "";
+        if (successImportMessage) {
+            $(document).ready(function () {
+                $('#successMessage').text(successImportMessage);
+                $('#successModal').modal('show');
+            });
+        }
+
+    function showPopup(message) {
+        var popup = document.getElementById('popup');
+        var successImportMessage = document.getElementById('successImportMessage');
+
+        successImportMessage.innerHTML = message;
+        popup.style.display = 'block';
+    }
+
+    function closePopup() {
+        var popup = document.getElementById('popup');
+        popup.style.display = 'none';
+    }
+
+</script>
+
+<script th:inline="javascript">
+    var dateFrom = document.getElementById("dateFrom");
+    var dateTo = document.getElementById("dateTo");
+
+    function Export(){
+        const table = document.querySelector('table');
+            const rows = table.querySelectorAll('tr');
+
+            // Tạo workbook và worksheet
+            const workbook = new ExcelJS.Workbook();
+            const worksheet = workbook.addWorksheet('Sheet1');
+
+            // Đọc dữ liệu từ bảng HTML và đưa vào worksheet
+            rows.forEach(row => {
+                const rowData = [];
+                const cols = row.querySelectorAll('td, th');
+
+                cols.forEach(col => {
+                    rowData.push(col.innerText);
+                });
+
+                worksheet.addRow(rowData);
+            });
+
+            // Tạo Blob từ workbook
+            workbook.xlsx.writeBuffer()
+                .then(buffer => {
+                    const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+                    // Sử dụng FileSaver để tải xuống Blob
+                    saveAs(blob, 'Order.xlsx');
+                });
+    }
+
+    function filterAndExport(){
+        if(dateFrom.value == "" || dateTo.value == null){
+            alert('Chưa nhập ngày xác định!');
+            return false;
+        }
+        if(dateFrom.value > dateTo.value){
+            alert('Vui lòng kiểm tra lại ngày nhập!!');
+            return false;
+        }
+
+        localStorage.setItem("dateFrom_Order", dateFrom.value); // Lưu giá trị mới vào localStorage
+        localStorage.setItem("dateTo_Order", dateTo.value); // Lưu giá trị mới vào localStorage
+        document.getElementById("filterOrder").submit();
+    }
+
+    dateFrom.value =  localStorage.getItem("dateFrom_Order")
+    dateTo.value =  localStorage.getItem("dateTo_Order")
+
+    localStorage.removeItem("dateFrom_Order");
+    localStorage.removeItem("dateTo_Order");
+
+     var message = /*[[${successMessage}]]*/ '';
+     if(message != null){
+         alert('Message from the server: ' + message);
+     }
+</script>
+
+
+</body>
+
+</html>

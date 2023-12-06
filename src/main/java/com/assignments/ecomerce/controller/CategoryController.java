@@ -8,6 +8,8 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +24,9 @@ public class CategoryController {
     private CategoryService categoryService;
     @Autowired
     private SupplierService supplierService;
+
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     @GetMapping("/category/{pageNo}")
     public String getAllCategory(@PathVariable("pageNo") int pageNo, Model model, Principal principal) {
@@ -104,6 +109,8 @@ public class CategoryController {
         List<Supplier> listSuppliers =  supplierService.getAllSuppliers();
         model.addAttribute("listSuppliers", listSuppliers);
         session.setAttribute("keyword", keyword);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
+        model.addAttribute("user", userDetails);
         model.addAttribute("keyword", keyword);
         model.addAttribute("size", listCategory.getSize());
         model.addAttribute("listCategory", listCategory);

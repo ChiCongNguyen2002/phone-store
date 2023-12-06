@@ -44,7 +44,7 @@ public class CartDetail {
 
     }
 
-    public  class CartDetailId implements Serializable {
+    public static class CartDetailId implements Serializable {
         private Integer userId;
         private Integer productId;
 

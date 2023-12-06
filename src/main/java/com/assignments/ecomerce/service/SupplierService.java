@@ -16,7 +16,7 @@ import java.util.List;
 
 @Service
 public interface SupplierService {
-
+    Supplier getById(Integer id);
      List<Supplier> getAllSuppliers();
 
      Supplier save(Supplier supplier);

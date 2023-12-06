@@ -64,56 +64,64 @@ public class ProductController {
 
     @GetMapping("/product-details/{id}")
     public String DetailProduct(@PathVariable("id") Integer id, Model model, Principal principal) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
+        if(principal == null){
+            return "cart";
+        }else{
+            UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
 
-        User user = userService.findByEmail(principal.getName());
-        Product product = productService.findById(id);
-        List<Product> productDtoList = productService.findAllByCategory(product.getCategory().getName());
-        List<Category> categories = categoryService.getAllCategory();
-        List<Review> reviews = reviewService.getByProduct(product);
-        List<Product> productColor = productService.getListColorByNameProduct(product.getName());
-        int countReview = reviewService.countReviews(product);
-        Double calculateAverageRating = reviewService.calculateAverageRating(product);
+            User user = userService.findByEmail(principal.getName());
+            Product product = productService.findById(id);
+            List<Product> productDtoList = productService.findAllByCategory(product.getCategory().getName());
+            List<Category> categories = categoryService.getAllCategory();
+            List<Review> reviews = reviewService.getByProduct(product);
+            List<Product> productColor = productService.getListColorByNameProduct(product.getName());
+            int countReview = reviewService.countReviews(product);
+            Double calculateAverageRating = reviewService.calculateAverageRating(product);
 
        /* Product getProductByColorAndName = productService.getProductByColorAndName(product.getName(), product.getColor());
         System.out.println("color:" + productColor);
         model.addAttribute("getProductByColorAndName", getProductByColorAndName);*/
-        model.addAttribute("name", user.getFullname());
-        model.addAttribute("userDetails", userDetails);
-        model.addAttribute("user", user);
-        model.addAttribute("userId", user.getId());
-        model.addAttribute("countReview", countReview);
-        model.addAttribute("calculateAverageRating", calculateAverageRating);
-        model.addAttribute("reviewNew", new Review());
-        model.addAttribute("reviews", reviews);
-        model.addAttribute("product", product);
-        model.addAttribute("products", productDtoList);
-        model.addAttribute("productDetail", product);
-        model.addAttribute("productColor", productColor);
-        model.addAttribute("categories", categories);
-        return "product-detail";
+            model.addAttribute("name", user.getFullname());
+            model.addAttribute("userDetails", userDetails);
+            model.addAttribute("user", user);
+            model.addAttribute("userId", user.getId());
+            model.addAttribute("countReview", countReview);
+            model.addAttribute("calculateAverageRating", calculateAverageRating);
+            model.addAttribute("reviewNew", new Review());
+            model.addAttribute("reviews", reviews);
+            model.addAttribute("product", product);
+            model.addAttribute("products", productDtoList);
+            model.addAttribute("productDetail", product);
+            model.addAttribute("productColor", productColor);
+            model.addAttribute("categories", categories);
+            return "product-detail";
+        }
     }
 
     @GetMapping("/ViewByCategory/{pageNo}")
     public String ViewByCategory(@PathVariable("pageNo") int pageNo,
                                  @RequestParam("categoryId") Integer categoryId, Model model, Principal principal) {
-        User user = userService.findByEmail(principal.getName());
-        List<Category> categories = categoryService.getAllCategory();
-        Page<Product> listProducts = productService.pageProductByCategory(pageNo, categoryId);
-        Category category = categoryService.findById(categoryId);
-        UserDetails userDetails = null;
-        if (principal != null) {
+
+        if (principal == null) {
+            return "register";
+        } else {
+            User user = userService.findByEmail(principal.getName());
+            List<Category> categories = categoryService.getAllCategory();
+            Page<Product> listProducts = productService.pageProductByCategory(pageNo, categoryId);
+            Category category = categoryService.findById(categoryId);
+            UserDetails userDetails = null;
             userDetails = userDetailsService.loadUserByUsername(principal.getName());
+            model.addAttribute("name", userDetails);
+            model.addAttribute("userId", user.getId());
+            model.addAttribute("userDetails", userDetails);
+            model.addAttribute("category", category);
+            model.addAttribute("categories", categories);
+            model.addAttribute("size", listProducts.getSize());
+            model.addAttribute("currentPage", pageNo);
+            model.addAttribute("totalPages", listProducts.getTotalPages());
+            model.addAttribute("listProducts", listProducts.getContent());
+            return "subcategory";
         }
-        model.addAttribute("userId", user.getId());
-        model.addAttribute("userDetails", userDetails);
-        model.addAttribute("category", category);
-        model.addAttribute("categories", categories);
-        model.addAttribute("size", listProducts.getSize());
-        model.addAttribute("currentPage", pageNo);
-        model.addAttribute("totalPages", listProducts.getTotalPages());
-        model.addAttribute("listProducts", listProducts.getContent());
-        return "subcategory";
     }
 
     @GetMapping("/product")
@@ -149,10 +157,12 @@ public class ProductController {
     @GetMapping("/search-productByAdmin/{pageNo}")
     public String searchProductByAdmin(@PathVariable("pageNo") int pageNo,
                                        @RequestParam("keyword") String keyword,
-                                       Model model, HttpSession session) {
+                                       Model model, HttpSession session, Principal principal) {
 
         Page<Product> listProducts = productService.findProductByAdmin(pageNo, keyword);
         List<Category> categories = categoryService.getAllCategory();
+        UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
+        model.addAttribute("user", userDetails);
         session.setAttribute("keyword", keyword);
         model.addAttribute("keyword", keyword);
         model.addAttribute("categories", categories);
@@ -207,6 +217,7 @@ public class ProductController {
             userDetails = userDetailsService.loadUserByUsername(principal.getName());
         }
         User user = userService.findByEmail(principal.getName());
+        model.addAttribute("name", userDetails);
         model.addAttribute("userId", user.getId());
         model.addAttribute("userDetails", userDetails);
         model.addAttribute("color", color);
@@ -229,31 +240,51 @@ public class ProductController {
     public String searchProductByCategory(@PathVariable("pageNo") int pageNo,
                                           @RequestParam("keyword") String keyword,
                                           Model model, HttpSession session, Principal principal) {
-        Page<Product> listProducts = productService.searchProducts(pageNo, keyword);
-        List<Category> categories = categoryService.getAllCategory();
-        double minPrice = productService.getMinPrice(listProducts);
-        double maxPrice = productService.getMaxPrice(listProducts);
-        double defaultMinPrice = productService.getMinPrice(listProducts);
-        double defaultMaxPrice = productService.getMaxPrice(listProducts);
-        UserDetails userDetails = null;
-        if (principal != null) {
+        if (principal == null) {
+            Page<Product> listProducts = productService.searchProducts(pageNo, keyword);
+            List<Category> categories = categoryService.getAllCategory();
+            double minPrice = productService.getMinPrice(listProducts);
+            double maxPrice = productService.getMaxPrice(listProducts);
+            double defaultMinPrice = productService.getMinPrice(listProducts);
+            double defaultMaxPrice = productService.getMaxPrice(listProducts);
+            session.setAttribute("keyword", keyword);
+            model.addAttribute("keyword", keyword);
+            model.addAttribute("categories", categories);
+            model.addAttribute("size", listProducts.getSize());
+            model.addAttribute("currentPage", pageNo);
+            model.addAttribute("totalPages", listProducts.getTotalPages());
+            model.addAttribute("listProducts", listProducts.getContent());
+            model.addAttribute("minPrice", minPrice);
+            model.addAttribute("maxPrice", maxPrice);
+            model.addAttribute("defaultMinPrice", 9490000);
+            model.addAttribute("defaultMaxPrice", 35000000);
+            return "searchCategory";
+        } else {
+            Page<Product> listProducts = productService.searchProducts(pageNo, keyword);
+            List<Category> categories = categoryService.getAllCategory();
+            double minPrice = productService.getMinPrice(listProducts);
+            double maxPrice = productService.getMaxPrice(listProducts);
+            double defaultMinPrice = productService.getMinPrice(listProducts);
+            double defaultMaxPrice = productService.getMaxPrice(listProducts);
+            UserDetails userDetails = null;
             userDetails = userDetailsService.loadUserByUsername(principal.getName());
+            model.addAttribute("name", userDetails);
+            User user = userService.findByEmail(principal.getName());
+            model.addAttribute("userId", user.getId());
+            model.addAttribute("userDetails", userDetails);
+            session.setAttribute("keyword", keyword);
+            model.addAttribute("keyword", keyword);
+            model.addAttribute("categories", categories);
+            model.addAttribute("size", listProducts.getSize());
+            model.addAttribute("currentPage", pageNo);
+            model.addAttribute("totalPages", listProducts.getTotalPages());
+            model.addAttribute("listProducts", listProducts.getContent());
+            model.addAttribute("minPrice", minPrice);
+            model.addAttribute("maxPrice", maxPrice);
+            model.addAttribute("defaultMinPrice", 9490000);
+            model.addAttribute("defaultMaxPrice", 35000000);
+            return "searchCategory";
         }
-        User user = userService.findByEmail(principal.getName());
-        model.addAttribute("userId", user.getId());
-        model.addAttribute("userDetails", userDetails);
-        session.setAttribute("keyword", keyword);
-        model.addAttribute("keyword", keyword);
-        model.addAttribute("categories", categories);
-        model.addAttribute("size", listProducts.getSize());
-        model.addAttribute("currentPage", pageNo);
-        model.addAttribute("totalPages", listProducts.getTotalPages());
-        model.addAttribute("listProducts", listProducts.getContent());
-        model.addAttribute("minPrice", minPrice);
-        model.addAttribute("maxPrice", maxPrice);
-        model.addAttribute("defaultMinPrice", 9490000);
-        model.addAttribute("defaultMaxPrice", 35000000);
-        return "searchCategory";
     }
 
     @GetMapping("/detail-product/{id}")

@@ -17,11 +17,11 @@
                         <div class="text-center">
                             <h1 class="h4 text-gray-900 mb-4">Khởi tạo tài khoản của người dùng</h1>
                         </div>
-                        <div th:if="${emailError}">
-                            <p class="alert alert-danger" th:text="${emailError}"></p>
+                        <div th:if="${userexist}">
+                            <p class="alert alert-danger">Email đã tồn tại Vui lòng nhập email khác</p>
                         </div>
-                        <div th:if="${errors}">
-                            <p class="alert alert-danger" th:text="${errors}"></p>
+                        <div th:if="${userexistPhone}">
+                            <p class="alert alert-danger">Số điện thoại đã tồn tại</p>
                         </div>
                         <div th:if="${success}">
                             <p class="alert alert-success" th:text="${success}"></p>
@@ -30,12 +30,14 @@
                             <p class="alert alert-danger" th:text="${passwordError}"></p>
                         </div>
 
-                        <form th:action="@{/registration}" method="post" role="form" th:object="${user}">
+
+                        <form id="registerForm" th:action="@{/registration}" method="post" role="form"
+                              th:object="${user}">
                             <div class="form-group">
-                                <label for="fullname">Fullname:</label>
+                                <label for="fullname">Tên đầy đủ:</label>
                                 <div class="input-group">
                                     <input th:field="*{fullname}" type="text" id="fullname" name="fullname"
-                                           class="form-control" placeholder="Enter your fullname" required>
+                                           class="form-control" placeholder="Nhập đầy đủ họ tên" required>
                                     <div class="input-group-append">
                                         <span class="input-group-text"><i class="fas fa-user"></i></span>
                                     </div>
@@ -46,18 +48,18 @@
                                 <label for="email">Email:</label>
                                 <div class="input-group">
                                     <input th:field="*{email}" type="email" id="email" name="email"
-                                           class="form-control" placeholder="Enter your email" required>
+                                           class="form-control" placeholder="Nhập email" required>
                                     <div class="input-group-append">
-                                        <span th:if="${userexist}" class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label for="address">Address:</label>
+                                <label for="address">Địa chỉ:</label>
                                 <div class="input-group">
-                                    <input th:field="*{address}" type="address" id="address" name="address"
-                                           class="form-control" placeholder="Enter your address" required>
+                                    <input th:field="*{address}" type="text" id="address" name="address"
+                                           class="form-control" placeholder="Nhập email" required>
                                     <div class="input-group-append">
                                         <span class="input-group-text"><i class="fas fa-address-card"></i></span>
                                     </div>
@@ -65,10 +67,10 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="phone">Phone:</label>
+                                <label for="phone">Số điện thoại:</label>
                                 <div class="input-group">
-                                    <input th:field="*{phone}" type="phone" id="phone" name="phone"
-                                           class="form-control" placeholder="Enter your phone" required>
+                                    <input th:field="*{phone}" type="text" id="phone" name="phone"
+                                           class="form-control" placeholder="Nhập số điện thoại" required>
                                     <div class="input-group-append">
                                         <span class="input-group-text">
                                             <i class="fa fa-phone" aria-hidden="true"></i>
@@ -78,25 +80,23 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="password">Password:</label>
+                                <label for="password">Mật khẩu:</label>
                                 <div class="input-group">
                                     <input th:field="*{password}" type="password" id="password" name="password"
-                                           class="form-control" placeholder="Enter your password" required>
+                                           class="form-control" placeholder="Nhập mật khẩu" required>
                                     <div class="input-group-append">
                                         <span class="input-group-text"><i class="fas fa-lock"></i></span>
                                     </div>
                                 </div>
                             </div>
 
-                            <button type="submit" class="btn btn-primary btn-block">Register</button>
+                            <button type="submit" class="btn btn-primary btn-block" onclick="SaveRegister(event)">Đăng
+                                ký
+                            </button>
                         </form>
-
                         <hr>
                         <div class="text-center">
-                            <a class="small" th:href="@{/password-request}">Forgot Password?</a>
-                        </div>
-                        <div class="text-center">
-                            <a class="small" th:href="@{/login}">Already have an account? Login!</a>
+                            <a class="small" th:href="@{/login}">Bạn đã có tài khoản Đăng nhập ngay !</a>
                         </div>
                     </div>
                 </div>
@@ -112,5 +112,6 @@
 <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
 <script src="js/sb-admin-2.min.js"></script>
+<script th:src="@{/js/register.js}"></script>
 </body>
 </html>

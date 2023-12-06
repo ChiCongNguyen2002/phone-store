@@ -2,7 +2,6 @@ package com.assignments.ecomerce.controller;
 
 import com.assignments.ecomerce.dto.UserDTO;
 import com.assignments.ecomerce.model.Category;
-import com.assignments.ecomerce.model.Customer;
 import com.assignments.ecomerce.model.Product;
 import com.assignments.ecomerce.model.User;
 import com.assignments.ecomerce.service.CategoryService;
@@ -32,48 +31,64 @@ public class UserController {
     private CategoryService categoryService;
 
     @GetMapping("/registration")
-    public String getRegistrationPage(@ModelAttribute("user") UserDTO userDto, Model model){
+    public String getRegistrationPage(@ModelAttribute("user") UserDTO userDto, Model model) {
         model.addAttribute("user", userDto);
         return "register";
     }
 
     @PostMapping("/registration")
-    public  String saveUser(@ModelAttribute("user") User userDto, Model model){
+    public String saveUser(@ModelAttribute("user") User userDto, Model model) {
         User user = userService.findByEmail(userDto.getEmail());
         if (user != null) {
             model.addAttribute("userexist", user);
             return "register";
         }
+
+        User userPhone = userService.findByPhone(userDto.getPhone());
+        if (userPhone != null) {
+            model.addAttribute("userexistPhone", userPhone);
+            return "register";
+        }
+
         userService.save(userDto);
-        model.addAttribute("message","Registered successfully");
+        model.addAttribute("message", "Registered successfully");
         return "login";
     }
 
     @GetMapping("/login")
-    public String login(){
+    public String login() {
         return "login";
     }
 
     @GetMapping("/indexCustomer")
-    public String userPage (Model model, Principal principal) {
-        User user = userService.findByEmail(principal.getName());
-        List<Product> listProducts = productService.getAllProducts();
-        List<Category> categories = categoryService.getAllCategory();
-        List<Product> topProducts = productService.getData();
-        UserDetails userDetails = null;
-        if (principal != null) {
+    public String userPage(Model model, Principal principal) {
+        if (principal == null) {
+            List<Product> listProducts = productService.getAllProducts();
+            List<Category> categories = categoryService.getAllCategory();
+            List<Product> topProducts = productService.getData();
+
+            model.addAttribute("top10Products", topProducts);
+            model.addAttribute("listProducts", listProducts);
+            model.addAttribute("categories", categories);
+            return "indexUser";
+        } else {
+            User user = userService.findByEmail(principal.getName());
+            List<Product> listProducts = productService.getAllProducts();
+            List<Category> categories = categoryService.getAllCategory();
+            List<Product> topProducts = productService.getData();
+            UserDetails userDetails = null;
             userDetails = userDetailsService.loadUserByUsername(principal.getName());
+            model.addAttribute("userId", user.getId());
+            model.addAttribute("userDetails", userDetails);
+            model.addAttribute("top10Products", topProducts);
+            model.addAttribute("listProducts", listProducts);
+            model.addAttribute("categories", categories);
+            return "indexUser";
         }
-        model.addAttribute("userId", user.getId());
-        model.addAttribute("userDetails", userDetails);
-        model.addAttribute("top10Products", topProducts);
-        model.addAttribute("listProducts", listProducts);
-        model.addAttribute("categories", categories);
-        return "indexUser";
     }
 
     @GetMapping({"/", "/index"})
-    public String adminPage (Model model, Principal principal) {
+    public String adminPage(Model model, Principal principal) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
         model.addAttribute("user", userDetails);
         return "statistical";
@@ -86,16 +101,21 @@ public class UserController {
             userDetails = userDetailsService.loadUserByUsername(principal.getName());
         }
         model.addAttribute("userDetails", userDetails);
+        model.addAttribute("user", userDetails);
         return "indexEmployee";
     }
 
     @GetMapping("/search-user/{pageNo}")
     public String searchUser(@PathVariable("pageNo") int pageNo,
-                                 @RequestParam("keyword") String keyword,
-                                 Model model, Principal principal, HttpSession session) {
+                             @RequestParam("keyword") String keyword,
+                             Model model, Principal principal, HttpSession session) {
 
         Page<User> listUser = userService.searchUser(pageNo, keyword);
+        User user = userService.findByEmail(principal.getName());
+        model.addAttribute("name", user.getFullname());
         session.setAttribute("keyword", keyword);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
+        model.addAttribute("user", userDetails);
         model.addAttribute("keyword", keyword);
         model.addAttribute("size", listUser.getSize());
         model.addAttribute("listUser", listUser);

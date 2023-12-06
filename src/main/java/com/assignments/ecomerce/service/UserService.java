@@ -8,8 +8,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface UserService {
+    User findByPhone(String phone);
     User findByEmail(String email);
-    User save (UserDTO userDto);
+    User saveAdmin(User user);
     User save(User user);
     int countUsersByRole();
     User findByEmailUser(String email);

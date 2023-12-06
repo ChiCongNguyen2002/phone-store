@@ -39,11 +39,7 @@
                                 </div>
 
                                 <div class="login-box-msg" style="color:red" th:if="${param.error}">
-                                    Lỗi Đăng Nhập !!! Sai thông tin đăng nhập hoặc tài khoản đã bị khóa !
-                                </div>
-
-                                <div class="login-box-msg" th:if="${param.logout}">
-                                    Logout Successfully !
+                                     Sai thông tin đăng nhập hoặc tài khoản đã bị khóa !
                                 </div>
 
                                 <form th:action="@{/login}" method="post">

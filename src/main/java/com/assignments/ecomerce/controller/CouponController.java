@@ -17,7 +17,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import java.security.Principal;
 import java.util.List;
 
@@ -45,35 +44,59 @@ public class CouponController {
     }
 
     @GetMapping("/couponCustomer/{pageNo}")
-    public String getAllCouponCustomer(@PathVariable("pageNo") int pageNo,Model model,Principal principal) {
-        User user = userService.findByEmail(principal.getName());
-        List<Product> listProducts = productService.getAllProducts();
-        List<Category> categories = categoryService.getAllCategory();
-        UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
-        Page<Coupon> listCoupon = couponService.pageCoupon(pageNo);
-        model.addAttribute("userId", user.getId());
-        model.addAttribute("currentPage", pageNo);
-        model.addAttribute("totalPages", listCoupon.getTotalPages());
-        model.addAttribute("listCoupon", listCoupon);
-        model.addAttribute("listProducts", listProducts);
-        model.addAttribute("categories", categories);
-        model.addAttribute("userDetails", userDetails);
-        return "couponCustomer";
+    public String getAllCouponCustomer(@PathVariable("pageNo") int pageNo, Model model, Principal principal) {
+        if (principal == null) {
+            List<Product> listProducts = productService.getAllProducts();
+            List<Category> categories = categoryService.getAllCategory();
+            Page<Coupon> listCoupon = couponService.pageCoupon(pageNo);
+            model.addAttribute("currentPage", pageNo);
+            model.addAttribute("totalPages", listCoupon.getTotalPages());
+            model.addAttribute("listCoupon", listCoupon);
+            model.addAttribute("listProducts", listProducts);
+            model.addAttribute("categories", categories);
+            return "couponCustomer";
+        } else {
+            User user = userService.findByEmail(principal.getName());
+            List<Product> listProducts = productService.getAllProducts();
+            List<Category> categories = categoryService.getAllCategory();
+            UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
+            Page<Coupon> listCoupon = couponService.pageCoupon(pageNo);
+            model.addAttribute("name", userDetails);
+            model.addAttribute("userId", user.getId());
+            model.addAttribute("currentPage", pageNo);
+            model.addAttribute("totalPages", listCoupon.getTotalPages());
+            model.addAttribute("listCoupon", listCoupon);
+            model.addAttribute("listProducts", listProducts);
+            model.addAttribute("categories", categories);
+            model.addAttribute("userDetails", userDetails);
+            return "couponCustomer";
+        }
     }
 
     @GetMapping("/detailCoupon/{id}")
-    public String getDetailCouponCustomer(@PathVariable("id") Integer id,Model model,Principal principal) {
-        User user = userService.findByEmail(principal.getName());
-        List<Product> listProducts = productService.getAllProducts();
-        List<Category> categories = categoryService.getAllCategory();
-        Coupon coupon = couponService.findById(id);
-        UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
-        model.addAttribute("userId", user.getId());
-        model.addAttribute("userDetails", userDetails);
-        model.addAttribute("coupon", coupon);
-        model.addAttribute("listProducts", listProducts);
-        model.addAttribute("categories", categories);
-        return "detailCoupon";
+    public String getDetailCouponCustomer(@PathVariable("id") Integer id, Model model, Principal principal) {
+        if(principal == null){
+            List<Product> listProducts = productService.getAllProducts();
+            List<Category> categories = categoryService.getAllCategory();
+            Coupon coupon = couponService.findById(id);
+            model.addAttribute("coupon", coupon);
+            model.addAttribute("listProducts", listProducts);
+            model.addAttribute("categories", categories);
+            return "detailCoupon";
+        }else{
+            User user = userService.findByEmail(principal.getName());
+            List<Product> listProducts = productService.getAllProducts();
+            List<Category> categories = categoryService.getAllCategory();
+            Coupon coupon = couponService.findById(id);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
+            model.addAttribute("name", userDetails);
+            model.addAttribute("userId", user.getId());
+            model.addAttribute("userDetails", userDetails);
+            model.addAttribute("coupon", coupon);
+            model.addAttribute("listProducts", listProducts);
+            model.addAttribute("categories", categories);
+            return "detailCoupon";
+        }
     }
 
     @PostMapping("/add-coupon")
@@ -82,9 +105,9 @@ public class CouponController {
             Coupon coup = couponService.findByCode(coupon.getCode());
             if (coup == null) {
                 couponService.save(coupon);
-            } else if(coup.getStatus() == 0){
+            } else if (coup.getStatus() == 0) {
                 couponService.updateStatus(coup.getId());
-            }else if(coup.getStatus() == 1){
+            } else if (coup.getStatus() == 1) {
                 attributes.addFlashAttribute("error", "Mã Code Đã Tồn Tại Vui lòng nhập Mã khác!");
                 return "redirect:/search-coupon/0?keyword=";
             }
@@ -102,7 +125,7 @@ public class CouponController {
 
     @RequestMapping(value = "/findByIdCoupon/{id}", method = {RequestMethod.PUT, RequestMethod.GET})
     @ResponseBody
-    public Coupon findById(@PathVariable("id") Integer id){
+    public Coupon findById(@PathVariable("id") Integer id) {
         return couponService.findById(id);
     }
 
@@ -146,9 +169,11 @@ public class CouponController {
 
     @GetMapping("/search-coupon/{pageNo}")
     public String searchCoupon(@PathVariable("pageNo") int pageNo,
-                                 @RequestParam("keyword") String keyword,
-                                 Model model, Principal principal) {
+                               @RequestParam("keyword") String keyword,
+                               Model model, Principal principal) {
         Page<Coupon> listCoupon = couponService.searchCoupon(pageNo, keyword);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
+        model.addAttribute("user", userDetails);
         model.addAttribute("size", listCoupon.getSize());
         model.addAttribute("listCoupon", listCoupon);
         model.addAttribute("currentPage", pageNo);

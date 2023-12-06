@@ -36,7 +36,9 @@ public class ProductServiceImpl implements ProductService {
         for (Object[] result : resultProduct) {
             String color = (String) result[0];
             String image = (String) result[1];
+            Integer id = (Integer) result[2];
             Product product = new Product(color, image);
+            product.setId(id);
             products.add(product);
         }
         return products;
@@ -151,6 +153,11 @@ public class ProductServiceImpl implements ProductService {
 
     public Double getTotalRevenue() {
         return productRepository.getTotalRevenue();
+    }
+
+    @Override
+    public List<Product> findAllByCategoryId(Integer categoryId) {
+        return transfer(productRepository.findAllByCategoryId(categoryId));
     }
 
     public Page<Product> pageProducts(int pageNo) {

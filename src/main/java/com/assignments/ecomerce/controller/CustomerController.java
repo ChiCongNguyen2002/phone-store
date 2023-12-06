@@ -8,6 +8,8 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +21,8 @@ import java.util.List;
 @Controller
 public class CustomerController {
     @Autowired
+    UserDetailsService userDetailsService;
+    @Autowired
     private CustomerService customerService;
     @GetMapping("/search-customer/{pageNo}")
     public String searchCustomer(@PathVariable("pageNo") int pageNo,
@@ -28,6 +32,8 @@ public class CustomerController {
         Page<Customer> listCustomer = customerService.searchCustomer(pageNo, keyword);
         session.setAttribute("keyword", keyword);
         model.addAttribute("keyword", keyword);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
+        model.addAttribute("user", userDetails);
         model.addAttribute("size", listCustomer.getSize());
         model.addAttribute("listCustomer", listCustomer);
         model.addAttribute("currentPage", pageNo);
@@ -47,6 +53,8 @@ public class CustomerController {
         model.addAttribute("listCustomer", listCustomer);
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", listCustomer.getTotalPages());
+        UserDetails userDetails  = userDetailsService.loadUserByUsername(principal.getName());
+        model.addAttribute("user", userDetails);
         model.addAttribute("customerNew", new Customer());
         return "CustomerManager";
     }

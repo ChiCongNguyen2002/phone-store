@@ -23,24 +23,27 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Override
+    public User findByPhone(String phone) {
+        return userRepository.findByPhone(phone);
+    }
+
+    @Override
     public User findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
     @Override
-    public User save(UserDTO userDto) {
-        User user = new User(
-                userDto.getEmail(),
-                passwordEncoder.encode(userDto.getPassword()),
-                userDto.getRole(),
-                userDto.getFullname(),
-                userDto.getAddress(),
-                userDto.getPhone());
+    public User saveAdmin(User user) {
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
         return userRepository.save(user);
     }
 
     @Override
     public User save(User user) {
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
+        user.setRole("USER");
         return userRepository.save(user);
     }
 
