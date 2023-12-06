@@ -36,12 +36,7 @@ public class StatisticalController {
         int countOrder = orderService.countOrders();
 
         Double total = productService.getTotalRevenue();
-        DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols(Locale.getDefault());
-        decimalFormatSymbols.setGroupingSeparator('.');
-        DecimalFormat decimalFormat = new DecimalFormat("#,###", decimalFormatSymbols);
-        String formattedPrice = decimalFormat.format(total);
-
-        model.addAttribute("total", formattedPrice);
+        model.addAttribute("total", total);
         model.addAttribute("countOrder", countOrder);
         model.addAttribute("countUser", countUser);
         model.addAttribute("countProduct", countProduct);

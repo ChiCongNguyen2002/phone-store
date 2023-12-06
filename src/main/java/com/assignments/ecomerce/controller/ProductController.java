@@ -64,12 +64,13 @@ public class ProductController {
 
     @GetMapping("/product-details/{id}")
     public String DetailProduct(@PathVariable("id") Integer id, Model model, Principal principal) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
 
+        User user = userService.findByEmail(principal.getName());
         Product product = productService.findById(id);
         List<Product> productDtoList = productService.findAllByCategory(product.getCategory().getName());
         List<Category> categories = categoryService.getAllCategory();
         List<Review> reviews = reviewService.getByProduct(product);
-        User user = userService.findByEmailUser(principal.getName());
         List<Product> productColor = productService.getListColorByNameProduct(product.getName());
         int countReview = reviewService.countReviews(product);
         Double calculateAverageRating = reviewService.calculateAverageRating(product);
@@ -77,10 +78,10 @@ public class ProductController {
        /* Product getProductByColorAndName = productService.getProductByColorAndName(product.getName(), product.getColor());
         System.out.println("color:" + productColor);
         model.addAttribute("getProductByColorAndName", getProductByColorAndName);*/
-        UserDetails userDetails = null;
-        userDetails = userDetailsService.loadUserByUsername(principal.getName());
+        model.addAttribute("name", user.getFullname());
         model.addAttribute("userDetails", userDetails);
         model.addAttribute("user", user);
+        model.addAttribute("userId", user.getId());
         model.addAttribute("countReview", countReview);
         model.addAttribute("calculateAverageRating", calculateAverageRating);
         model.addAttribute("reviewNew", new Review());
@@ -96,6 +97,7 @@ public class ProductController {
     @GetMapping("/ViewByCategory/{pageNo}")
     public String ViewByCategory(@PathVariable("pageNo") int pageNo,
                                  @RequestParam("categoryId") Integer categoryId, Model model, Principal principal) {
+        User user = userService.findByEmail(principal.getName());
         List<Category> categories = categoryService.getAllCategory();
         Page<Product> listProducts = productService.pageProductByCategory(pageNo, categoryId);
         Category category = categoryService.findById(categoryId);
@@ -103,6 +105,7 @@ public class ProductController {
         if (principal != null) {
             userDetails = userDetailsService.loadUserByUsername(principal.getName());
         }
+        model.addAttribute("userId", user.getId());
         model.addAttribute("userDetails", userDetails);
         model.addAttribute("category", category);
         model.addAttribute("categories", categories);
@@ -197,13 +200,14 @@ public class ProductController {
         if (maxPrice == null) {
             maxPrice = Double.MAX_VALUE;
         }
-
         List<Category> categories = categoryService.getAllCategory();
         Page<Product> listProducts = productService.searchProductByOption(pageNo, category, sortOption, color, minPrice, maxPrice);
         UserDetails userDetails = null;
         if (principal != null) {
             userDetails = userDetailsService.loadUserByUsername(principal.getName());
         }
+        User user = userService.findByEmail(principal.getName());
+        model.addAttribute("userId", user.getId());
         model.addAttribute("userDetails", userDetails);
         model.addAttribute("color", color);
         model.addAttribute("minPrice", minPrice);
@@ -235,6 +239,8 @@ public class ProductController {
         if (principal != null) {
             userDetails = userDetailsService.loadUserByUsername(principal.getName());
         }
+        User user = userService.findByEmail(principal.getName());
+        model.addAttribute("userId", user.getId());
         model.addAttribute("userDetails", userDetails);
         session.setAttribute("keyword", keyword);
         model.addAttribute("keyword", keyword);

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="navbar">
+    <!-- TOP HEADER -->
+    <div id="top-header">
+        <div class="container">
+            <ul class="header-links pull-left">
+                <li><a href="#">Xin chào <strong>quý khách</strong></a></li>
+            </ul>
+            <style>
+                #logout-button {
+                    padding: 0;
+                    border: none;
+                    background-color: transparent;
+                }
+
+                #logout_label {
+                    color: #FFF;
+                }
+
+               #logout_label:hover {
+                        color: #D10024;
+               }
+            </style>
+            <form id="logout_form" action="/Login/Logout" method="post">
+            </form>
+
+
+            <ul class="header-links pull-right">
+                <li><a th:href="@{/login}" th:if="${userDetails == null}">Đăng nhập</a></li>
+                <li><a th:href="@{/register}" th:if="${userDetails == null}">Đăng ký</a></li>
+                <li><a th:href="@{/account/0}" th:if="${userDetails != null}" ><i class="fa fa-user-o userID" th:data-user-id="${userId}"></i>Tài khoản</a></li>
+                <li><a th:href="@{/logout}" th:if="${userDetails != null}">Đăng xuất</a></li>
+            </ul>
+
+        </div>
+    </div>
+    <div id="header">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="header-logo">
+                        <a href="/indexCustomer" class="logo">
+                            <img src="/img/phone.png" alt="">
+                        </a>
+                    </div>
+                </div>
+                <!-- /LOGO -->
+                <!-- SEARCH BAR -->
+                <div class="col-md-6">
+                    <div class="header-search">
+                        <form th:action="@{/search-productByKeyword/0}" method="get">
+                            <input type="text" name="keyword" class="input" placeholder="Tìm kiếm ở đây"
+                                   style="border-radius: 20px 0px 0px 20px ;" th:value="${keyword}"/>
+                            <button type="submit" class="search-btn">Tìm</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- /SEARCH BAR -->
+                <!-- ACCOUNT -->
+                <div class="col-md-3 clearfix">
+                    <div class="header-ctn">
+                        <!-- Cart -->
+                        <div class="dropdown">
+                            <a th:href="@{/cart}">
+                                <i class="fa fa-shopping-cart"></i>
+                                <span>Giỏ hàng</span>
+                                <div class="qty sumQuantity" id="lbl_number_of_items_header">0</div>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- /Cart -->
+                </div>
+            </div>
+            <!-- /ACCOUNT -->
+        </div>
+        <!-- row -->
+    </div>
+    <!-- container -->
+</div>
+
+</body>
+<script th:fragment="ajax_script">
+var button = document.querySelector('.add-to-cart-link');
+var iconElement = document.querySelector('.fa.fa-user-o.userID');
+var uid = iconElement.getAttribute('data-user-id');
+console.log(uid);
+var productId = button.getAttribute('data-product-id');
+button.addEventListener('click', function(event) {
+    addProduct(uid, productId);
+    event.preventDefault();
+});
+
+function fetchDataOnModalShow() {
+    $.ajax({
+        url: "/api/index",
+        type: "GET",
+        data: {
+            userId: uid
+        },
+    }).done(function(response) {
+        var responseLength = response.length;
+        console.log(responseLength);
+        var sumQuantity = document.querySelector(".sumQuantity");
+        sumQuantity.innerHTML = responseLength;
+
+    }).fail(function(error) {
+        console.error(error);
+    });
+}
+
+function addProduct(userId, productId) {
+    console.log(userId);
+    console.log(productId);
+    $.ajax({
+        url: "/api/add",
+        type: "POST",
+        data: {
+            userId: userId,
+            productId: productId
+        },
+        success: function(response) {
+            totalQuantity = 0;
+            fetchDataOnModalShow();
+            Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: 'Đã thêm vào giỏ hàng',
+                showConfirmButton: false,
+                timer: 1500
+            })
+
+        },
+        error: function(xhr, status, error) {
+            console.error(error);
+        }
+    });
+}
+$(document).ready(function() {
+    fetchDataOnModalShow();
+});
+</script>
+</html>

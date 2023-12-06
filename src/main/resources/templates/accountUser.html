@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="https://www.thymeleaf.org/">
 <head th:replace="~{indexUser::header}">
 </head>
 <body>
 
+<div th:replace="~{ajax_fragment::navbar}"></div>
 <nav th:replace="~{indexUser::navigation}"></nav>
 
 <!-- BREADCRUMB -->
@@ -136,5 +137,32 @@
     </div>
 </section>
 <footer th:replace="~{indexUser::footer}"></footer>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script th:fragment="ajax_script">
+    var iconElement = document.querySelector('.fa.fa-user-o.userID');
+    var uid = iconElement.getAttribute('data-user-id');
+    console.log(uid)
+    function fetchDataOnModalShow() {
+        $.ajax({
+            url: "/api/index",
+            type: "GET",
+            data: {
+                userId: uid
+            },
+        }).done(function(response) {
+            var responseLength = response.length;
+            console.log(responseLength);
+            var sumQuantity = document.querySelector(".sumQuantity");
+            sumQuantity.innerHTML = responseLength;
+
+        }).fail(function(error) {
+            console.error(error);
+        });
+    }
+
+    window.onload = function() {
+      fetchDataOnModalShow();
+    };
+</script>
 </body>
 </html>

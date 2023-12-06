@@ -133,7 +133,7 @@
 
 <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
-    <form id="categoryForm" th:action="@{/add-account}" method="post" th:object="${accountNew}">
+    <form id="accountForm" th:action="@{/add-account}" method="post" th:object="${accountNew}">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -152,8 +152,8 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="address" class="col-form-label">Địa Chỉ:</label>
-                        <input type="text" th:field="*{address}" id="address" name="address" class="form-control" placeholder="Enter your address" required>
+                        <label for="addressAdd" class="col-form-label">Địa Chỉ:</label>
+                        <input type="text" th:field="*{address}" id="addressAdd" name="address" class="form-control" placeholder="Enter your address" required>
                     </div>
 
                     <div class="form-group">
@@ -176,13 +176,13 @@
 
                     <div class="form-group">
                         <label for="password">Xác Nhận Mật Khẩu</label>
-                        <input type="password" class="form-control" id="confirmPassword" name="password" placeholder="Xác nhận mật khẩu" required>
+                        <input type="password" class="form-control" id="confirmPassword" placeholder="Xác nhận mật khẩu" required>
                     </div>
                 </div>
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                    <button type="submit" class="btn btn-primary" onclick="SaveEmoloyee(event)">Lưu Lại</button>
+                    <button type="submit" class="btn btn-primary" onclick="SaveAccount(event)">Lưu Lại</button>
                 </div>
             </div>
         </div>
@@ -204,4 +204,5 @@
         return true;
     }
 </script>
+<script th:src="@{/js/account.js}"></script>
 </body>

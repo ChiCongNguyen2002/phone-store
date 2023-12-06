@@ -1,6 +1,5 @@
 package com.assignments.ecomerce.controller;
 
-import com.assignments.ecomerce.dto.UserDTO;
 import com.assignments.ecomerce.model.Category;
 import com.assignments.ecomerce.model.OrderDetail;
 import com.assignments.ecomerce.model.Orders;
@@ -20,11 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 @Controller
 public class AccountController {
@@ -49,6 +45,7 @@ public class AccountController {
         User user = userService.findByEmailUser(principal.getName());
         Page<Orders> listOrder = orderService.pageOrdersById(pageNo, user.getId());
         List<Category> categories = categoryService.getAllCategory();
+        model.addAttribute("userId", user.getId());
         model.addAttribute("categories", categories);
         model.addAttribute("size", listOrder.getSize());
         model.addAttribute("listOrder", listOrder);
@@ -66,6 +63,8 @@ public class AccountController {
         List<Category> categories = categoryService.getAllCategory();
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
+        User user1 = userService.findByEmailUser(principal.getName());
+        model.addAttribute("userId", user1.getId());
         model.addAttribute("userDetails", userDetails);
         model.addAttribute("categories", categories);
         model.addAttribute("userDetail", user);
@@ -85,6 +84,8 @@ public class AccountController {
         }
 
         List<OrderDetail> listOrderDetail = orderDetailService.findAllByOrderId(orderId);
+        User user = userService.findByEmailUser(principal.getName());
+        model.addAttribute("userId", user.getId());
         model.addAttribute("order", order);
         model.addAttribute("listOrderDetail", listOrderDetail);
         model.addAttribute("userDetails", userDetails);
@@ -106,22 +107,23 @@ public class AccountController {
     }
 
     @PostMapping("/add-account")
-    public String AddAccount(@ModelAttribute("accountNew") User userDto, Model model,RedirectAttributes attributes) {
-/*      User user = userService.findByEmail(userDto.getEmail());
+    public String AddAccount(@ModelAttribute("accountNew") User userDto, Model model, RedirectAttributes attributes) {
+        User user = userService.findByEmail(userDto.getEmail());
         if (user != null) {
             model.addAttribute("userexist", user);
+            attributes.addFlashAttribute("error", "Email đã tồn tại Vui lòng nhập email khác");
             return "redirect:/search-user/0?keyword=";
-        }*/
+        }
         try {
-        userService.save(userDto);
-        model.addAttribute("accountNew", userDto);
-        attributes.addFlashAttribute("success", "Added successfully");
+            userService.save(userDto);
+            model.addAttribute("accountNew", userDto);
+            attributes.addFlashAttribute("success", "Added successfully");
         } catch (DataIntegrityViolationException e1) {
             e1.printStackTrace();
-            attributes.addFlashAttribute("failed", "Duplicate name of category, please check again!");
+            attributes.addFlashAttribute("error", "Duplicate name of account, please check again!");
         } catch (Exception e2) {
             e2.printStackTrace();
-            attributes.addFlashAttribute("failed", "Error Server");
+            attributes.addFlashAttribute("error", "Error Server");
         }
         return "redirect:/search-user/0?keyword=";
     }

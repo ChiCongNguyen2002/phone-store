@@ -29,7 +29,7 @@
 
 <body>
 <!-- HEADER -->
-<header>
+<div th:fragment="navbar">
     <!-- TOP HEADER -->
     <div id="top-header">
         <div class="container">
@@ -58,7 +58,7 @@
             <ul class="header-links pull-right">
                 <li><a th:href="@{/login}" th:if="${userDetails == null}">Đăng nhập</a></li>
                 <li><a th:href="@{/register}" th:if="${userDetails == null}">Đăng ký</a></li>
-                <li><a th:href="@{/account/0}" th:if="${userDetails != null}"><i class="fa fa-user-o"></i>Tài khoản</a></li>
+                <li><a th:href="@{/account/0}" th:if="${userDetails != null}" ><i class="fa fa-user-o userID" th:data-user-id="${userId}"></i>Tài khoản</a></li>
                 <li><a th:href="@{/logout}" th:if="${userDetails != null}">Đăng xuất</a></li>
             </ul>
 
@@ -95,7 +95,7 @@
                             <a th:href="@{/cart}">
                                 <i class="fa fa-shopping-cart"></i>
                                 <span>Giỏ hàng</span>
-                                <div class="qty" id="lbl_number_of_items_header">0</div>
+                                <div class="qty sumQuantity" id="lbl_number_of_items_header">0</div>
                             </a>
                         </div>
                     </div>
@@ -108,8 +108,7 @@
     </div>
     <!-- container -->
     </div>
-    <!-- /MAIN HEADER -->
-</header>
+</div>
 
 <nav th:fragment="navigation" id="navigation">
     <div class="container">
@@ -469,6 +468,33 @@
 <script>
     var siteController = new SiteController();
     siteController.initialize();
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script th:fragment="ajax_script">
+    var iconElement = document.querySelector('.fa.fa-user-o.userID');
+    var uid = iconElement.getAttribute('data-user-id');
+    console.log(uid)
+    function fetchDataOnModalShow() {
+        $.ajax({
+            url: "/api/index",
+            type: "GET",
+            data: {
+                userId: uid
+            },
+        }).done(function(response) {
+            var responseLength = response.length;
+            console.log(responseLength);
+            var sumQuantity = document.querySelector(".sumQuantity");
+            sumQuantity.innerHTML = responseLength;
+
+        }).fail(function(error) {
+            console.error(error);
+        });
+    }
+
+    window.onload = function() {
+      fetchDataOnModalShow();
+    };
 </script>
 </body>
 </html>

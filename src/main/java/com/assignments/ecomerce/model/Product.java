@@ -97,5 +97,16 @@ public class Product {
         this.color = color;
         this.image = image;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "\"id\": " + id +
+                ", \"name\": \"" + name.toString().trim().replace("\n", "") + "\"" +
+                ", \"price\": " + price +
+                ", \"quantity\": " + quantity +
+                ", \"image\": \"" + image + "\"" +
+                "}";
+    }
 }
 

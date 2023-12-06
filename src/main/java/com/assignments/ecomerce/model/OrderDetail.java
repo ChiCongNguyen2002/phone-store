@@ -3,13 +3,16 @@ package com.assignments.ecomerce.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 
-@Getter
 @Entity
 @Table(name="OrderDetail")
 public class OrderDetail {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+
+    @EmbeddedId
+    private OrderDetailId id;
+
+    public void setId(OrderDetailId id) {
+        this.id = id;
+    }
 
     @ManyToOne
     @JoinColumn(name = "orderId")
@@ -18,14 +21,38 @@ public class OrderDetail {
     @JoinColumn(name = "productId")
     private Product product;
 
+    public OrderDetailId getId() {
+        return id;
+    }
+
+    public Orders getOrder() {
+        return order;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public Double getUnitPrice() {
+        return unitPrice;
+    }
+
+    public OrderDetail(OrderDetailId id, Orders order, Product product, Integer quantity, Double unitPrice) {
+        this.id = id;
+        this.order = order;
+        this.product = product;
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
+    }
     private Integer quantity;
     private Double unitPrice;
 
     public OrderDetail(){}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public void setOrder(Orders order) {
         this.order = order;
@@ -43,8 +70,7 @@ public class OrderDetail {
         this.unitPrice = unitPrice;
     }
 
-    public OrderDetail(Integer id, Orders order, Product product, Integer quantity, Double unitPrice) {
-        this.id = id;
+    public OrderDetail(Orders order, Product product, Integer quantity, Double unitPrice) {
         this.order = order;
         this.product = product;
         this.quantity = quantity;

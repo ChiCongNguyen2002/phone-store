@@ -3,9 +3,11 @@ package com.assignments.ecomerce.controller;
 import com.assignments.ecomerce.model.Category;
 import com.assignments.ecomerce.model.Coupon;
 import com.assignments.ecomerce.model.Product;
+import com.assignments.ecomerce.model.User;
 import com.assignments.ecomerce.service.CategoryService;
 import com.assignments.ecomerce.service.CouponService;
 import com.assignments.ecomerce.service.ProductService;
+import com.assignments.ecomerce.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -21,6 +23,8 @@ import java.util.List;
 
 @Controller
 public class CouponController {
+    @Autowired
+    private UserService userService;
     @Autowired
     UserDetailsService userDetailsService;
     @Autowired
@@ -42,11 +46,12 @@ public class CouponController {
 
     @GetMapping("/couponCustomer/{pageNo}")
     public String getAllCouponCustomer(@PathVariable("pageNo") int pageNo,Model model,Principal principal) {
-
+        User user = userService.findByEmail(principal.getName());
         List<Product> listProducts = productService.getAllProducts();
         List<Category> categories = categoryService.getAllCategory();
         UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
         Page<Coupon> listCoupon = couponService.pageCoupon(pageNo);
+        model.addAttribute("userId", user.getId());
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", listCoupon.getTotalPages());
         model.addAttribute("listCoupon", listCoupon);
@@ -58,10 +63,12 @@ public class CouponController {
 
     @GetMapping("/detailCoupon/{id}")
     public String getDetailCouponCustomer(@PathVariable("id") Integer id,Model model,Principal principal) {
+        User user = userService.findByEmail(principal.getName());
         List<Product> listProducts = productService.getAllProducts();
         List<Category> categories = categoryService.getAllCategory();
         Coupon coupon = couponService.findById(id);
         UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
+        model.addAttribute("userId", user.getId());
         model.addAttribute("userDetails", userDetails);
         model.addAttribute("coupon", coupon);
         model.addAttribute("listProducts", listProducts);

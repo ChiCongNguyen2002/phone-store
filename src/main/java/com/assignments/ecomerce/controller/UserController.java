@@ -56,7 +56,7 @@ public class UserController {
 
     @GetMapping("/indexCustomer")
     public String userPage (Model model, Principal principal) {
-
+        User user = userService.findByEmail(principal.getName());
         List<Product> listProducts = productService.getAllProducts();
         List<Category> categories = categoryService.getAllCategory();
         List<Product> topProducts = productService.getData();
@@ -64,6 +64,7 @@ public class UserController {
         if (principal != null) {
             userDetails = userDetailsService.loadUserByUsername(principal.getName());
         }
+        model.addAttribute("userId", user.getId());
         model.addAttribute("userDetails", userDetails);
         model.addAttribute("top10Products", topProducts);
         model.addAttribute("listProducts", listProducts);
@@ -108,6 +109,4 @@ public class UserController {
     public String permission() {
         return "permission";
     }
-
-
 }

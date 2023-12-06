@@ -34,6 +34,7 @@ public class OrderDetailController {
         }
         model.addAttribute("listOrder", listOrder);
         List<OrderDetail> listOrderDetail = orderDetailService.findAllByOrderId(orderId);
+        System.out.println(listOrderDetail.get(0));
         model.addAttribute("listOrderDetail", listOrderDetail);
         return "orderdetail";
     }

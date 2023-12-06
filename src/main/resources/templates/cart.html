@@ -2,6 +2,10 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{indexUser::header}">
 </head>
+
+
+<div th:replace="~{ajax_fragment::navbar}"></div>
+<nav th:replace="~{indexUser::navigation}"></nav>
 <body>
 <!-- BREADCRUMB -->
 <div id="breadcrumb" class="section">
@@ -26,48 +30,68 @@
     <div class="main container">
         <div class="cart">
 
-            <div class="page-content page-order" th:if="${size > 0}">
+            <div class="page-content page-order">
                 <div class="page-title">
                     <h2>Giỏ hàng</h2>
                 </div>
 
-                <div class="order-detail-content" th:if="${size > 0}">
+                <div class="order-detail-content">
                     <div class="table-responsive">
                         <table class="table table-bordered cart_summary" id="tbl_cart" >
                             <thead>
-                            <tr>
-                                <th class="cart_product">Hình ảnh</th>
-                                <th>Tên</th>
-                                <th class="text-center">Số lượng trong kho</th>
-                                <th>Đơn giá</th>
-                                <th>Số lượng mua</th>
-                                <th>Tổng cộng</th>
-                                <th class="action"><i class="fa fa-trash"></i></th>
-                            </tr>
+                                <tr>
+                                    <th class="cart_product">Hình ảnh</th>
+                                    <th>Tên</th>
+                                    <th>Đơn giá</th>
+                                    <th>Số lượng mua</th>
+                                    <th>Tổng cộng</th>
+                                    <th class="action"><i class="fa fa-trash"></i></th>
+                                </tr>
                             </thead>
-                            <tbody id="cart_body">
+                            <tbody class="cart_body">
+                                <tr>
+                                    <th>1</th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th class="action"><i class="fa fa-trash"></i></th>
+                                </tr>
                             </tbody>
-
+                            <tfoot>
                             <tr>
-                                <td colspan="2"></td>
-                                <td colspan="4"><strong>Tổng giá đơn hàng</strong></td>
-                                <td colspan="2"><strong><span id="lbl_total"></span> <span>&#8363;</span> </strong></td>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th class="row">
+                                    <div class="col">
+                                        <div class="p-3">Tổng đơn hàng</div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="p-3">Row column 2</div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="p-3">Row column 3</div>
+                                    </div>
+                                </th>
+                                <th class="row">
+                                    <div class="col">
+                                        <div class="p-3 sumPrice">Row column 1</div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="p-3">Row column 2</div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="p-3">Row column 3</div>
+                                    </div>
+                                </th>
                             </tr>
-                            <tr id="discount_amount_row">
-                                <td colspan="2"></td>
-                                <td colspan="4"><strong>Số tiền giảm</strong></td>
-                                <td colspan="2"><strong><span id="lbl_discount_amount"></span> <span>&#8363;</span>
-                                </strong></td>
-                            </tr>
-                            <tr id="total_discounted_row">
-                                <td colspan="2"></td>
-                                <td colspan="4"><strong>Tổng giá đơn hàng đã giảm</strong></td>
-                                <td colspan="2"><strong><span id="lbl_total_discounted"></span> <span>&#8363;</span>
-                                </strong></td>
-                            </tr>
+                            </tfoot>
+
                         </table>
                     </div>
-                    <div class="form-group" id="coupon-input" style="width:300px" th:if="${size > 0}">
+                    <div class="form-group" id="coupon-input" style="width:300px">
                         <label>Bạn có coupon giảm giá?</label>
                         <div class="input-group">
                             <input type="text" class="form-control" id="coupon-input-control"
@@ -87,17 +111,127 @@
                 </div>
             </div>
 
-            <div th:unless="${size > 0}" class="empty-cart-container">
+            <!--<div th:unless="${size > 0}" class="empty-cart-container">
                 <img src="/img/empty-cart.jpg" alt="Hình ảnh trống">
                 <p>Giỏ hàng của bạn còn trống</p>
                 <a href="/indexCustomer">
                     <button type="button">Mua ngay</button>
                 </a>
-            </div>
+            </div>-->
         </div>
     </div>
 </section>
 
+<script>
+var button = document.querySelector('.add-to-cart-link');
+var iconElement = document.querySelector('.fa.fa-user-o.userID');
+var uid = iconElement.getAttribute('data-user-id');
 
+function fetchDataOnModalShow() {
+    $.ajax({
+        url: "/api/index",
+        type: "GET",
+        data: {
+            userId: uid
+        },
+    }).done(function(response) {
+        console.log(response);
+        var responseLength = response.length;
+        console.log(responseLength);
+        var sumQuantity = document.querySelector(".sumQuantity");
+        sumQuantity.innerHTML = responseLength;
+
+    }).fail(function(error) {
+        console.error(error);
+    });
+}
+
+function addProduct(userId, productId) {
+    console.log(userId);
+    console.log(productId);
+    $.ajax({
+        url: "/api/add",
+        type: "POST",
+        data: {
+            userId: userId,
+            productId: productId
+        },
+        success: function(response) {
+            totalQuantity = 0;
+            fetchDataOnModalShow();
+            Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: 'Đã thêm vào giỏ hàng',
+                showConfirmButton: false,
+                timer: 1500
+            })
+
+        },
+        error: function(xhr, status, error) {
+            console.error(error);
+        }
+    });
+}
+
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script th:fragment="ajax_script">
+    var iconElement = document.querySelector('.fa.fa-user-o.userID');
+    var uid = iconElement.getAttribute('data-user-id');
+    console.log(uid)
+    function fetchDataOnModalShow() {
+        $.ajax({
+            url: "/api/index",
+            type: "GET",
+            data: {
+                userId: uid
+            },
+        }).done(function(response) {
+            updateModalContent(response);
+            var responseLength = response.length;
+            console.log(responseLength);
+            var sumQuantity = document.querySelector(".sumQuantity");
+            sumQuantity.innerHTML = responseLength;
+
+        }).fail(function(error) {
+            console.error(error);
+        });
+    }
+
+    window.onload = function() {
+      fetchDataOnModalShow();
+    };
+</script>
+<script>
+    function updateModalContent(response) {
+    // Clear the existing content in the modal body
+    var cartBody = $('.cart_body');
+    cartBody.empty();
+    var sum = 0;
+    response.forEach(function(item) {
+        var product = JSON.parse(item.product);
+        var quantity = item.quantity;
+        sum+=product.price * quantity;
+        // Create the HTML structure for each item
+        var itemHTML = `
+            <tr>
+                <td><img src="/img/${product.image}" alt="${product.name}" width="64" height="64"></td>
+                <td>${product.name}</td>
+                <td>${product.price}</td>
+                <td>${quantity}</td>
+                <td>${product.price * quantity}</td>
+                <td class="action"><i class="fa fa-trash"></i></td>
+            </tr>`;
+        console.log(itemHTML);
+
+        // Append the item HTML to the modal body
+        cartBody.append(itemHTML);
+    });
+    var sumPriceTable = $('.sumPrice');
+    sumPriceTable.html(sum);
+}
+
+</script>
 </body>
 </html>

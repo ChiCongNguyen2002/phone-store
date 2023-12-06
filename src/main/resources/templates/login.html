@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th = "https://www.thymeleaf.org/">
+<html lang="en" xmlns:th="https://www.thymeleaf.org/">
 <head>
 
     <meta charset="utf-8">
@@ -33,36 +33,50 @@
                         <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
                         <div class="col-lg-6">
                             <div class="p-5">
+
                                 <div class="text-center">
                                     <h1 class="h4 text-gray-900 mb-4">Chào mừng bạn đến với SmartPhone</h1>
                                 </div>
+
+                                <div class="login-box-msg" style="color:red" th:if="${param.error}">
+                                    Lỗi Đăng Nhập !!! Sai thông tin đăng nhập hoặc tài khoản đã bị khóa !
+                                </div>
+
+                                <div class="login-box-msg" th:if="${param.logout}">
+                                    Logout Successfully !
+                                </div>
+
                                 <form th:action="@{/login}" method="post">
                                     <div class="form-group">
                                         <label for="username">Email:</label>
                                         <div class="input-group">
-                                            <input type="email" class="form-control" id="username" name="username" placeholder="Nhập địa chỉ email">
+                                            <input type="email" class="form-control" id="username" name="username"
+                                                   placeholder="Nhập địa chỉ email">
                                             <div class="input-group-append">
                                                 <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                                             </div>
                                         </div>
                                     </div>
+
                                     <div class="form-group">
                                         <label for="password">Mật khẩu:</label>
                                         <div class="input-group">
-                                            <input type="password" class="form-control" id="password" name="password" placeholder="Nhập mật khẩu">
+                                            <input type="password" class="form-control" id="password" name="password"
+                                                   placeholder="Nhập mật khẩu">
                                             <div class="input-group-append">
                                                 <span class="input-group-text"><i class="fas fa-lock"></i></span>
                                             </div>
                                         </div>
                                     </div>
+
                                     <button type="submit" class="btn btn-primary btn-block">Đăng nhập</button>
                                 </form>
                                 <hr>
                                 <div class="text-center">
-                                    <a class="small" th:href = "@{/password-request}">Forgot Password?</a>
+                                    <a class="small" th:href="@{/password-request}">Quên mật khẩu?</a>
                                 </div>
                                 <div class="text-center">
-                                    <a class="small" th:href = "@{/registration}">Create an Account!</a>
+                                    <a class="small" th:href="@{/registration}">Chưa Có Tài Khoản ? Tạo tài khoản!</a>
                                 </div>
                             </div>
                         </div>
