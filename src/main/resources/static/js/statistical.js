@@ -28,92 +28,6 @@ dateToInput.addEventListener('input', function() {
 });
 
 var formResponse;
-function saveStatistical(event) {
-    event.preventDefault();
-    if (savedFromDate === '' || savedToDate === '') {
-        alert('Vui lòng chọn cả hai ngày.');
-        return;
-    }
-
-    if (savedFromDate > savedToDate) {
-        alert('Ngày bắt đầu không được lớn hơn ngày kết thúc.');
-        return;
-    }
-    localStorage.setItem('savedFromDate', savedFromDate);
-    localStorage.setItem('savedToDate', savedToDate);
-
-    document.getElementById("editForm").submit();
-}
-
-    document.addEventListener('DOMContentLoaded', function() {
-    var selectOption = localStorage.getItem("selectedChartType") || "top10Products";
-    document.getElementById("chartType").value = selectOption; // Đặt giá trị mặc định cho select
-    displayChart();
-
-    var form = document.querySelector("form");
-    form.addEventListener("submit", function(event) {
-        event.preventDefault(); // Ngăn chặn trình duyệt load lại trang
-        displayChart();
-    });
-
-//    console.log(selectOption);
-    hideAllDivs(); // Ẩn tất cả các div lúc tải trang
-                if (selectOption === "top10Products") {
-                    showDiv("top10ProductsDiv");
-                            if(chart != null){
-                                chart.destroy();
-                                draw_chart(data_chartProduct);
-                            }
-                            else{
-                                draw_chart(data_chartProduct);
-                            }
-                }else if (selectOption === "top5Users") {
-                    showDiv("top5UsersDiv");
-                            if(chart != null){
-                                chart.destroy();
-                                draw_chart(data_chartCustomer);
-                            }
-                            else{
-                            draw_chart(data_chartCustomer);
-                            }
-                }else if (selectOption === "weeklyRevenue") {
-                    showDiv("weeklyRevenueDiv");
-                            if(chart != null){
-                                chart.destroy();
-                                draw_chart(data_chartWeekly);
-                            }
-                            else{
-                                draw_chart(data_chartWeekly);
-                            }
-                }else if (selectOption === "monthlyRevenue") {
-                    showDiv("monthlyRevenueDiv");
-                            if(chart != null){
-                                chart.destroy();
-                                draw_chart(data_chart);
-                            }
-                            else{
-                                draw_chart(data_chart);
-                            }
-                } else if (selectOption === "top5Employee") {
-                    showDiv("top5EmployeeDiv");
-                    if(chart != null){
-                        chart.destroy();
-                        raw_chart(data_chartEmployee);
-                    }
-                    else{
-                         draw_chart(data_chartEmployee);
-                    }
-                }
-    if (sessionStorage.getItem('firstLoad') === null) {
-        hideAllDivs();
-      sessionStorage.setItem('firstLoad', 'loaded');
-    }
-    var savedChartType = localStorage.getItem("selectedChartType");
-    if (savedChartType) {
-        document.getElementById("chartType").value = savedChartType;
-        displayChart();
-    }
-});
 
 function create_chart(data_chart){
     var chart = new CanvasJS.Chart("chartContainer", {
@@ -136,10 +50,115 @@ function create_chart(data_chart){
    return chart;
 }
 
-function draw_chart(data_chart){
-    var chart = create_chart(data_chart);
+function draw_chart(chart_data){
+    var chart = create_chart(chart_data);
     chart.render();
 }
+
+function saveStatistical(event) {
+    event.preventDefault();
+    if (savedFromDate === '' || savedToDate === '') {
+        alert('Vui lòng chọn cả hai ngày.');
+        return;
+    }
+
+    if (savedFromDate > savedToDate) {
+        alert('Ngày bắt đầu không được lớn hơn ngày kết thúc.');
+        return;
+    }
+    localStorage.setItem('savedFromDate', savedFromDate);
+    localStorage.setItem('savedToDate', savedToDate);
+    sessionStorage.setItem("flag", 1);
+    document.getElementById("editForm").submit();
+}
+
+    document.addEventListener('DOMContentLoaded', function() {
+    var selectOption = localStorage.getItem("selectedChartType") || "top10Products";
+    document.getElementById("chartType").value = selectOption; // Đặt giá trị mặc định cho select
+    displayChart();
+
+    var form = document.querySelector("form");
+    form.addEventListener("submit", function(event) {
+        event.preventDefault(); // Ngăn chặn trình duyệt load lại trang
+        displayChart();
+    });
+//    console.log(selectOption);
+    hideAllDivs(); // Ẩn tất cả các div lúc tải trang
+    var flag = sessionStorage.getItem("flag");
+    if (flag == 1 || flag == null){
+                if (selectOption === "top10Products") {
+                    showDiv("top10ProductsDiv");
+
+                }else if (selectOption === "top5Users") {
+                    showDiv("top5UsersDiv");
+
+                }else if (selectOption === "weeklyRevenue") {
+                    showDiv("weeklyRevenueDiv");
+
+                }else if (selectOption === "monthlyRevenue") {
+                    showDiv("monthlyRevenueDiv");
+
+                } else if (selectOption === "top5Employee") {
+                    showDiv("top5EmployeeDiv");
+
+                }
+    if (sessionStorage.getItem('firstLoad') === null) {
+        hideAllDivs();
+      sessionStorage.setItem('firstLoad', 'loaded');
+    }
+    }
+    else {
+        var selectOption = localStorage.getItem("selectedChartType");
+            if (selectOption === "top10Products") {
+                                        if(chart != null){
+                                            chart.destroy();
+                                            draw_chart(data_chartProduct);
+                                        }
+                                        else{
+                                            draw_chart(data_chartProduct);
+                                        }
+                            }else if (selectOption === "top5Users") {
+                                        if(chart != null){
+                                            chart.destroy();
+                                            draw_chart(data_chartCustomer);
+                                        }
+                                        else{
+                                        draw_chart(data_chartCustomer);
+                                        }
+                            }else if (selectOption === "weeklyRevenue") {
+                                        if(chart != null){
+                                            chart.destroy();
+                                            draw_chart(data_chartWeekly);
+                                        }
+                                        else{
+                                            draw_chart(data_chartWeekly);
+                                        }
+                            }else if (selectOption === "monthlyRevenue") {
+                                        if(chart != null){
+                                            chart.destroy();
+                                            draw_chart(data_chart);
+                                        }
+                                        else{
+                                            draw_chart(data_chart);
+                                        }
+                            } else if (selectOption === "top5Employee") {
+                                if(chart != null){
+                                    chart.destroy();
+                                    raw_chart(data_chartEmployee);
+                                }
+                                else{
+                                     draw_chart(data_chartEmployee);
+                                }
+                            }
+    }
+    var savedChartType = localStorage.getItem("selectedChartType");
+    if (savedChartType) {
+        document.getElementById("chartType").value = savedChartType;
+        displayChart();
+    }
+});
+
+
 
 function displayChart() {
     var selectOption = document.getElementById("chartType").value;
@@ -177,13 +196,11 @@ function hideAllDivs() {
     div2.style.display = "none";
     div3.style.display = "none";
     div4.style.display = "none";
-    chart_content.style.display = "none";
 }
 
 function showChart(){
-    chart_content.style.display = "block";
-    var div_current = document.getElementById(divId_current);
-    div_current.style.display = "none";
+    sessionStorage.setItem("flag", 2);
+    document.getElementById("editForm").submit();
 }
 
 function showDiv(divId) {

@@ -55,7 +55,12 @@
 
             <div class="col-md-5">
                 <div class="product-details">
-                    <h2 class="product-name" th:text="${productDetail.name}"></h2>
+                    <h2 class="product-name">
+                        <span th:text="${productDetail.name}"></span>
+                        <a th:href="@{/compare(product=${productDetail.id})}" class="compare-button">
+                            + So sánh
+                        </a>
+                    </h2>
                     <div class="contain">
                         <div>
                             <p><span th:text="${calculateAverageRating}"></span></p>
