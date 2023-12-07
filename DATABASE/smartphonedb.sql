@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 07, 2023 at 09:06 AM
+-- Generation Time: Dec 07, 2023 at 10:49 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -114,7 +114,7 @@ CREATE TABLE `customer` (
 
 INSERT INTO `customer` (`id`, `fullname`, `address`, `phone`, `email`, `userId`, `statusCustomer`) VALUES
 (1, 'Nguyen Chi Cong', 'Cà Mau', '0948399484', 'congkhpro291002@gmail.com', 7, 1),
-(2, 'Bui Duy Hung', 'Binh Chanh', '0823147350', 'duyhung2202@gmail.com', 8, 1);
+(2, 'Nguyen Van Tien Dụng', 'Binh Chanh', '0948399484', 'tiendung2209@gmail.com', 8, 1);
 
 -- --------------------------------------------------------
 
@@ -177,7 +177,9 @@ INSERT INTO `importbill` (`id`, `supplierId`, `importDate`, `Status`, `total`) V
 (1, 1, '2022-10-22', 1, 1500000),
 (2, 2, '2023-11-24', 2, 1500000),
 (27, 1, '2023-12-06', 1, 15000000),
-(28, 1, '2023-12-07', 1, 15000000);
+(28, 1, '2023-12-07', 1, 300000000),
+(29, 1, '2023-12-07', 1, 135000000),
+(30, 1, '2023-12-07', 1, 100000000);
 
 -- --------------------------------------------------------
 
@@ -202,7 +204,9 @@ INSERT INTO `importbilldetail` (`id`, `importId`, `productId`, `quantity`, `unit
 (2, 1, 132, 3, 13000000),
 (3, 2, 132, 1, 230000),
 (24, 27, 142, 1, 15000000),
-(25, 28, 142, 3, 5000000);
+(25, 28, 142, 10, 30000000),
+(26, 29, 142, 4, 33750000),
+(27, 30, 149, 5, 20000000);
 
 -- --------------------------------------------------------
 
@@ -223,9 +227,7 @@ CREATE TABLE `orderdetail` (
 
 INSERT INTO `orderdetail` (`orderId`, `productId`, `quantity`, `unitPrice`) VALUES
 (12, 142, 4, 13000000),
-(12, 150, 2, 230000),
-(13, 142, 4, 24000000),
-(13, 147, 2, 34900000);
+(12, 150, 2, 230000);
 
 -- --------------------------------------------------------
 
@@ -252,8 +254,7 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `customerId`, `employeeId`, `orderDate`, `Status`, `couponId`, `paymentMethod`, `total`, `ShipName`, `ShipAddress`, `ShipPhoneNumber`) VALUES
-(12, 1, 2, '2023-12-07', 4, 1, 'COD', 1500000, 'Dinh Thinh', 'Ca Mau', '0129293493'),
-(13, 2, 3, '2023-11-01', 1, 2, 'COD', 25000000, 'Thiên Đạt', 'Bến Tre', '0912670750');
+(12, 1, 2, '2023-12-07', 2, 1, 'COD', 1500000, 'Dinh Thinh', 'Ca Mau', '0129293493');
 
 -- --------------------------------------------------------
 
@@ -270,28 +271,35 @@ CREATE TABLE `product` (
   `categoryId` int(11) NOT NULL,
   `quantity` int(11) NOT NULL,
   `color` varchar(50) NOT NULL,
-  `status` tinyint(4) NOT NULL
+  `status` tinyint(4) NOT NULL,
+  `ScreenSize` varchar(50) DEFAULT NULL,
+  `FrontCamera` varchar(50) DEFAULT NULL,
+  `Chipset` varchar(50) DEFAULT NULL,
+  `RAM` varchar(50) DEFAULT NULL,
+  `InternalStorage` varchar(50) DEFAULT NULL,
+  `Battery` varchar(50) DEFAULT NULL,
+  `importPrice` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `product`
 --
 
-INSERT INTO `product` (`id`, `name`, `price`, `Image`, `description`, `categoryId`, `quantity`, `color`, `status`) VALUES
-(131, 'iPhone 15 Pro Max 256GB', 34920000, 'IPhone_1.jpeg', 'iPhone 15 Pro Max đem lại một diện mạo hoàn toàn mới và sở hữu nhiều tính năng ưu việt cùng công nghệ tiên tiến. Hãy khám phá các đánh giá chi tiết về sản phẩm về khía cạnh thiết kế, màn hình, hiệu năng, thời lượng pin và bộ camera độc đáo qua các thông tin dưới đây!', 30, 100, 'đen', 0),
-(132, 'iPhone 15 Pro Max 256GB', 34290000, 'IPhone_2.png', 'Đẹp Xứng Đáng với chất lượng', 30, 100, 'xanh', 1),
-(133, 'iPhone 15 Pro Max 256GB', 34290000, 'IPhone_3.jpeg', 'Đẹp Xanh', 30, 100, 'Trắng', 1),
-(142, 'iPhone 15 Plus VN/a', 25000000, 'iphone-15-plus-black-thumbtz-650x650.png.png', 'iPhone 15 Plus VN/a', 30, 134, 'đen', 1),
-(143, 'iPhone 15 Plus VN/a', 25590000, 'iphone-15-plus yellow.png', 'iPhone 15 Plus VN/a', 30, 100, 'Vàng', 1),
-(144, 'iPhone 15 Plus VN/a', 25590000, 'iphone15pink.jpg', 'iPhone 15 Plus VN/a', 30, 100, 'hồng', 1),
-(145, 'Samsung Galaxy S23 Ultra 8/256GB', 25900000, 'SamsungGalaxyS23_BLACK.png', 'Samsung Galaxy S23 Ultra 8/256GB', 31, 100, 'Đen', 1),
-(146, 'Samsung Galaxy S23 Ultra 8/256GB', 25590000, 'SamsungGalaxyS23_WHITE.png', 'Samsung Galaxy S23 Ultra 8/256GB', 31, 100, 'Trắng', 1),
-(147, 'Samsung Galaxy S23 Ultra 8/256GB', 25590000, 'SamsungGalaxyS23_GREEN.png', 'Samsung Galaxy S23 Ultra 8/256GB', 31, 100, 'xanh lá', 1),
-(149, 'Samsung Galaxy A54 5G 8/128GB', 8690000, 'SamsungGalaxyA5_BLACK.png', 'Samsung Galaxy A54 5G 8/128GB', 31, 100, 'đen', 1),
-(150, 'Samsung Galaxy A54 5G 8/128GB', 8690000, 'SamsungGalaxyA5_TIM.png', 'Samsung Galaxy A54 5G 8/128GB', 31, 110, 'Tím', 1),
-(151, 'Vivo V29e 8GB-256GB', 8690000, 'Vivo_V29e.png', 'Vivo V29e 8GB-256GB', 32, 100, 'xanh', 1),
-(152, 'Vivo Y17s 4/128GB', 3890000, 'Vivo_Y17s.png', 'Vivo Y17s 4/128GB', 32, 100, 'Tím', 1),
-(153, 'Vivo Y36 8-128GB', 5490000, 'Vivo_Y36.png', 'Vivo Y36 8-128GB', 32, 100, 'xanh', 1);
+INSERT INTO `product` (`id`, `name`, `price`, `Image`, `description`, `categoryId`, `quantity`, `color`, `status`, `ScreenSize`, `FrontCamera`, `Chipset`, `RAM`, `InternalStorage`, `Battery`, `importPrice`) VALUES
+(131, 'iPhone 15 Pro Max 256GB', 34920000, 'IPhone_1.jpeg', 'iPhone 15 Pro Max đem lại một diện mạo hoàn toàn mới và sở hữu nhiều tính năng ưu việt cùng công nghệ tiên tiến. Hãy khám phá các đánh giá chi tiết về sản phẩm về khía cạnh thiết kế, màn hình, hiệu năng, thời lượng pin và bộ camera độc đáo qua các thông tin dưới đây!', 30, 100, 'đen', 1, '6.7 inches\n', '12MP, ƒ/1.9', 'A17 Pro\n', '8 GB\n', '256 GB\n', '4422 mAh\n', NULL),
+(132, 'iPhone 15 Pro Max 256GB', 34290000, 'IPhone_2.png', 'Đẹp Xứng Đáng với chất lượng', 30, 100, 'xanh', 1, '6.7 inches', '12MP, ƒ/1.9', 'A17 Pro', '8 GB', '256 GB', '4422 mAh', NULL),
+(133, 'iPhone 15 Pro Max 256GB', 34290000, 'IPhone_2.png', 'Đẹp Xứng Đáng với chất lượng', 30, 100, 'xanh', 1, '6.7 inches', '12MP, ƒ/1.9', 'A17 Pro', '8 GB', '256 GB', '4422 mAh', NULL),
+(142, 'iPhone 15 Plus VN/a', 37125000, 'iphone-15-plus-black-thumbtz-650x650.png.png', 'iPhone 15 Plus VN/a', 30, 145, 'đen', 1, '6.7 inches', '12MP, ƒ/1.9', 'Apple A16 Bionic', '6 GB', '512 GB', '4383 mAh', 33750000),
+(143, 'iPhone 15 Plus VN/a', 25590000, 'iphone-15-plus yellow.png', 'iPhone 15 Plus VN/a', 30, 100, 'Vàng', 1, '6.7 inches', '12MP, ƒ/1.9', 'Apple A16 Bionic', '6 GB', '512 GB', '4383 mAh', NULL),
+(144, 'iPhone 15 Plus VN/a', 25590000, 'iphone15pink.jpg', 'iPhone 15 Plus VN/a', 30, 100, 'hồng', 1, '6.7 inches', '12MP, ƒ/1.9', 'Apple A16 Bionic', '6 GB', '512 GB', '4383 mAh', NULL),
+(145, 'Samsung Galaxy S23 Ultra 8/256GB', 25900000, 'SamsungGalaxyS23_BLACK.png', 'Samsung Galaxy S23 Ultra 8/256GB', 31, 100, 'Đen', 1, '6.8 inches', '12MP F2.2 (Dual Pixel AF)', 'Snapdragon 8 Gen 2 (4 nm)', '8 GB', '256 GB', '5,000mAh', NULL),
+(146, 'Samsung Galaxy S23 Ultra 8/256GB', 25590000, 'SamsungGalaxyS23_WHITE.png', 'Samsung Galaxy S23 Ultra 8/256GB', 31, 100, 'Trắng', 1, '6.8 inches', '12MP F2.2 (Dual Pixel AF)', 'Snapdragon 8 Gen 2 (4 nm)', '8 GB', '256 GB', '5,000mAh', NULL),
+(147, 'Samsung Galaxy S23 Ultra 8/256GB', 25590000, 'SamsungGalaxyS23_GREEN.png', 'Samsung Galaxy S23 Ultra 8/256GB', 31, 100, 'xanh lá', 1, '6.8 inches', '12MP F2.2 (Dual Pixel AF)', 'Snapdragon 8 Gen 2 (4 nm)', '8 GB', '256 GB', '5,000mAh', NULL),
+(149, 'Samsung Galaxy A54 5G 8/128GB', 22000000, 'SamsungGalaxyA5_BLACK.png', 'Samsung Galaxy A54 5G 8/128GB', 31, 105, 'đen', 1, '6.4 inches', 'Camera góc rộng: 32 MP, f/2.2, 26mm, 1/2.8\", 0.8µm', 'Exynos 1380 (5 nm)', '8 GB', '128 GB', '5000 mAh', 20000000),
+(150, 'Samsung Galaxy A54 5G 8/128GB', 8690000, 'SamsungGalaxyA5_TIM.png', 'Samsung Galaxy A54 5G 8/128GB', 31, 110, 'Tím', 1, '6.4 inches', 'Camera góc rộng: 32 MP, f/2.2, 26mm, 1/2.8\", 0.8µm', 'Exynos 1380 (5 nm)', '8 GB', '128 GB', '5000 mAh', NULL),
+(151, 'Vivo V29e 8GB-256GB', 8690000, 'Vivo_V29e.png', 'Vivo V29e 8GB-256GB', 32, 100, 'xanh', 1, '6.67 inches', '50 MP, f/2.0, AF', 'Qualcomm Snapdragon 695', '8 GB', '256 GB', '4800 mAh', NULL),
+(152, 'Vivo Y17s 4/128GB', 3890000, 'Vivo_Y17s.png', 'Vivo Y17s 4/128GB', 32, 100, 'Tím', 1, '6.56 inches', '8 MP, f/2.0', 'MediaTek Helio G85', '4 GB', '128 GB', '5000 mAh', NULL),
+(153, 'Vivo Y36 8-128GB', 5490000, 'Vivo_Y36.png', 'Vivo Y36 8-128GB', 32, 100, 'xanh', 1, '6.64 inches', '16 MP, f/2.45', 'Snapdragon 680 8 nhân', '8 GB', '128 GB', '5,000 mAh', NULL);
 
 -- --------------------------------------------------------
 
@@ -363,7 +371,7 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`id`, `email`, `password`, `fullname`, `address`, `phone`, `role`, `status`) VALUES
 (7, 'congkhpro291002@gmail.com', '$2a$10$4zzxBP0Ot2GonLPW4mNnz.BkeS9tX0ZWM5FL4rPHc607QNVyzUGgm', 'Nguyen Chi Cong', 'Ca Mau', '0129293493', 'USER', 1),
-(8, 'duyhung2202@gmail.com', '$2a$10$/RK4hgagmY7w/8CyYhQ.E.qcgFiI1ANppwn3Pq6l0oOFRjwvUOxSm', 'Bui Duy Hung', 'Dak Lak', '0823147350', 'USER', 1),
+(8, 'congnguyen@gmail.com', '$2a$10$/RK4hgagmY7w/8CyYhQ.E.qcgFiI1ANppwn3Pq6l0oOFRjwvUOxSm', 'Bui Duy Hung', 'Dak Lak', '0823147350', 'USER', 1),
 (9, 'admin@gmail.com', '$2a$10$cFfZBkooDqE7HzlM0b9dm.CGFs7XE3bpUVPB.iSIJyB/OnQKIPAHm', 'Mai Ngoc Canh', 'Ben Tre', '0347349402', 'ADMIN', 1),
 (11, 'chicong123@gmail.com', '$2a$10$fvULYA6JnR2wssmuqEE.rOdXJ0/yK1poTTI2NqfB.qmizyWiWxPNS', 'Nguyen Van Tien Dung', 'Ha Noi', '0867453290', 'EMPLOYEE', 1),
 (26, 'tuongtanduy2004@gmail.com', '$2a$10$JCkdXm7DaACyfkRxuAnQHOL46eQ31qrBLgGX2KoUxfBHweZK82Hv6', 'Lai Quang Vinh', 'Long An', '0346457860', 'EMPLOYEE', 1),
@@ -511,19 +519,19 @@ ALTER TABLE `forgot_password_token`
 -- AUTO_INCREMENT for table `importbill`
 --
 ALTER TABLE `importbill`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `importbilldetail`
 --
 ALTER TABLE `importbilldetail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `product`
