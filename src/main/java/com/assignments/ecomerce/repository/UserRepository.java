@@ -16,7 +16,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("SELECT COUNT(u) FROM User u WHERE u.role = 'USER'")
     int countUsersByRole();
 
-    @Query("SELECT u FROM User u WHERE u.email = :email")
+    @Query("SELECT u FROM User u WHERE u.email = :email and u.role = 'USER'")
     User findByEmailUser(String email);
 
     @Query("SELECT c from User c where CONCAT(c.fullname,c.address,c.phone,c.email) like %?1%")

@@ -28,12 +28,12 @@ public interface OrderRepository extends JpaRepository<Orders, Integer> {
     @Query("SELECT o FROM Orders o WHERE o.customer.id = :userId")
     Page<Orders> pageOrdersById(Pageable pageable, @Param("userId") Integer userId);
 
-    @Query("SELECT u.fullname,o.total,SUM(od.quantity) AS sumQuantity " +
+    @Query("SELECT c.fullname, o.total, SUM(od.quantity) AS sumQuantity " +
             "FROM OrderDetail od " +
             "JOIN od.order o " +
-            "JOIN o.customer u " +
+            "JOIN o.customer c " +
             "WHERE o.orderDate BETWEEN :dateFrom AND :dateTo " +
-            "GROUP BY u.fullname " +
+            "GROUP BY c.fullname " +
             "ORDER BY sumQuantity DESC")
     List<Object[]> getTop5UsersWithSumQuantity(@Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo);
 

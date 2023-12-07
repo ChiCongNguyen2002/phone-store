@@ -54,7 +54,7 @@
                                 <tr th:each="orders,index : ${listOrder}">
                                     <form id="orderDetailForm" th:action="@{/OrderDetailByUser/0}" method="post">
                                         <input type="hidden" name="orderId" th:value="${orders.Id}">
-                                        <td class="text-center" th:text="${orders.user.getFullname()}"></td>
+                                        <td class="text-center" th:text="${orders.customer.getFullname()}"></td>
                                         <td class="text-center" th:text="${orders.orderDate}"></td>
                                         <td>
                                          <span class="text-center" th:switch="${orders.Status}">

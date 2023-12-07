@@ -96,7 +96,16 @@ public class ProductController {
                                  @RequestParam("categoryId") Integer categoryId, Model model, Principal principal) {
 
         if (principal == null) {
-            return "register";
+            List<Category> categories = categoryService.getAllCategory();
+            Page<Product> listProducts = productService.pageProductByCategory(pageNo, categoryId);
+            Category category = categoryService.findById(categoryId);
+            model.addAttribute("category", category);
+            model.addAttribute("categories", categories);
+            model.addAttribute("size", listProducts.getSize());
+            model.addAttribute("currentPage", pageNo);
+            model.addAttribute("totalPages", listProducts.getTotalPages());
+            model.addAttribute("listProducts", listProducts.getContent());
+            return "subcategory";
         } else {
             User user = userService.findByEmail(principal.getName());
             List<Category> categories = categoryService.getAllCategory();

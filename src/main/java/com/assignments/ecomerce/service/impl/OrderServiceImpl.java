@@ -110,6 +110,7 @@ public class OrderServiceImpl implements OrderService {
                     Long sumQuantity = (Long) result[2];
                     TopCustomer topCustomer = new TopCustomer(fullname, total, sumQuantity);
                     tops.add(topCustomer);
+                    System.out.println(fullname + "=" + total + "=" + sumQuantity);
                 }
                 return new ArrayList<>(tops);
             case "top10Products":
