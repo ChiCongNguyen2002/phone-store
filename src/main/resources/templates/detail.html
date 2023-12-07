@@ -46,7 +46,7 @@
                                 </tr>
                                 <tr th:each="product,index : ${listProducts}">
                                     <th>Giá Tiền:</th>
-                                    <td th:text="${formattedPrice.replace(',', '.') + ' VNĐ'}"></td>
+                                    <td th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + 'VNĐ'}"></td>
                                 </tr>
                                 <tr th:each="product : ${listProducts}">
                                     <th>Ảnh Đại Diện:</th>

@@ -15,6 +15,7 @@ public class User {
     private String fullname;
     private String address;
     private String phone;
+    private Integer status;
 
     public User(String email, String password, String role, String fullname) {
         this.email = email;
@@ -45,6 +46,17 @@ public class User {
         this.phone = phone;
     }
 
+    public User(Integer id, String email, String password, String role, String fullname, String address, String phone, Integer status) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.fullname = fullname;
+        this.address = address;
+        this.phone = phone;
+        this.status = status;
+    }
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -71,6 +83,10 @@ public class User {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }
 

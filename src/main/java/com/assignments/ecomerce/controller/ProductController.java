@@ -297,6 +297,7 @@ public class ProductController {
         if (principal != null) {
             userDetails = userDetailsService.loadUserByUsername(principal.getName());
         }
+        model.addAttribute("user", userDetails);
         model.addAttribute("userDetails", userDetails);
         model.addAttribute("categories", categories);
         model.addAttribute("listProducts", newProduct);

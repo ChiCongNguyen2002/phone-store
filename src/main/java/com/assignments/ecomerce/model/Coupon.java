@@ -12,7 +12,7 @@ public class Coupon {
     private Integer id;
     private String code;
     private int count;
-    private String promotion;
+    private int promotion;
     private String description;
     private Integer status;
 
@@ -20,7 +20,7 @@ public class Coupon {
         this.status = status;
     }
 
-    public Coupon(Integer id, String code, int count, String promotion, String description) {
+    public Coupon(Integer id, String code, int count, int promotion, String description) {
         this.id = id;
         this.code = code;
         this.count = count;
@@ -28,7 +28,7 @@ public class Coupon {
         this.description = description;
     }
 
-    public Coupon(String code, int count, String promotion, String description) {
+    public Coupon(String code, int count, int promotion, String description) {
         this.code = code;
         this.count = count;
         this.promotion = promotion;
@@ -50,7 +50,7 @@ public class Coupon {
         this.count = count;
     }
 
-    public void setPromotion(String promotion) {
+    public void setPromotion(int promotion) {
         this.promotion = promotion;
     }
 
