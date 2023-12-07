@@ -36,7 +36,7 @@
 
                     <div class="statistics-card order-statistics">
                         <h2>Tổng doanh thu</h2>
-                        <h5><span th:text="${total + ' VNĐ'}"></span></h5>
+                        <h5><span th:text="${#numbers.formatDecimal(total, 0, 'COMMA', 0, 'POINT') + 'VNĐ'}"></span></h5>
                     </div>
                 </div>
 
