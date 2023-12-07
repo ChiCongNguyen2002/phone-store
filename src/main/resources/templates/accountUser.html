@@ -125,7 +125,7 @@
                                     <td class="text-center" th:text="${userDetail.email}"></td>
                                     <td class="text-center" th:text="${userDetail.phone}"></td>
                                     <td class="text-center">
-                                        <a id="editButton" th:if="${userDetail != null}" class="text-center" th:href="@{/EditAccount/0/{userId}(userId=${userDetail.id})}"><i class="fas fa-edit"></i></a>
+                                        <a id="editButton" th:if="${userDetail != null}" class="text-center" th:href="@{/EditAccount/0/{userId}(userId=${userDetail.id})}">Cập nhật</a>
                                     </td>
                                 </tr>
                                 </tbody>

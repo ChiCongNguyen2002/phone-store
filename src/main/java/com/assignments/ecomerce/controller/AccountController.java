@@ -44,7 +44,6 @@ public class AccountController {
         Page<Orders> listOrder = orderService.pageOrdersById(pageNo, customer.getId());
         List<Category> categories = categoryService.getAllCategory();
         UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
-        System.out.println("listOrder"+listOrder.getContent().size());
         model.addAttribute("name", userDetails);
         model.addAttribute("userId", user.getId());
         model.addAttribute("categories", categories);
