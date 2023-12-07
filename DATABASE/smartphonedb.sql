@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 07, 2023 at 10:49 AM
+-- Generation Time: Dec 07, 2023 at 01:17 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -90,7 +90,8 @@ INSERT INTO `coupon` (`id`, `code`, `count`, `promotion`, `description`, `status
 (1, 'CM3', 40, '3', 'Khuyến mãi 3%', 1),
 (2, 'CM4', 30, '10', 'Khuyến mãi 10%', 1),
 (3, 'CM5', 5, '5', 'Khuyến mãi 5%', 1),
-(13, 'C', 1, '1', '1', 0);
+(13, 'C', 1, '1', '1', 0),
+(14, 'CM6', 1, '1', 'Không khuyến mãi ', 1);
 
 -- --------------------------------------------------------
 
@@ -286,7 +287,7 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`id`, `name`, `price`, `Image`, `description`, `categoryId`, `quantity`, `color`, `status`, `ScreenSize`, `FrontCamera`, `Chipset`, `RAM`, `InternalStorage`, `Battery`, `importPrice`) VALUES
-(131, 'iPhone 15 Pro Max 256GB', 34920000, 'IPhone_1.jpeg', 'iPhone 15 Pro Max đem lại một diện mạo hoàn toàn mới và sở hữu nhiều tính năng ưu việt cùng công nghệ tiên tiến. Hãy khám phá các đánh giá chi tiết về sản phẩm về khía cạnh thiết kế, màn hình, hiệu năng, thời lượng pin và bộ camera độc đáo qua các thông tin dưới đây!', 30, 100, 'đen', 1, '6.7 inches\n', '12MP, ƒ/1.9', 'A17 Pro\n', '8 GB\n', '256 GB\n', '4422 mAh\n', NULL),
+(131, 'iPhone 15 Pro Max 256GB', 34920000, 'IPhone_1.jpeg', 'iPhone 15 Pro Max đem lại một diện mạo hoàn toàn mới và sở hữu nhiều tính năng ưu việt cùng công nghệ tiên tiến. Hãy khám phá các đánh giá chi tiết về sản phẩm về khía cạnh thiết kế, màn hình, hiệu năng, thời lượng pin và bộ camera độc đáo qua các thông tin dưới đây!', 30, 100, 'đen', 0, NULL, NULL, NULL, '8 GB\n', NULL, NULL, NULL),
 (132, 'iPhone 15 Pro Max 256GB', 34290000, 'IPhone_2.png', 'Đẹp Xứng Đáng với chất lượng', 30, 100, 'xanh', 1, '6.7 inches', '12MP, ƒ/1.9', 'A17 Pro', '8 GB', '256 GB', '4422 mAh', NULL),
 (133, 'iPhone 15 Pro Max 256GB', 34290000, 'IPhone_2.png', 'Đẹp Xứng Đáng với chất lượng', 30, 100, 'xanh', 1, '6.7 inches', '12MP, ƒ/1.9', 'A17 Pro', '8 GB', '256 GB', '4422 mAh', NULL),
 (142, 'iPhone 15 Plus VN/a', 37125000, 'iphone-15-plus-black-thumbtz-650x650.png.png', 'iPhone 15 Plus VN/a', 30, 145, 'đen', 1, '6.7 inches', '12MP, ƒ/1.9', 'Apple A16 Bionic', '6 GB', '512 GB', '4383 mAh', 33750000),
@@ -495,7 +496,7 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT for table `coupon`
 --
 ALTER TABLE `coupon`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `customer`
@@ -537,7 +538,7 @@ ALTER TABLE `orders`
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=155;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=161;
 
 --
 -- AUTO_INCREMENT for table `review`
