@@ -49,9 +49,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Page<Orders> pageOrdersById(int pageNo, Integer userId) {
+    public Page<Orders> pageOrdersById(int pageNo, Integer customerId) {
         Pageable pageable = PageRequest.of(pageNo, 4);
-        return orderRepository.pageOrdersById(pageable, userId);
+        return orderRepository.pageOrdersById(pageable, customerId);
     }
 
     public Page<Orders> searchOrders(int pageNo, String keyword) {

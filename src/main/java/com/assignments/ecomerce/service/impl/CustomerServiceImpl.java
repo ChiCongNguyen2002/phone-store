@@ -67,6 +67,11 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository.getById(id);
     }
 
+    @Override
+    public Customer findByEmailCustomer(String email) {
+        return customerRepository.findByEmailCustomer(email);
+    }
+
     private Page toPage(List<User> list, Pageable pageable) {
         if (pageable.getOffset() >= list.size()) {
             return Page.empty();

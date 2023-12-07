@@ -39,15 +39,21 @@ function saveCoupon(event) {
   var promotion = document.getElementById("promotionAdd").value;
   var description = document.getElementById("descriptionAdd").value;
 
-  if (code === "" || count === "" || promotion === "" || description === "") {
+ if (code === "" || count === "" || promotion === "" || description === "") {
     alert("Vui lòng điền đầy đủ thông tin");
     return;
   }
-   // Kiểm tra nếu số lượng không được để trống và phải là số nguyên dương
-     if (count.trim() === "" || !Number.isInteger(parseInt(count)) || parseInt(count) <= 0) {
-       alert("Vui lòng nhập số lượng sản phẩm hợp lệ.");
-       return;
-     }
+
+   if (count.trim() === "" || !Number.isInteger(parseInt(count)) || parseInt(count) <= 0) {
+      alert("Vui lòng nhập số lượng sản phẩm hợp lệ.");
+      return;
+   }
+
+   if (promotion.trim() === "" || !Number.isInteger(parseInt(promotion)) || parseInt(promotion) <= 0) {
+      alert("Vui lòng nhập phần trăm giảm giá hợp lệ.");
+      return;
+   }
+
   document.getElementById("couponForm").submit();
 }
 

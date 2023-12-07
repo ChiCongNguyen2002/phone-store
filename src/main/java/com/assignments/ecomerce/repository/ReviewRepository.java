@@ -21,5 +21,5 @@ public interface ReviewRepository extends JpaRepository<Review,Integer> {
     @Query(value = "SELECT ROUND(AVG(r.rating), 1) FROM Review r WHERE r.product = :product")
     Double calculateAverageRating(Product product);
 
-    boolean existsByUserIdAndProductId(Integer userId, Integer productId);
+    boolean existsByCustomerIdAndProductId(Integer userId, Integer productId);
 }

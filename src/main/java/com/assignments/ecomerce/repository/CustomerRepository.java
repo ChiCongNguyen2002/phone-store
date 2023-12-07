@@ -18,4 +18,7 @@ public interface CustomerRepository extends JpaRepository<Customer,Integer> {
 
     @Query(value = "SELECT c from Customer c WHERE c.statusCustomer = 1 and c.phone = ?1 OR c.email = ?2")
     Customer findByPhoneAndEmail(String phone, String email);
+
+    @Query("SELECT u FROM Customer u WHERE u.email = :email")
+    Customer findByEmailCustomer(String email);
 }

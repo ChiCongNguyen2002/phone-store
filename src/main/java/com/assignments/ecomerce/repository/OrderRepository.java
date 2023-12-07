@@ -25,8 +25,8 @@ public interface OrderRepository extends JpaRepository<Orders, Integer> {
     @Query("SELECT o from Orders o")
     Page<Orders> pageOrders(Pageable pageable);
 
-    @Query("SELECT o FROM Orders o WHERE o.customer.id = :userId")
-    Page<Orders> pageOrdersById(Pageable pageable, @Param("userId") Integer userId);
+    @Query("SELECT o FROM Orders o WHERE o.customer.id = :customerId")
+    Page<Orders> pageOrdersById(Pageable pageable, @Param("customerId") Integer customerId);
 
     @Query("SELECT c.fullname, o.total, SUM(od.quantity) AS sumQuantity " +
             "FROM OrderDetail od " +

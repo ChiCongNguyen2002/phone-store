@@ -34,8 +34,8 @@ public class ReviewServiceImpl implements ReviewService{
         return reviewRepository.calculateAverageRating(product);
     }
 
-    public boolean existsByUserIdAndProductId(Integer userId, Integer productId) {
-        return reviewRepository.existsByUserIdAndProductId(userId,productId);
+    public boolean existsByCustomerIdAndProductId(Integer userId, Integer productId) {
+        return reviewRepository.existsByCustomerIdAndProductId(userId,productId);
     }
 
 }

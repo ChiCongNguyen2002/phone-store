@@ -42,7 +42,7 @@ public class ProductController {
     @PostMapping("/add-review")
     public String add(@ModelAttribute("reviewNew") Review review, Model model, RedirectAttributes attributes) {
         try {
-            boolean exists = reviewService.existsByUserIdAndProductId(review.getUser().getId(), review.getProduct().getId());
+            boolean exists = reviewService.existsByCustomerIdAndProductId(review.getCustomer().getId(), review.getProduct().getId());
             if (exists) {
                 attributes.addFlashAttribute("error", "Duplicate name of user and productId, please check again!");
                 return "redirect:/product-details/" + review.getProduct().getId();

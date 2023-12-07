@@ -1,14 +1,8 @@
 package com.assignments.ecomerce.controller;
 
 import com.assignments.ecomerce.dto.UserDTO;
-import com.assignments.ecomerce.model.Category;
-import com.assignments.ecomerce.model.OrderDetail;
-import com.assignments.ecomerce.model.Orders;
-import com.assignments.ecomerce.model.User;
-import com.assignments.ecomerce.service.CategoryService;
-import com.assignments.ecomerce.service.OrderDetailService;
-import com.assignments.ecomerce.service.OrderService;
-import com.assignments.ecomerce.service.UserService;
+import com.assignments.ecomerce.model.*;
+import com.assignments.ecomerce.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -35,6 +29,9 @@ public class AccountController {
     private UserService userService;
 
     @Autowired
+    private CustomerService customerService;
+
+    @Autowired
     private OrderDetailService orderDetailService;
 
     @Autowired
@@ -43,9 +40,11 @@ public class AccountController {
     @GetMapping("/account/{pageNo}")
     public String showAccountUser(@PathVariable("pageNo") int pageNo, Model model, Principal principal) {
         User user = userService.findByEmailUser(principal.getName());
-        Page<Orders> listOrder = orderService.pageOrdersById(pageNo, user.getId());
+        Customer customer = customerService.findByEmailCustomer(principal.getName());
+        Page<Orders> listOrder = orderService.pageOrdersById(pageNo, customer.getId());
         List<Category> categories = categoryService.getAllCategory();
         UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
+        System.out.println("listOrder"+listOrder.getContent().size());
         model.addAttribute("name", userDetails);
         model.addAttribute("userId", user.getId());
         model.addAttribute("categories", categories);

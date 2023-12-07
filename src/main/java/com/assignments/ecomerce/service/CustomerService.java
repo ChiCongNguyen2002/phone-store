@@ -16,4 +16,6 @@ public interface CustomerService {
     Customer save(Customer customer);
     Customer updateStatus(Integer id);
     Customer findById(Integer id);
+
+    Customer findByEmailCustomer(String email);
 }
