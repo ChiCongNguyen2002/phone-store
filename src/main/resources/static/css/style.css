@@ -827,7 +827,7 @@
      -ms-transform: translate(-50%, -5px);
      transform: translate(-50%, -5px);
 }
- .product .add-to-cart-link {
+ .product .add-to-cart {
      position: absolute;
      left: 1px;
      right: 1px;
@@ -842,12 +842,12 @@
      transition: 0.2s all;
      z-index: 2;
 }
- .product:hover .add-to-cart-link {
+ .product:hover .add-to-cart {
      -webkit-transform: translateY(100%);
      -ms-transform: translateY(100%);
      transform: translateY(100%);
 }
- .product .add-to-cart-link .add-to-cart-link {
+ .product .add-to-cart .add-to-cart-link {
      position: relative;
      border: 2px solid transparent;
      height: 40px;
@@ -860,7 +860,7 @@
      -webkit-transition: 0.2s all;
      transition: 0.2s all;
 }
- .product .add-to-cart-link .add-to-cart-link>i {
+ .product .add-to-cart .add-to-cart-link>i {
      position: absolute;
      left: 0;
      top: 0;
@@ -871,13 +871,13 @@
      opacity: 0;
      visibility: hidden;
 }
- .product .add-to-cart-link .add-to-cart-link:hover {
+ .product .add-to-cart .add-to-cart-link:hover {
      background-color: #FFF;
      color: #D10024;
      border-color: #D10024;
      padding: 0px 30px 0px 50px;
 }
- .product .add-to-cart-link .add-to-cart-link:hover>i {
+ .product .add-to-cart .add-to-cart-link:hover>i {
      opacity: 1;
      visibility: visible;
 }
@@ -1236,7 +1236,7 @@
  .product-details .add-to-cart {
      margin-bottom: 30px;
 }
- .product-details .add-to-cart .add-to-cart {
+ .product-details .add-to-cart .add-to-cart-link {
      position: relative;
      border: 2px solid transparent;
      height: 40px;
@@ -1249,7 +1249,7 @@
      -webkit-transition: 0.2s all;
      transition: 0.2s all;
 }
- .product-details .add-to-cart .add-to-cart>i {
+ .product-details .add-to-cart .add-to-cart-link>i {
      position: absolute;
      left: 0;
      top: 0;
@@ -1260,13 +1260,13 @@
      opacity: 0;
      visibility: hidden;
 }
- .product-details .add-to-cart .add-to-cart:hover {
+ .product-details .add-to-cart .add-to-cart-link:hover {
      background-color: #FFF;
      color: #D10024;
      border-color: #D10024;
      padding: 0px 30px 0px 50px;
 }
- .product-details .add-to-cart .add-to-cart:hover>i {
+ .product-details .add-to-cart .add-to-cart-link:hover>i {
      opacity: 1;
      visibility: visible;
 }

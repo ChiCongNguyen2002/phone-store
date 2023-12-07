@@ -86,15 +86,19 @@
 </div>
 
 </body>
+
 <script th:fragment="ajax_script">
 var button = document.querySelector('.add-to-cart-link');
 var iconElement = document.querySelector('.fa.fa-user-o.userID');
 var uid = iconElement.getAttribute('data-user-id');
-console.log(uid);
 var productId = button.getAttribute('data-product-id');
+
+
 button.addEventListener('click', function(event) {
-    addProduct(uid, productId);
-    event.preventDefault();
+   var quantityInput = document.getElementById('quantity-input');
+   var quantityValue = quantityInput.value;
+   addProduct(uid, productId, quantityValue);
+   event.preventDefault();
 });
 
 function fetchDataOnModalShow() {
@@ -106,7 +110,6 @@ function fetchDataOnModalShow() {
         },
     }).done(function(response) {
         var responseLength = response.length;
-        console.log(responseLength);
         var sumQuantity = document.querySelector(".sumQuantity");
         sumQuantity.innerHTML = responseLength;
 
@@ -115,15 +118,17 @@ function fetchDataOnModalShow() {
     });
 }
 
-function addProduct(userId, productId) {
+function addProduct(userId, productId, quantity) {
     console.log(userId);
     console.log(productId);
+    console.log(quantity);
     $.ajax({
         url: "/api/add",
         type: "POST",
         data: {
             userId: userId,
-            productId: productId
+            productId: productId,
+            quantity : quantity
         },
         success: function(response) {
             totalQuantity = 0;
@@ -142,6 +147,7 @@ function addProduct(userId, productId) {
         }
     });
 }
+
 $(document).ready(function() {
     fetchDataOnModalShow();
 });

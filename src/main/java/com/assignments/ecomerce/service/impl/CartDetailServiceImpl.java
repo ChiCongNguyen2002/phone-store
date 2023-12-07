@@ -35,9 +35,8 @@ public class CartDetailServiceImpl implements CartDetailService {
             CartDetail existingCartDetail = cartDetailRepository.findByUserIdAndProductId(userId, productId);
             if (existingCartDetail != null) {
                 // Nếu bản ghi đã tồn tại, tăng quantity lên 1
-                existingCartDetail.setQuantity(existingCartDetail.getQuantity() + 1);
+                existingCartDetail.setQuantity(existingCartDetail.getQuantity() + quantity);
                 cartDetailRepository.save(existingCartDetail);
-                System.out.println("loi o day");
             } else {
                 // Nếu bản ghi không tồn tại, tạo mới CartDetail và lưu vào cơ sở dữ liệu
                 int oldQuantity = 0;

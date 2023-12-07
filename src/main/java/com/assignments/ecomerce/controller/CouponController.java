@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import java.security.Principal;
 import java.util.List;
 
@@ -75,7 +76,7 @@ public class CouponController {
 
     @GetMapping("/detailCoupon/{id}")
     public String getDetailCouponCustomer(@PathVariable("id") Integer id, Model model, Principal principal) {
-        if(principal == null){
+        if (principal == null) {
             List<Product> listProducts = productService.getAllProducts();
             List<Category> categories = categoryService.getAllCategory();
             Coupon coupon = couponService.findById(id);
@@ -83,7 +84,7 @@ public class CouponController {
             model.addAttribute("listProducts", listProducts);
             model.addAttribute("categories", categories);
             return "detailCoupon";
-        }else{
+        } else {
             User user = userService.findByEmail(principal.getName());
             List<Product> listProducts = productService.getAllProducts();
             List<Category> categories = categoryService.getAllCategory();

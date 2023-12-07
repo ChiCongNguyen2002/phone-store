@@ -57,9 +57,9 @@
                 <div class="product-details">
                     <h2 class="product-name">
                         <span th:text="${productDetail.name}"></span>
-                        <a th:href="@{/compare(product=${productDetail.id})}" class="compare-button">
+                        <a th:href="@{/compare/{productId}(productId=${productDetail.id})}" class="compare-button">
                             + So sánh
-                        </a>
+                        </a>|
                     </h2>
                     <div class="contain">
                         <div>
@@ -112,7 +112,8 @@
                     </ul>
                     <div class="price-box-bar">
                         <div class="add-to-cart" style="margin-top:10px">
-                            <button class="add-to-cart-link" th:value="${productDetail.id}" th:data-product-id="${productDetail.id}">
+                            <button class="add-to-cart-link" th:value="${productDetail.id}"
+                                    th:data-product-id="${productDetail.id}">
                                 <i class="fa fa-shopping-cart"></i> thêm vào giỏ hàng
                             </button>
                         </div>
@@ -141,11 +142,41 @@
                                         </tr>
                                         <tr>
                                             <th>Giá:</th>
-                                            <td th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + 'VNĐ'}"></td>
+                                            <td th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + ' VNĐ'}"></td>
                                         </tr>
                                         <tr>
                                             <th>Chi tiết sản phẩm:</th>
                                             <td th:text="${product.description}"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <th>Kích thước màn hình:</th>
+                                            <td th:text="${product.ScreenSize}"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <th>Camera phía trước:</th>
+                                            <td th:text="${product.FrontCamera}"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <th>Bộ Chip:</th>
+                                            <td th:text="${product.Chipset}"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <th>RAM:</th>
+                                            <td th:text="${product.RAM}"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <th>Bộ nhớ lưu trữ:</th>
+                                            <td th:text="${product.InternalStorage}"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <th>Pin:</th>
+                                            <td th:text="${product.Battery}"></td>
                                         </tr>
                                     </table>
                                 </div>
@@ -184,14 +215,15 @@
                                 </div>
 
                                 <div>
-                                    <p>Comment</p>
+                                    <p>Bình luận</p>
                                     <!-- <a href="/indexCustomer">Mua hàng mới được đánh giá sản phẩm</a>-->
                                     <!-- Form to add a new review -->
                                     <div th:if="${error}" class="text-center alert alert-danger">
                                         <p th:text="${error}"></p>
                                     </div>
 
-                                    <form id="reviewForm" th:action="@{/add-review}" method="post" th:object="${reviewNew}">
+                                    <form id="reviewForm" th:action="@{/add-review}" method="post"
+                                          th:object="${reviewNew}">
                                         <div class="form-group">
                                             <input type="hidden" class="form-control" id="customer" name="customer"
                                                    th:value="${customer != null ? customer.id : ''}" required>
@@ -204,9 +236,8 @@
 
                                         <div class="form-group">
                                             <label for="message">Nội dung đánh giá</label>
-                                            <textarea class="form-control" id="message" th:field="*{comments}"
-                                                      name="message" required>
-                                            </textarea>
+                                            <textarea class="form-control" id="message" name="comments" required=""
+                                                      style="width: 1172px; height: 113px; resize : none"></textarea>
                                         </div>
 
                                         <div class="form-group">
@@ -226,7 +257,9 @@
                                             </div>
                                         </div>
 
-                                        <button type="submit" class="btn btn-primary" onclick="saveReview(event)">Thêm đánh giá</button>
+                                        <button type="submit" class="btn btn-primary" onclick="saveReview(event)">Thêm
+                                            đánh giá
+                                        </button>
                                     </form>
                                 </div>
                             </div>
@@ -242,6 +275,21 @@
 </div>
 <div th:replace="~{indexUser::connection}"></div>
 <footer th:replace="~{indexUser::footer}"></footer>
+
+<script>
+    var quantityInput = document.getElementById('quantity-input');
+
+    quantityInput.addEventListener('keydown', function(event) {
+        var key = event.key;
+        var isNumber = /^\d+$/.test(key);
+
+        if (!isNumber) {
+            event.preventDefault();
+            alert("Vui lòng chỉ nhập số.");
+            return;
+        }
+    });
+</script>
 <script>
     var maxQuantity = parseInt([[${productDetail.quantity}]]);
 
@@ -308,12 +356,6 @@
 <script src="/js/nouislider.min.js"></script>
 <script src="/js/jquery.zoom.min.js"></script>
 <script src="/js/main.js"></script>
-<script src="/js/site.js"></script>
-<script src="/js/cart.js"></script>
-<script>
-    var siteController = new SiteController();
-    siteController.initialize();
-</script>
 <script th:replace="~{ajax_fragment::ajax_script}"></script>
 </body>
 </html>

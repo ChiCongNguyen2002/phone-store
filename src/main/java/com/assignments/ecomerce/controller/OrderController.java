@@ -212,4 +212,24 @@ public class OrderController {
             return "cart";
         }
     }
+
+    @GetMapping("/Cart/checkout")
+    public String pageCheckOut(Model model, Principal principal) {
+        if (principal == null) {
+            return "checkoutUser";
+        } else {
+            UserDetails userDetails = null;
+            userDetails = userDetailsService.loadUserByUsername(principal.getName());
+            User user = userService.findByEmail(principal.getName());
+/*            Orders order = orderService.getOrderById(orderId);*/
+
+            List<Category> categories = categoryService.getAllCategory();
+            model.addAttribute("categories", categories);
+            model.addAttribute("userId", user.getId());
+            model.addAttribute("userDetails", userDetails);
+            model.addAttribute("name", userDetails);
+            model.addAttribute("userDetails", userDetails);
+            return "checkoutUser";
+        }
+    }
 }

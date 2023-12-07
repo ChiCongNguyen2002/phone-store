@@ -1,9 +1,40 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org/">
 <head th:replace="~{indexUser::header}">
+    <style>
+        .compare-list {
+            display: flex;
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .compare-list-item {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            margin-right: 10px;
+        }
+
+        .add-product-button {
+            margin-top: 10px;
+        }
+
+        .selected-products {
+            margin-top: 20px;
+            display: flex;
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .selected-product-item {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            margin-right: 10px;
+        }
+    </style>
 </head>
 <body>
-
 <div th:replace="~{ajax_fragment::navbar}"></div>
 <nav th:replace="~{indexUser::navigation}"></nav>
 
@@ -16,7 +47,7 @@
             <div class="col-md-12">
                 <ul class="breadcrumb-tree">
                     <li><a th:href="@{/indexCustomer}">Trang chủ</a></li>
-                    <li><a th:href="#">SO SÁNH</a></li>
+                    <li><a>SO SÁNH</a></li>
                 </ul>
             </div>
         </div>
@@ -27,6 +58,19 @@
 <!-- /BREADCRUMB -->
 
 
+<h1>Trang so sánh sản phẩm</h1>
+
+<ul class="compare-list">
+    <li class="compare-list-item">
+        <h2>Tên sản phẩm 1</h2>
+        <p>Chi tiết sản phẩm 1</p>
+    </li>
+    <li class="compare-list-item">
+        <h2>Tên sản phẩm 2</h2>
+        <p>Chi tiết sản phẩm 2</p>
+        <button class="add-product-button">Thêm sản phẩm</button>
+    </li>
+</ul>
 
 <footer th:replace="~{indexUser::footer}"></footer>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

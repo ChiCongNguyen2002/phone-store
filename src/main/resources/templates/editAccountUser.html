@@ -43,11 +43,11 @@
                             <div th:if="${success}" class="text-center alert alert-success">
                                 <p th:text="${success}"></p>
                             </div>
-                            <div th:if="${error}" class="text-center alert alert-danger">
+                            <div th:if="${error}">
                                 <p th:text="${error}"></p>
                             </div>
 
-                            <form id="productForm" class="form-horizontal" enctype="multipart/form-data" method="POST"
+                            <form id="editAccountForm" class="form-horizontal" enctype="multipart/form-data" method="POST"
                                   th:action="@{/EditAccount/0/{userId}(userId = ${userDetail.id})}" th:object="${userDetail}">
 
                                 <input type="hidden" name="orderId" id="idEdit" th:field="*{id}">
@@ -75,26 +75,15 @@
                                 <div class="form-group">
                                     <label class="col-md-4 control-label" for="address">Địa chỉ</label>
                                     <div class="col-md-4">
-                                        <input id="address" th:field="*{address}" name="quantity"
+                                        <input id="address" th:field="*{address}" name="address"
                                                class="form-control input-md" required=""
                                                type="text">
                                     </div>
                                 </div>
 
-                                <!-- Text input-->
-                                <div class="form-group">
-                                    <label class="col-md-4 control-label" for="email">Email</label>
-                                    <div class="col-md-4">
-                                        <input id="email" th:field="*{email}" name="price" class="form-control input-md"
-                                               required=""
-                                               type="text">
-                                    </div>
-                                </div>
-
                                 <div class="center-container">
-                                    <button type="submit" class="btn btn-primary text-center">Lưu Thông Tin</button>
+                                    <button type="submit" class="btn btn-primary text-center" onclick="SaveEditAccount(event)">Lưu Thông Tin</button>
                                 </div>
-
                             </form>
                         </div>
                     </div>
@@ -104,6 +93,7 @@
     </div>
 </section>
 <footer th:replace="~{indexUser::footer}"></footer>
+<script th:src="@{/js/register.js}"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script th:fragment="ajax_script">
     var iconElement = document.querySelector('.fa.fa-user-o.userID');

@@ -73,7 +73,6 @@ public class ProductController {
             Double calculateAverageRating = reviewService.calculateAverageRating(product);
 
        /* Product getProductByColorAndName = productService.getProductByColorAndName(product.getName(), product.getColor());
-        System.out.println("color:" + productColor);
         model.addAttribute("getProductByColorAndName", getProductByColorAndName);*/
             model.addAttribute("user", userDetails);
             model.addAttribute("name", userDetails);

@@ -1,13 +1,14 @@
 package com.assignments.ecomerce.controller;
 
-import com.assignments.ecomerce.model.CartDetail;
-import com.assignments.ecomerce.model.Product;
-import com.assignments.ecomerce.model.User;
+import com.assignments.ecomerce.model.*;
 import com.assignments.ecomerce.service.CartDetailService;
+import com.assignments.ecomerce.service.CouponService;
 import com.assignments.ecomerce.service.ProductService;
 import com.assignments.ecomerce.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +23,12 @@ import com.google.gson.JsonObject;
 @RequestMapping("/api")
 
 public class CartDetailController {
+    @Autowired
+    private CouponService couponService;
+
+    @Autowired
+    UserDetailsService userDetailsService;
+
     @Autowired
     private CartDetailService cartDetailService;
     @Autowired
@@ -95,10 +102,16 @@ public class CartDetailController {
             User user = userService.findByEmail(principal.getName());
             if (user != null && user.getId() == userId) {
                 int productId = Integer.parseInt(request.getParameter("productId"));
+                int quantity = Integer.parseInt(request.getParameter("quantity"));
+
+                System.out.println("productId" + productId);
+                System.out.println("userId" + userId);
+                System.out.println("quantity" + quantity);
+
                 Product product = productService.findById(productId);
                 String message = "Thêm thất bại";
                 if (product != null) {
-                    if (cartDetailService.saveCart(user.getId(), productId, 1, product.getPrice())) {
+                    if (cartDetailService.saveCart(user.getId(), productId, quantity, product.getPrice())) {
                         message = "Thêm thành công mã sản phẩm " + product.getId() + " vào giỏ hàng";
                     }
                 } else {
@@ -113,5 +126,26 @@ public class CartDetailController {
             // Principal rỗng, trả về lỗi hoặc thông báo không có xác thực
             return "error: Unauthorized";
         }
+    }
+
+    @GetMapping("/Coupon/ApplyCoupon")
+    public int ApplyCoupon(@RequestBody String code, Model model, Principal principal) {
+
+        // Lấy danh sách các mã coupon từ service
+        List<Coupon> coupons = couponService.getAllCoupons();
+
+        // Tìm kiếm mã coupon theo code
+        Coupon coupon = coupons.stream()
+                .filter(c -> c.getCode().equals(code))
+                .findFirst()
+                .orElse(null);
+
+        if (coupon == null) {
+            return -2;
+        } else if (coupon.getCount() <= 0) {
+            return -1;
+        }
+
+        return coupon.getPromotion();
     }
 }

@@ -36,7 +36,7 @@
 
                 <div class="order-detail-content">
                     <div class="table-responsive">
-                        <table class="table table-bordered cart_summary" id="tbl_cart" >
+                        <table class="table table-bordered cart_summary" id="tbl_cart">
                             <thead>
                                 <tr>
                                     <th class="cart_product">Hình ảnh</th>
@@ -93,11 +93,10 @@
                     <div class="form-group" id="coupon-input" style="width:300px">
                         <label>Bạn có coupon giảm giá?</label>
                         <div class="input-group">
-                            <input type="text" class="form-control" id="coupon-input-control"
-                                   placeholder="Nhập mã Coupon">
+                            <input type="text" class="form-control" id="coupon-input-control" placeholder="Nhập mã Coupon">
                             <span class="input-group-btn">
                                     <button class="btn btn-primary" id="btn-apply-coupon">Áp dụng</button>
-                                </span>
+                            </span>
                         </div>
                     </div>
 
@@ -172,8 +171,71 @@ function addProduct(userId, productId) {
         }
     });
 }
-
 </script>
+
+<script th:inline="javascript">
+    $(document).ready(function() {
+        $('body').on('click', '#btn-apply-coupon', function(e) {
+            e.preventDefault();
+            var code = $("#coupon-input-control").val();
+            console.log("check");
+            applyCoupon(code);
+        });
+    });
+
+function applyCoupon(code) {
+        $.ajax({
+            type: "POST",
+            url: "/Coupon/ApplyCoupon",
+            data: {
+                code: code
+            },
+            success: function (res) {
+                if (res === 0) {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'error',
+                        title: 'Một mã coupon chỉ được áp dụng cho 1 đơn hàng',
+                        showConfirmButton: false,
+                        timer: 1500,
+                    })
+                    return res;
+                } else if (res === -1) {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'error',
+                        title: 'Mã coupon này đã hết lượt sử dụng',
+                        showConfirmButton: false,
+                        timer: 1500,
+                    })
+                    return res;
+                } else if (res === -2) {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'error',
+                        title: 'Mã coupon không tồn tại',
+                        showConfirmButton: false,
+                        timer: 1500,
+                    })
+                    return res;
+                }
+
+                loadData();
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'Áp dụng coupon thành công',
+                    showConfirmButton: false,
+                    timer: 1500,
+                })
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    }
+</script>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script th:fragment="ajax_script">
     var iconElement = document.querySelector('.fa.fa-user-o.userID');
@@ -202,6 +264,7 @@ function addProduct(userId, productId) {
       fetchDataOnModalShow();
     };
 </script>
+
 <script>
     function updateModalContent(response) {
     // Clear the existing content in the modal body
@@ -230,7 +293,6 @@ function addProduct(userId, productId) {
     var sumPriceTable = $('.sumPrice');
     sumPriceTable.html(sum);
 }
-
 </script>
 </body>
 </html>
