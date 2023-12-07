@@ -41,10 +41,11 @@ function saveStatistical(event) {
     }
     localStorage.setItem('savedFromDate', savedFromDate);
     localStorage.setItem('savedToDate', savedToDate);
+
     document.getElementById("editForm").submit();
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {
     var selectOption = localStorage.getItem("selectedChartType") || "top10Products";
     document.getElementById("chartType").value = selectOption; // Đặt giá trị mặc định cho select
     displayChart();
@@ -55,9 +56,58 @@ document.addEventListener('DOMContentLoaded', function() {
         displayChart();
     });
 
+//    console.log(selectOption);
     hideAllDivs(); // Ẩn tất cả các div lúc tải trang
-
-    // Kiểm tra nếu có giá trị lưu trong localStorage, thì khôi phục giá trị của select
+                if (selectOption === "top10Products") {
+                    showDiv("top10ProductsDiv");
+                            if(chart != null){
+                                chart.destroy();
+                                draw_chart(data_chartProduct);
+                            }
+                            else{
+                                draw_chart(data_chartProduct);
+                            }
+                }else if (selectOption === "top5Users") {
+                    showDiv("top5UsersDiv");
+                            if(chart != null){
+                                chart.destroy();
+                                draw_chart(data_chartCustomer);
+                            }
+                            else{
+                            draw_chart(data_chartCustomer);
+                            }
+                }else if (selectOption === "weeklyRevenue") {
+                    showDiv("weeklyRevenueDiv");
+                            if(chart != null){
+                                chart.destroy();
+                                draw_chart(data_chartWeekly);
+                            }
+                            else{
+                                draw_chart(data_chartWeekly);
+                            }
+                }else if (selectOption === "monthlyRevenue") {
+                    showDiv("monthlyRevenueDiv");
+                            if(chart != null){
+                                chart.destroy();
+                                draw_chart(data_chart);
+                            }
+                            else{
+                                draw_chart(data_chart);
+                            }
+                } else if (selectOption === "top5Employee") {
+                    showDiv("top5EmployeeDiv");
+                    if(chart != null){
+                        chart.destroy();
+                        raw_chart(data_chartEmployee);
+                    }
+                    else{
+                         draw_chart(data_chartEmployee);
+                    }
+                }
+    if (sessionStorage.getItem('firstLoad') === null) {
+        hideAllDivs();
+      sessionStorage.setItem('firstLoad', 'loaded');
+    }
     var savedChartType = localStorage.getItem("selectedChartType");
     if (savedChartType) {
         document.getElementById("chartType").value = savedChartType;
@@ -65,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-function create_chart(){
+function create_chart(data_chart){
     var chart = new CanvasJS.Chart("chartContainer", {
         animationEnabled: true,
         theme: "light2", // "light1", "light2", "dark1", "dark2"
@@ -86,8 +136,8 @@ function create_chart(){
    return chart;
 }
 
-function draw_chart(){
-    var chart = create_chart();
+function draw_chart(data_chart){
+    var chart = create_chart(data_chart);
     chart.render();
 }
 
@@ -97,15 +147,9 @@ function displayChart() {
     var yearSelect = document.getElementById("year");
     var yearSelectContainer = document.getElementById("yearSelectContainer");
     yearSelectContainer.style.display = "none";
-    hideAllDivs();
+//  hideAllDivs();
 
-    if (selectOption === "top10Products") {
-        showDiv("top10ProductsDiv");
-    }else if (selectOption === "top5Users") {
-        showDiv("top5UsersDiv");
-    }else if (selectOption === "weeklyRevenue") {
-        showDiv("weeklyRevenueDiv");
-    }else if (selectOption === "monthlyRevenue") {
+    if (selectOption === "monthlyRevenue") {
         yearSelectContainer.style.display = "inline";
         yearSelect.innerHTML = ""; // Xóa tất cả các tùy chọn hiện tại
         var dateFromSelect = document.getElementById("dateFrom");
@@ -119,15 +163,6 @@ function displayChart() {
              option.value = year;
              option.text = year;
              yearSelect.appendChild(option);
-             }
-        showDiv("monthlyRevenueDiv");
-        console.log(data_chart);
-        if(chart != null){
-            chart.destroy();
-            draw_chart();
-        }
-        else{
-        draw_chart();
         }
     }
 }

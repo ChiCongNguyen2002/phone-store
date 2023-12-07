@@ -181,25 +181,76 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="col-md-12 control-label" for="product-quantity">Số lượng Màu</label>
                         <div class="col-md-8">
                             <input id="product-quantity" th:field="*{quantity}" name="quantity"
-                                   class="form-control input-md" type="number" value="1" required>
+                                   class="form-control input-md" type="hidden" value="0">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-md-8 control-label" for="price">Giá</label>
                         <div class="col-md-8">
                             <input id="price" th:field="*{price}" name="price" class="form-control input-md"
-                                   type="text" required>
+                                   type="hidden" value="0" required>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="col-md-8 control-label" for="description">Mô Tả </label>
                         <div class="col-md-8">
-                            <input id="description" th:field="*{description}" name="description"
+                            <input id="description" th:field="*{description}" name="description" class="form-control input-md" required
+                                   type="text">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-8 control-label" for="ScreenSize">Kích thước màn hình </label>
+                        <div class="col-md-8">
+                            <input id="ScreenSize" th:field="*{ScreenSize}" name="ScreenSize"
+                                   class="form-control input-md" required
+                                   type="text">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-8 control-label" for="FrontCamera">FrontCamera </label>
+                        <div class="col-md-8">
+                            <input id="FrontCamera" th:field="*{FrontCamera}" name="FrontCamera"
+                                   class="form-control input-md" required
+                                   type="text">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-8 control-label" for="Chipset">Chip</label>
+                        <div class="col-md-8">
+                            <input id="Chipset" th:field="*{Chipset}" name="Chipset"
+                                   class="form-control input-md" required
+                                   type="text">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-8 control-label" for="RAM">RAM </label>
+                        <div class="col-md-8">
+                            <input id="RAM" th:field="*{RAM}" name="RAM"
+                                   class="form-control input-md" required
+                                   type="text">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-8 control-label" for="InternalStorage">InternalStorage </label>
+                        <div class="col-md-8">
+                            <input id="InternalStorage" th:field="*{InternalStorage}" name="InternalStorage"
+                                   class="form-control input-md" required
+                                   type="text">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-8 control-label" for="Battery">Battery</label>
+                        <div class="col-md-8">
+                            <input id="Battery" th:field="*{Battery}" name="Battery"
                                    class="form-control input-md" required
                                    type="text">
                         </div>

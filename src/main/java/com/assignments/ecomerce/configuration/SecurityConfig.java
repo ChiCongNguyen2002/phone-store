@@ -25,7 +25,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(c -> c.disable())
-                .authorizeHttpRequests(request -> request.requestMatchers("/index")
+                .authorizeHttpRequests(request -> request.requestMatchers("/statistical")
                         .hasAuthority("ADMIN")
 /*                        .requestMatchers("/indexUser").hasAuthority("USER")*/
                         .requestMatchers("/search-customer-ByEmployee/0?keyword=").hasAuthority("EMPLOYEE")

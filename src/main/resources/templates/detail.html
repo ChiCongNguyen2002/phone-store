@@ -67,6 +67,30 @@
                                     <th>Số lượng:</th>
                                     <td th:text="${product.quantity}"></td>
                                 </tr>
+                                <tr th:each="product : ${listProducts}">
+                                    <th>Kích thước màn hình:</th>
+                                    <td th:text="${product.ScreenSize}"></td>
+                                </tr>
+                                <tr th:each="product : ${listProducts}">
+                                    <th>FrontCamera:</th>
+                                    <td th:text="${product.FrontCamera}"></td>
+                                </tr>
+                                <tr th:each="product : ${listProducts}">
+                                    <th>Chip:</th>
+                                    <td th:text="${product.Chipset}"></td>
+                                </tr>
+                                <tr th:each="product : ${listProducts}">
+                                    <th>RAM:</th>
+                                    <td th:text="${product.RAM}"></td>
+                                </tr>
+                                <tr th:each="product : ${listProducts}">
+                                    <th>InternalStorage:</th>
+                                    <td th:text="${product.InternalStorage}"></td>
+                                </tr>
+                                <tr th:each="product : ${listProducts}">
+                                    <th>Battery:</th>
+                                    <td th:text="${product.Battery}"></td>
+                                </tr>
                             </table>
                     </div>
                 </div>

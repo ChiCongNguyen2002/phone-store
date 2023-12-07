@@ -166,7 +166,6 @@
                     </tbody>
                 </table>
             </div>
-
             <div id="chartContainer"></div>
         </div>
         <!-- End of Main Content -->
@@ -221,8 +220,8 @@
          var sumTotal = parseInt(row.cells[1].innerText);
          // Thêm giá trị month và sumTotal vào mảng data_chart
          data_chartWeekly.push({
-             y: week,
-             label: sumTotal
+             y: sumTotal,
+             label: week
          });
          console.log(data_chartWeekly);
      });

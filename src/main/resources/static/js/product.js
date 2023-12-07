@@ -3,16 +3,14 @@ function saveProduct(event) {
 
   var name = document.getElementById("nameAdd").value;
   var color = document.getElementById("color").value;
-  var quantity = document.getElementById("product-quantity").value;
   var price = document.getElementById("price").value;
   var description = document.getElementById("description").value;
   var photoFile = document.getElementById("photo_file").files[0];
 
-// Kiểm tra nếu số lượng không được để trống và phải là số nguyên dương
-if (quantity.trim() === "" || !Number.isInteger(parseInt(quantity)) || parseInt(quantity) <= 0) {
-  alert("Vui lòng nhập số lượng sản phẩm hợp lệ.");
-  return;
-}
+ if (name === "" || color === "" || price === "" || description === "" || photoFile === "") {
+    alert("Vui lòng điền đầy đủ thông tin");
+    return;
+  }
 
 // Kiểm tra nếu giá không được để trống và phải là số dương
 if (price.trim() === "" || isNaN(parseFloat(price)) || parseFloat(price) <= 0) {

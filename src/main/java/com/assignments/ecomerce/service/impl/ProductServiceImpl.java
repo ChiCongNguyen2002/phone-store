@@ -68,10 +68,9 @@ public class ProductServiceImpl implements ProductService {
             }
 
             String photoFileName = StringUtils.cleanPath(photo.getOriginalFilename() != null ? photo.getOriginalFilename() : "unknown_photo_file");
-            /*Path photoTargetPath = uploadPath.resolve(photoFileName);*/
-           /* Files.copy(photo.getInputStream(), photoTargetPath, StandardCopyOption.REPLACE_EXISTING);*/
+            Path photoTargetPath = uploadPath.resolve(photoFileName);
+            Files.copy(photo.getInputStream(), photoTargetPath, StandardCopyOption.REPLACE_EXISTING);
 
-            System.out.println("photo:"+photoFileName);
             if (!photo.isEmpty()) {
                 newProduct.setImage(photoFileName);
             } else {
@@ -79,11 +78,16 @@ public class ProductServiceImpl implements ProductService {
             }
 
             newProduct.setName(product.getName());
-            newProduct.setPrice(product.getPrice());
             newProduct.setDescription(product.getDescription());
             newProduct.setCategory(product.getCategory());
             newProduct.setColor(product.getColor());
-            newProduct.setQuantity(product.getQuantity());
+            newProduct.setPrice(0);
+            newProduct.setQuantity(0);
+            newProduct.setScreenSize(product.getScreenSize());
+            newProduct.setFrontCamera(product.getFrontCamera());
+            newProduct.setChipset(product.getChipset());
+            newProduct.setInternalStorage(product.getInternalStorage());
+            newProduct.setBattery(product.getBattery());
             newProduct.setStatus(1);
             productRepository.save(newProduct);
             return newProduct;
@@ -103,6 +107,11 @@ public class ProductServiceImpl implements ProductService {
         newProduct.setPrice(product.getPrice());
         newProduct.setQuantity(product.getQuantity());
         newProduct.setImage(product.getImage());
+        newProduct.setScreenSize(product.getScreenSize());
+        newProduct.setFrontCamera(product.getFrontCamera());
+        newProduct.setChipset(product.getChipset());
+        newProduct.setInternalStorage(product.getInternalStorage());
+        newProduct.setBattery(product.getBattery());
         return product;
     }
 
@@ -138,6 +147,11 @@ public class ProductServiceImpl implements ProductService {
             productUpdate.setCategory(product.getCategory());
             productUpdate.setQuantity(product.getQuantity());
             productUpdate.setColor(product.getColor());
+            productUpdate.setScreenSize(product.getScreenSize());
+            productUpdate.setFrontCamera(product.getFrontCamera());
+            productUpdate.setChipset(product.getChipset());
+            productUpdate.setInternalStorage(product.getInternalStorage());
+            productUpdate.setBattery(product.getBattery());
             productRepository.save(productUpdate);
             return productUpdate;
         } catch (Exception e) {
@@ -221,6 +235,11 @@ public class ProductServiceImpl implements ProductService {
             newProduct.setColor(product.getColor());
             newProduct.setQuantity(product.getQuantity());
             newProduct.setImage(product.getImage());
+            newProduct.setScreenSize(product.getScreenSize());
+            newProduct.setFrontCamera(product.getFrontCamera());
+            newProduct.setChipset(product.getChipset());
+            newProduct.setInternalStorage(product.getInternalStorage());
+            newProduct.setBattery(product.getBattery());
             productList.add(newProduct);
         }
         return productList;

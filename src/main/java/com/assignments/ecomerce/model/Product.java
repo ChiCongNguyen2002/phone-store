@@ -68,7 +68,6 @@ public class Product {
         this.color = color;
     }
 
-
     public Product() {
 
     }
@@ -79,7 +78,6 @@ public class Product {
     }
 
     public Product(String name, Integer price, Integer quantity, String image, String description, String color, Category category) {
-        this.id = id;
         this.name = name;
         this.price = price;
         this.quantity = quantity;
