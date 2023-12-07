@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 07, 2023 at 01:17 PM
+-- Generation Time: Dec 07, 2023 at 03:16 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -180,7 +180,12 @@ INSERT INTO `importbill` (`id`, `supplierId`, `importDate`, `Status`, `total`) V
 (27, 1, '2023-12-06', 1, 15000000),
 (28, 1, '2023-12-07', 1, 300000000),
 (29, 1, '2023-12-07', 1, 135000000),
-(30, 1, '2023-12-07', 1, 100000000);
+(30, 1, '2023-12-07', 1, 100000000),
+(31, 2, '2023-12-07', 1, 11000000),
+(32, 1, '2023-12-07', 1, 11000000),
+(33, 1, '2023-12-07', 1, 0),
+(34, 1, '2023-12-07', 1, 11000000),
+(35, 1, '2023-12-07', 1, 110000000);
 
 -- --------------------------------------------------------
 
@@ -207,7 +212,8 @@ INSERT INTO `importbilldetail` (`id`, `importId`, `productId`, `quantity`, `unit
 (24, 27, 142, 1, 15000000),
 (25, 28, 142, 10, 30000000),
 (26, 29, 142, 4, 33750000),
-(27, 30, 149, 5, 20000000);
+(27, 30, 149, 5, 20000000),
+(28, 35, 142, 3, 36666666.666666664);
 
 -- --------------------------------------------------------
 
@@ -290,7 +296,7 @@ INSERT INTO `product` (`id`, `name`, `price`, `Image`, `description`, `categoryI
 (131, 'iPhone 15 Pro Max 256GB', 34920000, 'IPhone_1.jpeg', 'iPhone 15 Pro Max đem lại một diện mạo hoàn toàn mới và sở hữu nhiều tính năng ưu việt cùng công nghệ tiên tiến. Hãy khám phá các đánh giá chi tiết về sản phẩm về khía cạnh thiết kế, màn hình, hiệu năng, thời lượng pin và bộ camera độc đáo qua các thông tin dưới đây!', 30, 100, 'đen', 0, NULL, NULL, NULL, '8 GB\n', NULL, NULL, NULL),
 (132, 'iPhone 15 Pro Max 256GB', 34290000, 'IPhone_2.png', 'Đẹp Xứng Đáng với chất lượng', 30, 100, 'xanh', 1, '6.7 inches', '12MP, ƒ/1.9', 'A17 Pro', '8 GB', '256 GB', '4422 mAh', NULL),
 (133, 'iPhone 15 Pro Max 256GB', 34290000, 'IPhone_2.png', 'Đẹp Xứng Đáng với chất lượng', 30, 100, 'xanh', 1, '6.7 inches', '12MP, ƒ/1.9', 'A17 Pro', '8 GB', '256 GB', '4422 mAh', NULL),
-(142, 'iPhone 15 Plus VN/a', 37125000, 'iphone-15-plus-black-thumbtz-650x650.png.png', 'iPhone 15 Plus VN/a', 30, 145, 'đen', 1, '6.7 inches', '12MP, ƒ/1.9', 'Apple A16 Bionic', '6 GB', '512 GB', '4383 mAh', 33750000),
+(142, 'iPhone 15 Plus VN/a', 40333332, 'iphone-15-plus-black-thumbtz-650x650.png.png', 'iPhone 15 Plus VN/a', 30, 148, 'đen', 1, '6.7 inches', '12MP, ƒ/1.9', 'Apple A16 Bionic', '6 GB', '512 GB', '4383 mAh', 36666666),
 (143, 'iPhone 15 Plus VN/a', 25590000, 'iphone-15-plus yellow.png', 'iPhone 15 Plus VN/a', 30, 100, 'Vàng', 1, '6.7 inches', '12MP, ƒ/1.9', 'Apple A16 Bionic', '6 GB', '512 GB', '4383 mAh', NULL),
 (144, 'iPhone 15 Plus VN/a', 25590000, 'iphone15pink.jpg', 'iPhone 15 Plus VN/a', 30, 100, 'hồng', 1, '6.7 inches', '12MP, ƒ/1.9', 'Apple A16 Bionic', '6 GB', '512 GB', '4383 mAh', NULL),
 (145, 'Samsung Galaxy S23 Ultra 8/256GB', 25900000, 'SamsungGalaxyS23_BLACK.png', 'Samsung Galaxy S23 Ultra 8/256GB', 31, 100, 'Đen', 1, '6.8 inches', '12MP F2.2 (Dual Pixel AF)', 'Snapdragon 8 Gen 2 (4 nm)', '8 GB', '256 GB', '5,000mAh', NULL),
@@ -310,7 +316,7 @@ INSERT INTO `product` (`id`, `name`, `price`, `Image`, `description`, `categoryI
 
 CREATE TABLE `review` (
   `id` int(11) NOT NULL,
-  `userId` int(11) NOT NULL,
+  `customerId` int(11) NOT NULL,
   `productId` int(11) NOT NULL,
   `rating` int(50) NOT NULL,
   `DateReview` datetime NOT NULL,
@@ -321,7 +327,7 @@ CREATE TABLE `review` (
 -- Dumping data for table `review`
 --
 
-INSERT INTO `review` (`id`, `userId`, `productId`, `rating`, `DateReview`, `comments`) VALUES
+INSERT INTO `review` (`id`, `customerId`, `productId`, `rating`, `DateReview`, `comments`) VALUES
 (31, 11, 131, 5, '2023-11-26 12:16:34', 'Tốt'),
 (32, 9, 142, 5, '2023-12-05 08:58:12', 'san pham tot'),
 (33, 7, 142, 2, '2023-12-05 08:59:13', 'san pham binh thuong');
@@ -468,7 +474,7 @@ ALTER TABLE `product`
 ALTER TABLE `review`
   ADD PRIMARY KEY (`id`),
   ADD KEY `product_fk_2` (`productId`),
-  ADD KEY `fk_userId` (`userId`);
+  ADD KEY `fk_userId` (`customerId`);
 
 --
 -- Indexes for table `supplier`
@@ -520,13 +526,13 @@ ALTER TABLE `forgot_password_token`
 -- AUTO_INCREMENT for table `importbill`
 --
 ALTER TABLE `importbill`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `importbilldetail`
 --
 ALTER TABLE `importbilldetail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `orders`
@@ -631,7 +637,7 @@ ALTER TABLE `product`
 -- Constraints for table `review`
 --
 ALTER TABLE `review`
-  ADD CONSTRAINT `fk_userId` FOREIGN KEY (`userId`) REFERENCES `user` (`id`),
+  ADD CONSTRAINT `fk_userId` FOREIGN KEY (`customerId`) REFERENCES `user` (`id`),
   ADD CONSTRAINT `product_fk_2` FOREIGN KEY (`productId`) REFERENCES `product` (`id`);
 COMMIT;
 
