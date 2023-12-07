@@ -168,10 +168,12 @@ public class OrderController {
     public String UpdateOrderStatusByEmployee(@PathVariable("pageNo") int pageNo,
                                               @PathVariable("id") Integer id, Model model, Principal principal) {
         Orders order = orderService.getById(id);
+        Orders orderByInforEmployee = orderService.getEmployeeById(id);
         int status = order.getStatus();
         switch (status) {
             case 1:
                 order.setStatus(2);
+                order.setEmployee(orderByInforEmployee.getEmployee());
                 orderService.save(order);
                 break;
             case 2:
@@ -204,6 +206,8 @@ public class OrderController {
             List<Category> categories = categoryService.getAllCategory();
             model.addAttribute("categories", categories);
             model.addAttribute("userId", user.getId());
+            model.addAttribute("userDetails", userDetails);
+            model.addAttribute("name", userDetails);
             model.addAttribute("userDetails", userDetails);
             return "cart";
         }

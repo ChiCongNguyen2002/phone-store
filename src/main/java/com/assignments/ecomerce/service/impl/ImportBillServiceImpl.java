@@ -47,12 +47,6 @@ public class ImportBillServiceImpl implements ImportBillService {
         return importBillRepository.pageImportBill(pageable);
     }
 
-//    @Override
-//    public ePage<ImportBill> pageImportBillById(int pageNo, Integer userId) {
-////        Pageable pageable = PageRequest.of(pageNo, 5);
-////        return importBillRepository.pageImportBillById(pageable,usrId);
-//    }
-
     public Page<ImportBill> searchImportBill(int pageNo, String keyword) {
         Pageable pageable = PageRequest.of(pageNo, 5);
         List<ImportBill> importBills = transfer(importBillRepository.searchImportBill(keyword));

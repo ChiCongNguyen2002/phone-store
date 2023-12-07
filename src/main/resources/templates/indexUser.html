@@ -60,7 +60,7 @@
             <ul class="header-links pull-right">
                 <li><a th:href="@{/login}" th:if="${userDetails == null}">Đăng nhập</a></li>
                 <li><a th:href="@{/registration}" th:if="${userDetails == null}">Đăng ký</a></li>
-                <li><a th:href="@{/account/0}" th:if="${userDetails != null}" ><i class="fa fa-user-o userID"></i>Tài khoản</a></li>
+                <li><a th:href="@{/account/0}" th:if="${userDetails != null}" ><i class="fa fa-user-o userID"></i>[[${name.getFullname()}]]</a></li>
                 <li><a th:href="@{/logout}" th:if="${userDetails != null}">Đăng xuất</a></li>
             </ul>
 

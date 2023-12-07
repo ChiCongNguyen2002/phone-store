@@ -185,7 +185,8 @@
                                     <div th:if="${error}" class="text-center alert alert-danger">
                                         <p th:text="${error}"></p>
                                     </div>
-                                    <form th:action="@{/add-review}" method="post" th:object="${reviewNew}">
+
+                                    <form id="reviewForm" th:action="@{/add-review}" method="post" th:object="${reviewNew}">
                                         <div class="form-group">
                                             <input type="hidden" class="form-control" id="user" name="user"
                                                    th:value="${user != null ? user.id : ''}" required>
@@ -220,7 +221,7 @@
                                             </div>
                                         </div>
 
-                                        <button type="submit" class="btn btn-primary">Thêm đánh giá</button>
+                                        <button type="submit" class="btn btn-primary" onclick="saveReview(event)">Thêm đánh giá</button>
                                     </form>
                                 </div>
                             </div>

@@ -25,13 +25,13 @@ public interface OrderRepository extends JpaRepository<Orders, Integer> {
     @Query("SELECT o from Orders o")
     Page<Orders> pageOrders(Pageable pageable);
 
-    @Query("SELECT o FROM Orders o WHERE o.user.id = :userId")
+    @Query("SELECT o FROM Orders o WHERE o.customer.id = :userId")
     Page<Orders> pageOrdersById(Pageable pageable, @Param("userId") Integer userId);
 
     @Query("SELECT u.fullname,o.total,SUM(od.quantity) AS sumQuantity " +
             "FROM OrderDetail od " +
             "JOIN od.order o " +
-            "JOIN o.user u " +
+            "JOIN o.customer u " +
             "WHERE o.orderDate BETWEEN :dateFrom AND :dateTo " +
             "GROUP BY u.fullname " +
             "ORDER BY sumQuantity DESC")
@@ -46,20 +46,10 @@ public interface OrderRepository extends JpaRepository<Orders, Integer> {
             "ORDER BY sumQuantity DESC")
     List<Object[]> getTop10ProductsWithSumQuantity(@Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo);
 
-/*    @Query(value = "SELECT u.fullname,o.total,SUM(od.quantity) AS totalQuantity " +
-            "FROM OrderDetail od " +
-            "JOIN orders o ON o.id = od.orderId " +
-            "JOIN user u ON o.userId = u.id " +
-            "JOIN employee e ON e.userId = u.id " +
-            "WHERE o.orderDate BETWEEN :dateFrom AND :dateTo " +
-            "GROUP BY u.fullname,o.total,od.quantity " +
-            "ORDER BY totalQuantity DESC", nativeQuery = true)
-    List<Object[]> getTop5EmployeesWithSumQuantity(@Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo);*/
-
     @Query("SELECT u.fullname,o.total,SUM(od.quantity) AS sumQuantity " +
             "FROM OrderDetail od " +
             "JOIN od.order o " +
-            "JOIN o.user u " +
+            "JOIN o.employee u " +
             "WHERE o.orderDate BETWEEN :dateFrom AND :dateTo " +
             "GROUP BY u.fullname " +
             "ORDER BY sumQuantity DESC")
@@ -99,4 +89,6 @@ public interface OrderRepository extends JpaRepository<Orders, Integer> {
 
     @Query("SELECT p from Orders p where CONCAT(p.orderDate,p.status,p.total,p.orderDate) like %?1%")
     List<Orders> searchOrders(String keyword);
+    @Query("SELECT o FROM Orders o JOIN FETCH o.employee WHERE o.id = :orderId")
+    Orders getEmployeeById(@Param("orderId") Integer orderId);
 }

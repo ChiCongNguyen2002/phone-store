@@ -37,7 +37,7 @@
                     <table class="table table-bordered">
                         <tr th:each="orders : ${listOrder}">
                             <td class="font-weight-bold">Tên người đặt</td>
-                            <td th:text="${orders.user.fullname}"></td>
+                            <td th:text="${orders.customer.fullname}"></td>
                         </tr>
                         <tr th:each="orders : ${listOrder}">
                             <td class="font-weight-bold">Tên người nhận</td>

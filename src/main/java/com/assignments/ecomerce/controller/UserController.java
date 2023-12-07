@@ -44,12 +44,6 @@ public class UserController {
             return "register";
         }
 
-        User userPhone = userService.findByPhone(userDto.getPhone());
-        if (userPhone != null) {
-            model.addAttribute("userexistPhone", userPhone);
-            return "register";
-        }
-
         userService.save(userDto);
         model.addAttribute("message", "Registered successfully");
         return "login";
@@ -78,6 +72,7 @@ public class UserController {
             List<Product> topProducts = productService.getData();
             UserDetails userDetails = null;
             userDetails = userDetailsService.loadUserByUsername(principal.getName());
+            model.addAttribute("name", userDetails);
             model.addAttribute("userId", user.getId());
             model.addAttribute("userDetails", userDetails);
             model.addAttribute("top10Products", topProducts);
@@ -112,7 +107,6 @@ public class UserController {
 
         Page<User> listUser = userService.searchUser(pageNo, keyword);
         User user = userService.findByEmail(principal.getName());
-        model.addAttribute("name", user.getFullname());
         session.setAttribute("keyword", keyword);
         UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
         model.addAttribute("user", userDetails);

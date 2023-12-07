@@ -29,10 +29,15 @@
                     <div class="card-header">
                         <a class="btn btn-success" href="/search-order-ByEmployee/0?keyword=">Về danh sách</a>
                     </div>
+
                     <table class="table table-bordered">
                         <tr th:each="orders : ${listOrder}">
+                            <td class="font-weight-bold">Tên Nhân Viên Xác Nhận Đơn Hàng</td>
+                           <td th:text="${nameEmployee}"></td>
+                        </tr>
+                        <tr th:each="orders : ${listOrder}">
                             <td class="font-weight-bold">Tên người đặt</td>
-                            <td th:text="${orders.user.fullname}"></td>
+                            <td th:text="${orders.customer.fullname}"></td>
                         </tr>
                         <tr th:each="orders : ${listOrder}">
                             <td class="font-weight-bold">Tên người nhận</td>

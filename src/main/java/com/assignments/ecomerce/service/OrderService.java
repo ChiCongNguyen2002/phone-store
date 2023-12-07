@@ -41,5 +41,7 @@ public interface OrderService {
 
      List<Orders> searchOrdersByTimeToExcel(Date dateFrom, Date dateTo);
 
-     Orders getById(Integer id) ;
+     Orders getById(Integer id);
+
+     Orders getEmployeeById(Integer id);
 }

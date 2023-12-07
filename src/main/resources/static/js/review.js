@@ -1,5 +1,3 @@
-
-
 var ratingValue = 0;
 
 function setRating(star) {
@@ -44,4 +42,34 @@ function resetStars() {
       stars[i].src = "/img/star_2.png";
     }
   }
+}
+
+function saveReview(event) {
+  event.preventDefault(); // Ngăn chặn hành vi gửi biểu mẫu mặc định
+
+  var message = document.getElementById("message").value;
+  var date = document.getElementById("date-review").value;
+  var rating = document.getElementById("rating-value").value;
+
+if (message.trim() === "") {
+  alert("Vui lòng nhập nội dung");
+  return;
+}
+
+// Kiểm tra xem trường date có được nhập hay không
+if (date.trim() === "") {
+  alert("Vui lòng nhập ngày");
+  return;
+}
+
+// Kiểm tra xem trường rating có được chọn hay không
+if (rating === "") {
+  alert("Vui lòng chọn đánh giá");
+  return;
+} else if (isNaN(rating) || rating < 1 || rating > 5) {
+  alert("Đánh giá không hợp lệ");
+  return;
+}
+
+  document.getElementById("reviewForm").submit();
 }

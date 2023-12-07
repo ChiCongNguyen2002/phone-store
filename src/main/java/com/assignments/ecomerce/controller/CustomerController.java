@@ -3,6 +3,7 @@ package com.assignments.ecomerce.controller;
 import com.assignments.ecomerce.model.Category;
 import com.assignments.ecomerce.model.Customer;
 import com.assignments.ecomerce.model.Product;
+import com.assignments.ecomerce.model.User;
 import com.assignments.ecomerce.service.CustomerService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class CustomerController {
                                 @RequestParam("keyword") String keyword,
                                 Model model, Principal principal, HttpSession session) {
 
-        Page<Customer> listCustomer = customerService.searchCustomer(pageNo, keyword);
+        Page<User> listCustomer = customerService.findByKeyword(pageNo, keyword);
         session.setAttribute("keyword", keyword);
         model.addAttribute("keyword", keyword);
         UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
@@ -46,7 +47,7 @@ public class CustomerController {
     public String searchCustomerByEmployee(@PathVariable("pageNo") int pageNo,
                                  @RequestParam("keyword") String keyword,
                                  Model model, Principal principal, HttpSession session) {
-        Page<Customer> listCustomer = customerService.searchCustomer(pageNo, keyword);
+        Page<User> listCustomer = customerService.findByKeyword(pageNo, keyword);
         session.setAttribute("keyword", keyword);
         model.addAttribute("keyword", keyword);
         model.addAttribute("size", listCustomer.getSize());

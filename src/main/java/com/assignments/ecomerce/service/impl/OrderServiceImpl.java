@@ -76,7 +76,8 @@ public class OrderServiceImpl implements OrderService {
         for (Orders order : orders) {
             Orders newOrder = new Orders();
             newOrder.setId(order.getId());
-            newOrder.setCustomer(order.getUser());
+            newOrder.setCustomer(order.getCustomer());
+            newOrder.setEmployee(order.getEmployee());
             newOrder.setOrderDate(order.getOrderDate());
             newOrder.setStatus(order.getStatus());
             newOrder.setCouponId(order.getCouponId());
@@ -186,7 +187,8 @@ public class OrderServiceImpl implements OrderService {
         Orders newOrder = new Orders();
         newOrder.setId(order.getId());
         newOrder.setCouponId(order.getCouponId());
-        newOrder.setCustomer(order.getUser());
+        newOrder.setCustomer(order.getCustomer());
+        newOrder.setEmployee(order.getEmployee());
         newOrder.setOrderDate(order.getOrderDate());
         newOrder.setStatus(order.getStatus());
         newOrder.setTotal(order.getTotal());
@@ -195,5 +197,10 @@ public class OrderServiceImpl implements OrderService {
         newOrder.setShipPhoneNumber(order.getShipPhoneNumber());
         newOrder.setShipName(order.getShipName());
         return newOrder;
+    }
+
+    @Override
+    public Orders getEmployeeById(Integer id) {
+        return orderRepository.getEmployeeById(id);
     }
 }

@@ -40,9 +40,7 @@ public class ProductController {
     private UserService userService;
 
     @PostMapping("/add-review")
-    public String add(@ModelAttribute("reviewNew") Review review,
-                      Model model,
-                      RedirectAttributes attributes) {
+    public String add(@ModelAttribute("reviewNew") Review review, Model model, RedirectAttributes attributes) {
         try {
             boolean exists = reviewService.existsByUserIdAndProductId(review.getUser().getId(), review.getProduct().getId());
             if (exists) {
@@ -64,11 +62,7 @@ public class ProductController {
 
     @GetMapping("/product-details/{id}")
     public String DetailProduct(@PathVariable("id") Integer id, Model model, Principal principal) {
-        if(principal == null){
-            return "cart";
-        }else{
             UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
-
             User user = userService.findByEmail(principal.getName());
             Product product = productService.findById(id);
             List<Product> productDtoList = productService.findAllByCategory(product.getCategory().getName());
@@ -81,7 +75,7 @@ public class ProductController {
        /* Product getProductByColorAndName = productService.getProductByColorAndName(product.getName(), product.getColor());
         System.out.println("color:" + productColor);
         model.addAttribute("getProductByColorAndName", getProductByColorAndName);*/
-            model.addAttribute("name", user.getFullname());
+            model.addAttribute("name", userDetails);
             model.addAttribute("userDetails", userDetails);
             model.addAttribute("user", user);
             model.addAttribute("userId", user.getId());
@@ -95,7 +89,6 @@ public class ProductController {
             model.addAttribute("productColor", productColor);
             model.addAttribute("categories", categories);
             return "product-detail";
-        }
     }
 
     @GetMapping("/ViewByCategory/{pageNo}")

@@ -13,9 +13,15 @@ public class Orders {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     @ManyToOne
-    @JoinColumn(name = "userId")
-    private User user;
+    @JoinColumn(name = "customerId")
+    private Customer customer;
+
+    @ManyToOne
+    @JoinColumn(name = "employeeId")
+    private Employee employee;
+
     private Date orderDate;
     private Integer status;
     private Integer couponId;
@@ -52,8 +58,12 @@ public class Orders {
         this.total = total;
     }
 
-    public void setCustomer(User user) {
-        this.user = user;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 
     public void setShipName(String shipName) {
@@ -72,9 +82,10 @@ public class Orders {
         this.orderDetails = orderDetails;
     }
 
-    public Orders(Integer id, User user, Date orderDate, Integer status, Integer couponId, String paymentMethod, Double total, String shipName, String shipAddress, String shipPhone) {
+    public Orders(Integer id, Customer customer, Employee employee, Date orderDate, Integer status, Integer couponId, String paymentMethod, Double total, String shipName, String shipAddress, String shipPhoneNumber, List<OrderDetail> orderDetails) {
         this.id = id;
-        this.user = user;
+        this.customer = customer;
+        this.employee = employee;
         this.orderDate = orderDate;
         this.status = status;
         this.couponId = couponId;
@@ -82,7 +93,8 @@ public class Orders {
         this.total = total;
         ShipName = shipName;
         ShipAddress = shipAddress;
-        ShipPhoneNumber = shipPhone;
+        ShipPhoneNumber = shipPhoneNumber;
+        this.orderDetails = orderDetails;
     }
 
     public Orders(){}

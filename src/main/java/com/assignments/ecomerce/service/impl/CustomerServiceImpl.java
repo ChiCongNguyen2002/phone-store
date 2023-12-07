@@ -1,9 +1,6 @@
 package com.assignments.ecomerce.service.impl;
 
-import com.assignments.ecomerce.model.Category;
-import com.assignments.ecomerce.model.Customer;
-import com.assignments.ecomerce.model.Product;
-import com.assignments.ecomerce.model.Supplier;
+import com.assignments.ecomerce.model.*;
 import com.assignments.ecomerce.repository.CustomerRepository;
 import com.assignments.ecomerce.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +23,11 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Page<Customer> searchCustomer(int pageNo, String keyword) {
+    public Page<User> findByKeyword(int pageNo, String keyword) {
         Pageable pageable = PageRequest.of(pageNo, 5);
-        List<Customer> categorys = transfer(customerRepository.searchCustomer(keyword.trim()));
-        Page<Customer> categoryPages = toPage(categorys, pageable);
-        return categoryPages;
+        List<User> customners = transfer(customerRepository.findByKeyword(keyword.trim()));
+        Page<User> customnersPages = toPage(customners, pageable);
+        return customnersPages;
     }
 
     @Override
@@ -70,7 +67,7 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository.getById(id);
     }
 
-    private Page toPage(List<Customer> list, Pageable pageable) {
+    private Page toPage(List<User> list, Pageable pageable) {
         if (pageable.getOffset() >= list.size()) {
             return Page.empty();
         }
@@ -81,16 +78,15 @@ public class CustomerServiceImpl implements CustomerService {
         return new PageImpl(subList, pageable, list.size());
     }
 
-    private List<Customer> transfer(List<Customer> customers) {
-        List<Customer> customerList = new ArrayList<>();
-        for (Customer customer : customers) {
-            Customer newCustomer = new Customer();
+    private List<User> transfer(List<User> users) {
+        List<User> customerList = new ArrayList<>();
+        for (User customer : users) {
+            User newCustomer = new User();
             newCustomer.setId(customer.getId());
             newCustomer.setFullname(customer.getFullname());
             newCustomer.setAddress(customer.getAddress());
             newCustomer.setPhone(customer.getPhone());
             newCustomer.setEmail(customer.getEmail());
-            newCustomer.setStatusCustomer(customer.getStatusCustomer());
             customerList.add(newCustomer);
         }
         return customerList;
