@@ -141,8 +141,9 @@ public class ImportBillController {
             detail.setProduct(product);
             product.setQuantity(product.getQuantity() + Integer.parseInt(quantity[i]));
 
-            product.setImportPrice(Integer.parseInt(price[i]));
-            product.setPrice(Integer.parseInt(price[i]) + Integer.parseInt(price[i]) * 10/100);
+            product.setImportPrice((int) Double.parseDouble(price[i]));
+            Integer sumPrice = (int)Double.parseDouble(price[i]) + (int)Double.parseDouble(price[i]) * 10/100;
+            product.setPrice(sumPrice);
 
             detail.setQuantity(Integer.parseInt(quantity[i]));
             detail.setUnitPrice(Double.parseDouble(price[i]));

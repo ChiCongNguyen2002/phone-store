@@ -261,7 +261,7 @@
                                         <h4 th:text="${product.name}"></h4>
                                         <div class="item-price">
                                             <div class="price-box"><span class="regular-price"> <span
-                                                    class="price" th:text="${product.price}"><span></span></span></span>
+                                                    class="price" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + ' VNĐ'}"><span></span></span></span>
                                             </div>
                                         </div>
                                     </div>
@@ -312,8 +312,10 @@
                                     <div class="product-body">
                                         <h4 th:text="${product.name}"></h4>
                                         <div class="item-price">
-                                            <div class="price-box"><span class="regular-price"> <span
-                                                    class="price" th:text="${product.price}"><span></span></span></span>
+                                            <div class="price-box">
+                                                <span class="regular-price">
+                                                    <span class="price" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + ' VNĐ'}">
+                                                <span></span></span></span>
                                             </div>
                                         </div>
                                     </div>
