@@ -148,6 +148,25 @@ function addProduct(userId, productId, quantity) {
     });
 }
 
+function deleteItem(userId, productId) {
+            $.ajax({
+                url: "/api/delete",
+                type: "POST",
+                data: {
+                    productId: productId,
+                    userId: userId
+                },
+                success: function(response) {
+                    showToast(response);
+                    fetchDataOnModalShow(); // Update modal content after successful deletion
+                },
+                error: function(error) {
+                    fetchDataOnModalShow();
+                    console.log("Error deleting item:", error);
+                }
+            });
+}
+
 $(document).ready(function() {
     fetchDataOnModalShow();
 });

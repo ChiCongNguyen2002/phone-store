@@ -20,4 +20,7 @@ public interface CouponRepository extends JpaRepository<Coupon,Integer> {
 
     @Query(value = "select c from Coupon c where c.status = 1 and c.code = ?1")
     Coupon findByCode(String code);
+
+    @Query("SELECT p from Coupon p where status = 1")
+    List<Coupon> getAllCoupons();
 }

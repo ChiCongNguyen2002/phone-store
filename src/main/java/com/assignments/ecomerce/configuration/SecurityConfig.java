@@ -29,7 +29,11 @@ public class SecurityConfig {
                         .hasAuthority("ADMIN")
 /*                        .requestMatchers("/indexUser").hasAuthority("USER")*/
                         .requestMatchers("/search-customer-ByEmployee/0?keyword=").hasAuthority("EMPLOYEE")
-                        .requestMatchers("/*","/indexUser","/registration","/reset-password","/password-request","/css/**", "/dist/**", "/fonts/**",
+                        .requestMatchers("/*","/search-productByKeyword/**",
+                                "/search-productByOption/**","/ViewByCategory/0",
+                                "/product-details/**",
+                                "/couponCustomer/**","/detailCoupon/**",
+                                "/indexUser","/registration","/reset-password","/password-request","/css/**", "/dist/**", "/fonts/**",
                                 "/img/**", "/js/**", "/less/**", "/lib/**", "/pages/**",
                                 "/scss/**", "/themes/**", "/vendor/**").permitAll()
                         .anyRequest().authenticated())

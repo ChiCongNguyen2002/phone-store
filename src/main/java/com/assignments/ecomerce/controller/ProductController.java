@@ -1,13 +1,7 @@
 package com.assignments.ecomerce.controller;
 
-import com.assignments.ecomerce.model.Category;
-import com.assignments.ecomerce.model.Product;
-import com.assignments.ecomerce.model.Review;
-import com.assignments.ecomerce.model.User;
-import com.assignments.ecomerce.service.CategoryService;
-import com.assignments.ecomerce.service.ProductService;
-import com.assignments.ecomerce.service.ReviewService;
-import com.assignments.ecomerce.service.UserService;
+import com.assignments.ecomerce.model.*;
+import com.assignments.ecomerce.service.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -39,6 +33,9 @@ public class ProductController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private OrderService orderService;
+
     @PostMapping("/add-review")
     public String add(@ModelAttribute("reviewNew") Review review, Model model, RedirectAttributes attributes) {
         try {
@@ -62,32 +59,59 @@ public class ProductController {
 
     @GetMapping("/product-details/{id}")
     public String DetailProduct(@PathVariable("id") Integer id, Model model, Principal principal) {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
-            User user = userService.findByEmail(principal.getName());
-            Product product = productService.findById(id);
-            List<Product> productDtoList = productService.findAllByCategory(product.getCategory().getName());
-            List<Category> categories = categoryService.getAllCategory();
-            List<Review> reviews = reviewService.getByProduct(product);
-            List<Product> productColor = productService.getListColorByNameProduct(product.getName());
-            int countReview = reviewService.countReviews(product);
-            Double calculateAverageRating = reviewService.calculateAverageRating(product);
+            if(principal == null){
+                Product product = productService.findById(id);
+                List<Product> productDtoList = productService.findAllByCategory(product.getCategory().getName());
+                List<Category> categories = categoryService.getAllCategory();
+                List<Review> reviews = reviewService.getByProduct(product);
+                List<Product> productColor = productService.getListColorByNameProduct(product.getName());
+                int countReview = reviewService.countReviews(product);
+                Double calculateAverageRating = reviewService.calculateAverageRating(product);
 
        /* Product getProductByColorAndName = productService.getProductByColorAndName(product.getName(), product.getColor());
         model.addAttribute("getProductByColorAndName", getProductByColorAndName);*/
-            model.addAttribute("user", userDetails);
-            model.addAttribute("name", userDetails);
-            model.addAttribute("userDetails", userDetails);
-            model.addAttribute("userId", user.getId());
-            model.addAttribute("countReview", countReview);
-            model.addAttribute("calculateAverageRating", calculateAverageRating);
-            model.addAttribute("reviewNew", new Review());
-            model.addAttribute("reviews", reviews);
-            model.addAttribute("product", product);
-            model.addAttribute("products", productDtoList);
-            model.addAttribute("productDetail", product);
-            model.addAttribute("productColor", productColor);
-            model.addAttribute("categories", categories);
-            return "product-detail";
+
+                model.addAttribute("countReview", countReview);
+                model.addAttribute("calculateAverageRating", calculateAverageRating);
+                model.addAttribute("reviewNew", new Review());
+                model.addAttribute("reviews", reviews);
+                model.addAttribute("product", product);
+                model.addAttribute("products", productDtoList);
+                model.addAttribute("productDetail", product);
+                model.addAttribute("productColor", productColor);
+                model.addAttribute("categories", categories);
+                return "product-detail";
+            }else{
+                UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
+                User user = userService.findByEmail(principal.getName());
+                Product product = productService.findById(id);
+                List<Product> productDtoList = productService.findAllByCategory(product.getCategory().getName());
+                List<Category> categories = categoryService.getAllCategory();
+                List<Review> reviews = reviewService.getByProduct(product);
+                List<Product> productColor = productService.getListColorByNameProduct(product.getName());
+                int countReview = reviewService.countReviews(product);
+                Double calculateAverageRating = reviewService.calculateAverageRating(product);
+
+
+       /* Product getProductByColorAndName = productService.getProductByColorAndName(product.getName(), product.getColor());
+        model.addAttribute("getProductByColorAndName", getProductByColorAndName);*/
+                List<Orders> completedOrders = orderService.findDeliveredOrdersByUserEmail(principal.getName());
+                model.addAttribute("orders", completedOrders);
+                model.addAttribute("user", userDetails);
+                model.addAttribute("name", userDetails);
+                model.addAttribute("userDetails", userDetails);
+                model.addAttribute("userId", user.getId());
+                model.addAttribute("countReview", countReview);
+                model.addAttribute("calculateAverageRating", calculateAverageRating);
+                model.addAttribute("reviewNew", new Review());
+                model.addAttribute("reviews", reviews);
+                model.addAttribute("product", product);
+                model.addAttribute("products", productDtoList);
+                model.addAttribute("productDetail", product);
+                model.addAttribute("productColor", productColor);
+                model.addAttribute("categories", categories);
+                return "product-detail";
+            }
     }
 
     @GetMapping("/ViewByCategory/{pageNo}")
@@ -204,37 +228,63 @@ public class ProductController {
                                         @RequestParam(value = "defaultMinPrice", required = false) Double defaultMinPrice,
                                         @RequestParam(value = "defaultMaxPrice", required = false) Double defaultMaxPrice,
                                         Model model, Principal principal) {
-        if (minPrice == null) {
-            minPrice = 0.0;
-        }
+        if(principal == null){
+            if (minPrice == null) {
+                minPrice = 0.0;
+            }
 
-        if (maxPrice == null) {
-            maxPrice = Double.MAX_VALUE;
+            if (maxPrice == null) {
+                maxPrice = Double.MAX_VALUE;
+            }
+            List<Category> categories = categoryService.getAllCategory();
+            Page<Product> listProducts = productService.searchProductByOption(pageNo, category, sortOption, color, minPrice, maxPrice);
+            model.addAttribute("color", color);
+            model.addAttribute("minPrice", minPrice);
+            model.addAttribute("maxPrice", maxPrice);
+            model.addAttribute("defaultMinPrice", defaultMinPrice);
+            model.addAttribute("defaultMaxPrice", defaultMaxPrice);
+            model.addAttribute("sortOption", sortOption);
+            model.addAttribute("category", category);
+            model.addAttribute("categories", categories);
+            model.addAttribute("size", listProducts.getSize());
+            model.addAttribute("currentPage", pageNo);
+            model.addAttribute("totalPages", listProducts.getTotalPages());
+            model.addAttribute("productNew", new Product());
+            model.addAttribute("listProducts", listProducts.getContent());
+            return "searchByOption";
+        }else{
+            if (minPrice == null) {
+                minPrice = 0.0;
+            }
+
+            if (maxPrice == null) {
+                maxPrice = Double.MAX_VALUE;
+            }
+            List<Category> categories = categoryService.getAllCategory();
+            Page<Product> listProducts = productService.searchProductByOption(pageNo, category, sortOption, color, minPrice, maxPrice);
+            UserDetails userDetails = null;
+            if (principal != null) {
+                userDetails = userDetailsService.loadUserByUsername(principal.getName());
+            }
+            User user = userService.findByEmail(principal.getName());
+            model.addAttribute("name", userDetails);
+            model.addAttribute("userId", user.getId());
+            model.addAttribute("userDetails", userDetails);
+            model.addAttribute("color", color);
+            model.addAttribute("minPrice", minPrice);
+            model.addAttribute("maxPrice", maxPrice);
+            model.addAttribute("defaultMinPrice", defaultMinPrice);
+            model.addAttribute("defaultMaxPrice", defaultMaxPrice);
+            model.addAttribute("sortOption", sortOption);
+            model.addAttribute("category", category);
+            model.addAttribute("categories", categories);
+            model.addAttribute("size", listProducts.getSize());
+            model.addAttribute("currentPage", pageNo);
+            model.addAttribute("totalPages", listProducts.getTotalPages());
+            model.addAttribute("productNew", new Product());
+            model.addAttribute("listProducts", listProducts.getContent());
+            return "searchByOption";
         }
-        List<Category> categories = categoryService.getAllCategory();
-        Page<Product> listProducts = productService.searchProductByOption(pageNo, category, sortOption, color, minPrice, maxPrice);
-        UserDetails userDetails = null;
-        if (principal != null) {
-            userDetails = userDetailsService.loadUserByUsername(principal.getName());
-        }
-        User user = userService.findByEmail(principal.getName());
-        model.addAttribute("name", userDetails);
-        model.addAttribute("userId", user.getId());
-        model.addAttribute("userDetails", userDetails);
-        model.addAttribute("color", color);
-        model.addAttribute("minPrice", minPrice);
-        model.addAttribute("maxPrice", maxPrice);
-        model.addAttribute("defaultMinPrice", defaultMinPrice);
-        model.addAttribute("defaultMaxPrice", defaultMaxPrice);
-        model.addAttribute("sortOption", sortOption);
-        model.addAttribute("category", category);
-        model.addAttribute("categories", categories);
-        model.addAttribute("size", listProducts.getSize());
-        model.addAttribute("currentPage", pageNo);
-        model.addAttribute("totalPages", listProducts.getTotalPages());
-        model.addAttribute("productNew", new Product());
-        model.addAttribute("listProducts", listProducts.getContent());
-        return "searchByOption";
     }
 
     @GetMapping("/search-productByKeyword/{pageNo}")

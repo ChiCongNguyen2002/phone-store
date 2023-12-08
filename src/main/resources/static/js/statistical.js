@@ -191,11 +191,13 @@ function hideAllDivs() {
     var div2 = document.getElementById("top10ProductsDiv");
     var div3 = document.getElementById("monthlyRevenueDiv");
     var div4 = document.getElementById("weeklyRevenueDiv");
+    var div5 = document.getElementById("top5EmployeeDiv");
 
     div1.style.display = "none";
     div2.style.display = "none";
     div3.style.display = "none";
     div4.style.display = "none";
+    div5.style.display = "none";
 }
 
 function showChart(){

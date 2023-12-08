@@ -63,11 +63,12 @@ public class StatisticalController {
             }
             Object firstData = chartData.get(0);
             switch (firstData.getClass().getSimpleName()) {
-                case "TopEmployee":
-                    List<TopEmployee> top5Employees = chartData.stream()
-                            .map(p -> (TopEmployee) p)
+                case "Top5Employee":
+                    List<Top5Employee> top5Employees = chartData.stream()
+                            .map(p -> (Top5Employee) p)
                             .collect(Collectors.toList());
-                    model.addAttribute("top5Employees", top5Employees);
+                    System.out.println("controller" + top5Employees.size());
+                    model.addAttribute("top5Employee", top5Employees);
                     break;
                 case "TopCustomer":
                     List<TopCustomer> top5Users = chartData.stream()

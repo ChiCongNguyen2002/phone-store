@@ -13,6 +13,13 @@ import java.util.List;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Orders, Integer> {
+
+    @Query(value = "SELECT * FROM orders o " +
+            "JOIN customer c ON c.id = o.customerId " +
+            "JOIN user u ON u.email = c.email " +
+            "WHERE o.Status = 4 AND u.email = :email", nativeQuery = true)
+    List<Orders> findDeliveredOrdersByUserEmail(@Param("email") String userEmail);
+
     @Query(value = "SELECT COUNT(*) FROM orders", nativeQuery = true)
     int countOrders();
 
@@ -28,15 +35,6 @@ public interface OrderRepository extends JpaRepository<Orders, Integer> {
     @Query("SELECT o FROM Orders o WHERE o.customer.id = :customerId")
     Page<Orders> pageOrdersById(Pageable pageable, @Param("customerId") Integer customerId);
 
-    @Query("SELECT c.fullname, o.total, SUM(od.quantity) AS sumQuantity " +
-            "FROM OrderDetail od " +
-            "JOIN od.order o " +
-            "JOIN o.customer c " +
-            "WHERE o.orderDate BETWEEN :dateFrom AND :dateTo " +
-            "GROUP BY c.fullname " +
-            "ORDER BY sumQuantity DESC")
-    List<Object[]> getTop5UsersWithSumQuantity(@Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo);
-
     @Query("SELECT p.name, p.price, p.image, SUM(od.quantity) AS sumQuantity " +
             "FROM OrderDetail od " +
             "JOIN od.product p " +
@@ -46,12 +44,21 @@ public interface OrderRepository extends JpaRepository<Orders, Integer> {
             "ORDER BY sumQuantity DESC")
     List<Object[]> getTop10ProductsWithSumQuantity(@Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo);
 
-    @Query("SELECT u.fullname,o.total,SUM(od.quantity) AS sumQuantity " +
+    @Query("SELECT c.fullname, o.total, SUM(od.quantity) AS sumQuantity " +
             "FROM OrderDetail od " +
             "JOIN od.order o " +
-            "JOIN o.employee u " +
+            "JOIN o.customer c " +
             "WHERE o.orderDate BETWEEN :dateFrom AND :dateTo " +
-            "GROUP BY u.fullname " +
+            "GROUP BY c.fullname " +
+            "ORDER BY sumQuantity DESC")
+    List<Object[]> getTop5UsersWithSumQuantity(@Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo);
+
+    @Query("SELECT e.fullname,o.total,SUM(od.quantity) AS sumQuantity " +
+            "FROM OrderDetail od " +
+            "JOIN od.order o " +
+            "JOIN o.employee e " +
+            "WHERE o.orderDate BETWEEN :dateFrom AND :dateTo " +
+            "GROUP BY e.fullname " +
             "ORDER BY sumQuantity DESC")
     List<Object[]> getTop5EmployeesWithSumQuantity(@Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo);
 
@@ -89,6 +96,7 @@ public interface OrderRepository extends JpaRepository<Orders, Integer> {
 
     @Query("SELECT p from Orders p where CONCAT(p.orderDate,p.status,p.total,p.orderDate) like %?1%")
     List<Orders> searchOrders(String keyword);
+
     @Query("SELECT o FROM Orders o JOIN FETCH o.employee WHERE o.id = :orderId")
     Orders getEmployeeById(@Param("orderId") Integer orderId);
 }

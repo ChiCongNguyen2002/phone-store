@@ -198,7 +198,7 @@ public class OrderController {
     @GetMapping("/cart")
     public String pageCart(Model model, Principal principal) {
         if (principal == null) {
-            return "cart";
+            return "redirect:/login";
         } else {
             UserDetails userDetails = null;
             userDetails = userDetailsService.loadUserByUsername(principal.getName());

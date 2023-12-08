@@ -25,10 +25,6 @@ import com.google.gson.JsonObject;
 public class CartDetailController {
     @Autowired
     private CouponService couponService;
-
-    @Autowired
-    UserDetailsService userDetailsService;
-
     @Autowired
     private CartDetailService cartDetailService;
     @Autowired
@@ -72,7 +68,6 @@ public class CartDetailController {
             return "error: Unauthorized";
         }
     }
-
     @PostMapping("/delete")
     public String delete(HttpServletRequest request, Model model, Principal principal) {
         int userId = Integer.parseInt(request.getParameter("userId"));
@@ -86,11 +81,9 @@ public class CartDetailController {
                 }
                 return message;
             } else {
-                // Người dùng không tồn tại, trả về lỗi hoặc thông báo không tìm thấy
                 return "error: User not found";
             }
         } else {
-            // Principal rỗng, trả về lỗi hoặc thông báo không có xác thực
             return "error: Unauthorized";
         }
     }
@@ -103,11 +96,6 @@ public class CartDetailController {
             if (user != null && user.getId() == userId) {
                 int productId = Integer.parseInt(request.getParameter("productId"));
                 int quantity = Integer.parseInt(request.getParameter("quantity"));
-
-                System.out.println("productId" + productId);
-                System.out.println("userId" + userId);
-                System.out.println("quantity" + quantity);
-
                 Product product = productService.findById(productId);
                 String message = "Thêm thất bại";
                 if (product != null) {
@@ -128,18 +116,20 @@ public class CartDetailController {
         }
     }
 
-    @GetMapping("/Coupon/ApplyCoupon")
-    public int ApplyCoupon(@RequestBody String code, Model model, Principal principal) {
+    @PostMapping("/Coupon/ApplyCoupon")
+    public int ApplyCoupon(@RequestParam("code") String code, Model model, Principal principal) {
+        Coupon coupon = couponService.findByCode(code);
+        if (coupon == null) {
+            return -2;
+        } else if (coupon.getCount() <= 0) {
+            return -1;
+        }
+        return coupon.getPromotion();
+    }
 
-        // Lấy danh sách các mã coupon từ service
-        List<Coupon> coupons = couponService.getAllCoupons();
-
-        // Tìm kiếm mã coupon theo code
-        Coupon coupon = coupons.stream()
-                .filter(c -> c.getCode().equals(code))
-                .findFirst()
-                .orElse(null);
-
+    @PostMapping("/Cart/UpdateCart")
+    public int updateCart(@RequestParam("code") String code, Model model, Principal principal) {
+        Coupon coupon = couponService.findByCode(code);
         if (coupon == null) {
             return -2;
         } else if (coupon.getCount() <= 0) {

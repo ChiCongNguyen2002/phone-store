@@ -90,15 +90,17 @@ public class OrderServiceImpl implements OrderService {
 
     public List<Object> getData(Date dateFrom, Date dateTo, int year, String chartType) {
         switch (chartType) {
-            case "top5Employees":
+            case "top5Employee":
                 List<Object[]> resultEmployee = orderRepository.getTop5EmployeesWithSumQuantity(dateFrom, dateTo);
-                List<TopCustomer> top5Employee = new ArrayList<>();
+                List<Top5Employee> top5Employee = new ArrayList<>();
                 for (Object[] result : resultEmployee) {
                     String fullname = (String) result[0];
                     Double total = (Double) result[1];
                     Long sumQuantity = (Long) result[2];
-                    TopCustomer topEmployee = new TopCustomer(fullname, total, sumQuantity);
+                    System.out.println(fullname + " == "  + total  + "==" + sumQuantity);
+                    Top5Employee topEmployee = new Top5Employee(fullname, total, sumQuantity);
                     top5Employee.add(topEmployee);
+                    System.out.println("service" + top5Employee.size());
                 }
                 return new ArrayList<>(top5Employee);
             case "top5Users":
@@ -110,7 +112,6 @@ public class OrderServiceImpl implements OrderService {
                     Long sumQuantity = (Long) result[2];
                     TopCustomer topCustomer = new TopCustomer(fullname, total, sumQuantity);
                     tops.add(topCustomer);
-                    System.out.println(fullname + "=" + total + "=" + sumQuantity);
                 }
                 return new ArrayList<>(tops);
             case "top10Products":
@@ -120,7 +121,6 @@ public class OrderServiceImpl implements OrderService {
                     String name = (String) result[0];
                     Integer price = (Integer) result[1];
                     String image = (String) result[2];
-                    System.out.println("price"+ price);
                     Product product = new Product(name, price, image);
                     products.add(product);
                 }
@@ -203,5 +203,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Orders getEmployeeById(Integer id) {
         return orderRepository.getEmployeeById(id);
+    }
+
+    @Override
+    public List<Orders> findDeliveredOrdersByUserEmail(String userEmail) {
+        return orderRepository.findDeliveredOrdersByUserEmail(userEmail);
     }
 }

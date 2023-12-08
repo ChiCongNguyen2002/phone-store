@@ -55,6 +55,7 @@
                         <select id="chartType" name="chartType" onchange="displayChart()">
                             <option value="top10Products">Top 10 Sản Phẩm Bán Chạy Nhất</option>
                             <option value="top5Users">Top 5 Khách hàng mua hàng nhiều nhất</option>
+                            <option value="top5Employee">Top 5 Nhân Viên Bán Chạy Nhất</option>
                             <option value="monthlyRevenue">Doanh Thu theo tháng</option>
                             <option value="weeklyRevenue">Doanh Thu theo thứ trong tuần</option>
                         </select>
@@ -89,6 +90,27 @@
                         <td th:text="${user.fullname}"></td>
                         <td th:text="${user.total}"></td>
                         <td th:text="${user.sumQuantity}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="top5EmployeeDiv">
+                <table class="styled-table">
+                    <thead>
+                    <tr>
+                        <th>Top</th>
+                        <th>Tên</th>
+                        <th>Tổng Tiền</th>
+                        <th>Số lượng</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="employee,index : ${top5Employee}">
+                        <td th:text="${index.count}"></td>
+                        <td th:text="${employee.fullname}"></td>
+                        <td th:text="${employee.total}"></td>
+                        <td th:text="${employee.sumQuantity}"></td>
                     </tr>
                     </tbody>
                 </table>
@@ -187,11 +209,13 @@
     var tableRowProducts = document.querySelectorAll("#top10ProductsDiv tbody tr");
     var tableRowWeekly = document.querySelectorAll("#weeklyRevenueDiv tbody tr");
     var tableRowCustomer = document.querySelectorAll("#top5UsersDiv tbody tr");
+    var tableRowEmployee = document.querySelectorAll("#top5EmployeeDiv tbody tr");
 
     var data_chart = [];
     var data_chartProduct = [];
     var data_chartWeekly = [];
     var data_chartCustomer = [];
+    var data_chartEmployee = [];
 
      tableRows.forEach(function(row) {
          var month = row.cells[0].innerText; // Lấy giá trị từ cột đầu tiên
@@ -226,7 +250,7 @@
          console.log(data_chartWeekly);
      });
 
-    tableRowCustomer.forEach(function(row) {
+    tableRowEmployee.forEach(function(row) {
          var fullname = row.cells[1].innerText; // Lấy giá trị từ cột đầu tiên
          var sumTotal = parseInt(row.cells[2].innerText); // Lấy giá trị từ cột thứ hai
 
@@ -236,6 +260,18 @@
              label: fullname
          });
          console.log(data_chartCustomer);
+     });
+
+    tableRowCustomer.forEach(function(row) {
+         var fullname = row.cells[1].innerText; // Lấy giá trị từ cột đầu tiên
+         var sumTotal = parseInt(row.cells[2].innerText); // Lấy giá trị từ cột thứ hai
+
+         // Thêm giá trị month và sumTotal vào mảng data_chart
+         data_chartCustomer.push({
+             y: sumTotal,
+             label: fullname
+         });
+         console.log(data_chartEmployee);
      });
 
 </script>

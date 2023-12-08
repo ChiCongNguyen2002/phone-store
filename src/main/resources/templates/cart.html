@@ -38,24 +38,28 @@
                     <div class="table-responsive">
                         <table class="table table-bordered cart_summary" id="tbl_cart">
                             <thead>
-                                <tr>
-                                    <th class="cart_product">Hình ảnh</th>
-                                    <th>Tên</th>
-                                    <th>Đơn giá</th>
-                                    <th>Số lượng mua</th>
-                                    <th>Tổng cộng</th>
-                                    <th class="action"><i class="fa fa-trash"></i></th>
-                                </tr>
+                            <tr>
+                                <th class="cart_product">Hình ảnh</th>
+                                <th>Tên</th>
+                                <th>Đơn giá</th>
+                                <th>Số lượng mua</th>
+                                <th>Tổng cộng</th>
+                                <th class="action">
+                                    <i class="fa fa-trash"></i>
+                                </th>
+                            </tr>
                             </thead>
                             <tbody class="cart_body">
-                                <tr>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th class="action"><i class="fa fa-trash"></i></th>
-                                </tr>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th class="action">
+                                    <i class="fa fa-trash"></i>
+                                </th>
+                            </tr>
                             </tbody>
                             <tfoot>
                             <tr>
@@ -76,35 +80,34 @@
                                 </th>
                                 <th class="row">
                                     <div class="col">
-                                        <div class="p-3 sumPrice">Row column 1</div>
+                                        <div id="lbl_total" class="p-3 sumPrice">Row column 1</div>
                                     </div>
                                     <div class="col">
-                                        <div class="p-3 DiscPrice">Row column 2</div>
+                                        <div id="lbl_discount_amount" class="p-3 discountedPrice">Row column 2</div>
                                     </div>
                                     <div class="col">
-                                        <div class="p-3 sumTotalDiscPrice">Row column 3</div>
+                                        <div id="lbl_total_discounted" class="p-3 sumTotalDiscPrice">Row column 3</div>
                                     </div>
                                 </th>
                             </tr>
                             </tfoot>
-
                         </table>
                     </div>
                     <div class="form-group" id="coupon-input" style="width:300px">
                         <label>Bạn có coupon giảm giá?</label>
                         <div class="input-group">
-                            <input type="text" class="form-control" id="coupon-input-control" placeholder="Nhập mã Coupon">
+                            <input type="text" class="form-control" id="coupon-input-control"
+                                   placeholder="Nhập mã Coupon">
                             <span class="input-group-btn">
-                                    <button class="btn btn-primary" id="btn-apply-coupon">Áp dụng</button>
+                             <button class="btn btn-primary" id="btn-apply-coupon">Áp dụng</button>
                             </span>
                         </div>
                     </div>
-
                     <div class="cart_navigation">
-                        <a class="continue-btn" href="/indexCustomer"><i class="fa fa-arrow-left"> </i>&nbsp; Tiếp tục
-                            mua hàng</a>
-                        <a class="checkout-btn" th:href="@{/Cart/checkout}"><i class="fa fa-check"></i> Tiến hành thanh
-                            toán</a>
+                        <a class="continue-btn" href="/indexCustomer">
+                            <i class="fa fa-arrow-left"></i>&nbsp; Tiếp tục mua hàng </a>
+                        <a class="checkout-btn" th:href="@{/Cart/checkout}">
+                            <i class="fa fa-check"></i> Tiến hành thanh toán </a>
                     </div>
                 </div>
             </div>
@@ -120,124 +123,123 @@
     </div>
 </section>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-var button = document.querySelector('.add-to-cart-link');
-var iconElement = document.querySelector('.fa.fa-user-o.userID');
-var uid = iconElement.getAttribute('data-user-id');
+    var button = document.querySelector('.add-to-cart-link');
+    var iconElement = document.querySelector('.fa.fa-user-o.userID');
+    var uid = iconElement.getAttribute('data-user-id');
+    var discountAmount = 0;
+    var discountedTotalPrice = 0;
 
-function fetchDataOnModalShow() {
-    $.ajax({
-        url: "/api/index",
-        type: "GET",
-        data: {
-            userId: uid
-        },
-    }).done(function(response) {
-        console.log(response);
-        var responseLength = response.length;
-        console.log(responseLength);
-        var sumQuantity = document.querySelector(".sumQuantity");
-        sumQuantity.innerHTML = responseLength;
-
-    }).fail(function(error) {
-        console.error(error);
-    });
-}
-
-function addProduct(userId, productId) {
-    console.log(userId);
-    console.log(productId);
-    $.ajax({
-        url: "/api/add",
-        type: "POST",
-        data: {
-            userId: userId,
-            productId: productId
-        },
-        success: function(response) {
-            totalQuantity = 0;
-            fetchDataOnModalShow();
-            Swal.fire({
-                position: 'top-end',
-                icon: 'success',
-                title: 'Đã thêm vào giỏ hàng',
-                showConfirmButton: false,
-                timer: 1500
-            })
-
-        },
-        error: function(xhr, status, error) {
-            console.error(error);
-        }
-    });
-}
-</script>
-
-<script th:inline="javascript">
-    $(document).ready(function() {
-        $('body').on('click', '#btn-apply-coupon', function(e) {
-            e.preventDefault();
-            var code = $("#coupon-input-control").val();
-            console.log("check");
-            applyCoupon(code);
-        });
-    });
-
-function applyCoupon(code) {
+    function fetchDataOnModalShow() {
         $.ajax({
-            type: "POST",
-            url: "/Coupon/ApplyCoupon",
+            url: "/api/index",
+            type: "GET",
             data: {
-                code: code
+                userId: uid
             },
-            success: function (res) {
-                if (res === 0) {
-                    Swal.fire({
-                        position: 'top-end',
-                        icon: 'error',
-                        title: 'Một mã coupon chỉ được áp dụng cho 1 đơn hàng',
-                        showConfirmButton: false,
-                        timer: 1500,
-                    })
-                    return res;
-                } else if (res === -1) {
-                    Swal.fire({
-                        position: 'top-end',
-                        icon: 'error',
-                        title: 'Mã coupon này đã hết lượt sử dụng',
-                        showConfirmButton: false,
-                        timer: 1500,
-                    })
-                    return res;
-                } else if (res === -2) {
-                    Swal.fire({
-                        position: 'top-end',
-                        icon: 'error',
-                        title: 'Mã coupon không tồn tại',
-                        showConfirmButton: false,
-                        timer: 1500,
-                    })
-                    return res;
-                }
+        }).done(function(response) {
+            console.log(response);
+            var responseLength = response.length;
+            console.log(responseLength);
+            var sumQuantity = document.querySelector(".sumQuantity");
+            sumQuantity.innerHTML = responseLength;
+            var promotion = response.promotion;
 
-                loadData();
+        }).fail(function(error) {
+            console.error(error);
+        });
+    }
+
+    function addProduct(userId, productId) {
+        console.log(userId);
+        console.log(productId);
+        $.ajax({
+            url: "/api/add",
+            type: "POST",
+            data: {
+                userId: userId,
+                productId: productId
+            },
+            success: function(response) {
+                totalQuantity = 0;
+                fetchDataOnModalShow();
                 Swal.fire({
                     position: 'top-end',
                     icon: 'success',
-                    title: 'Áp dụng coupon thành công',
+                    title: 'Đã thêm vào giỏ hàng',
                     showConfirmButton: false,
-                    timer: 1500,
+                    timer: 1500
                 })
+
             },
-            error: function (err) {
-                console.log(err);
+            error: function(xhr, status, error) {
+                console.error(error);
             }
         });
     }
-</script>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script th:fragment="ajax_script">
+    $(document).ready(function() {
+    $('body').on('click', '#btn-apply-coupon', function(e) {
+        e.preventDefault();
+        var code = $("#coupon-input-control").val();
+        console.log("Mã Code là: " + code);
+        applyCoupon(code);
+    });
+});
+
+function applyCoupon(code) {
+    $.ajax({
+        type: "POST",
+        url: "/api/Coupon/ApplyCoupon",
+        data: {
+            code: code
+        },
+        success: function(res) {
+            if (res === 0) {
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'error',
+                    title: 'Một mã coupon chỉ được áp dụng cho 1 đơn hàng',
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+                return;
+            } else if (res === -1) {
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'error',
+                    title: 'Mã coupon này đã hết lượt sử dụng',
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+                return;
+            } else if (res === -2) {
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'error',
+                    title: 'Mã coupon không tồn tại',
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+                return;
+            }
+
+            Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: 'Áp dụng coupon thành công',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        },
+        error: function(err) {
+            console.log(err);
+        }
+    });
+}
+
     var iconElement = document.querySelector('.fa.fa-user-o.userID');
     var uid = iconElement.getAttribute('data-user-id');
     console.log(uid)
@@ -261,37 +263,44 @@ function applyCoupon(code) {
     }
 
     window.onload = function() {
-      fetchDataOnModalShow();
+        fetchDataOnModalShow();
     };
-</script>
 
-<script>
     function updateModalContent(response) {
-    // Clear the existing content in the modal body
-    var cartBody = $('.cart_body');
-    cartBody.empty();
-    var sum = 0;
-    response.forEach(function(item) {
-        var product = JSON.parse(item.product);
-        var quantity = item.quantity;
-        sum+=product.price * quantity;
-        // Create the HTML structure for each item
-        var itemHTML = `
-            <tr>
-                <td><img src="/img/${product.image}" alt="${product.name}" width="64" height="64"></td>
-                <td>${product.name}</td>
-                <td>${product.price}</td>
-                <td>${quantity}</td>
-                <td>${product.price * quantity}</td>
-                <td class="action"><i class="fa fa-trash"></i></td>
-            </tr>`;
-        console.log(itemHTML);
+        // Clear the existing content in the modal body
+        var cartBody = $('.cart_body');
+        cartBody.empty();
 
-        // Append the item HTML to the modal body
-        cartBody.append(itemHTML);
-    });
-    var sumPriceTable = $('.sumPrice');
-    sumPriceTable.html(sum);
+        var sum = 0;
+        response.forEach(function(item) {
+            var product = JSON.parse(item.product);
+            var quantity = item.quantity;
+            var itemTotalPrice = product.price * quantity;
+            sum += itemTotalPrice;
+
+            // Create the HTML structure for each item
+            var itemHTML = `
+                <tr>
+                    <td><img src="/img/${product.image}" alt="${product.name}" width="64" height="64"></td>
+                    <td>${product.name}</td>
+                    <td>${product.price}</td>
+                    <td>${quantity}</td>
+                    <td>${itemTotalPrice}</td>
+                    <td class="action"><i class="fa fa-trash"></i></td>
+                </tr>`;
+
+            // Append the item HTML to the modal body
+            cartBody.append(itemHTML);
+        });
+
+        var totalPriceTable = $('.sumPrice');
+        var discountedPriceTable = $('.discountedPrice');
+        var sumTotalDiscPriceTable = $('.sumTotalDiscPrice');
+        var discountedTotalPrice = sum - discountAmount;
+
+        totalPriceTable.html(sum);
+        discountedPriceTable.html(discountAmount);
+        sumTotalDiscPriceTable.html(discountedTotalPrice);
 }
 </script>
 </body>

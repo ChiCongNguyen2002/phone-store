@@ -112,9 +112,12 @@
                     </ul>
                     <div class="price-box-bar">
                         <div class="add-to-cart" style="margin-top:10px">
-                            <button class="add-to-cart-link" th:value="${productDetail.id}"
+                            <button th:if="${name == null}" onclick="redirectToLogin()" class="add-to-cart-link">
+                                <i class="fa fa-shopping-cart"></i> Thêm vào giỏ hàng
+                            </button>
+                            <button th:if="${name != null}" class="add-to-cart-link" th:value="${productDetail.id}"
                                     th:data-product-id="${productDetail.id}">
-                                <i class="fa fa-shopping-cart"></i> thêm vào giỏ hàng
+                                <i class="fa fa-shopping-cart"></i> Thêm vào giỏ hàng
                             </button>
                         </div>
                     </div>
@@ -215,14 +218,18 @@
                                 </div>
 
                                 <div>
-                                    <p>Bình luận</p>
+                                    <p th:if="${name != null}">Bình luận</p>
                                     <!-- <a href="/indexCustomer">Mua hàng mới được đánh giá sản phẩm</a>-->
                                     <!-- Form to add a new review -->
                                     <div th:if="${error}" class="text-center alert alert-danger">
                                         <p th:text="${error}"></p>
                                     </div>
 
-                                    <form id="reviewForm" th:action="@{/add-review}" method="post"
+                                    <button th:if="${name == null}" onclick="redirectToLogin()" class="add-to-cart-link">
+                                        Bạn phải đăng nhập và mua hàng mới được đánh giá sản phẩm
+                                    </button>
+
+                                    <form id="reviewForm" th:if="${name != null && orders.size() > 0}" th:action="@{/add-review}" method="post"
                                           th:object="${reviewNew}">
                                         <div class="form-group">
                                             <input type="hidden" class="form-control" id="customer" name="customer"
@@ -356,6 +363,11 @@
 <script src="/js/nouislider.min.js"></script>
 <script src="/js/jquery.zoom.min.js"></script>
 <script src="/js/main.js"></script>
+<script>
+    function redirectToLogin() {
+        window.location.href = "/login";
+    }
+</script>
 <script th:replace="~{ajax_fragment::ajax_script}"></script>
 </body>
 </html>

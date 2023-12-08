@@ -20,7 +20,7 @@ public class CouponServiceImpl implements CouponService {
     private CouponRepository couponRepository;
 
     public List<Coupon> getAllCoupons() {
-        return (List<Coupon>) couponRepository.findAll();
+        return couponRepository.getAllCoupons();
     }
 
     public Coupon save(Coupon coupon) {
