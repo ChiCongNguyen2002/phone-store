@@ -2,9 +2,11 @@ package com.assignments.ecomerce.controller;
 
 import com.assignments.ecomerce.dto.UserDTO;
 import com.assignments.ecomerce.model.Category;
+import com.assignments.ecomerce.model.Customer;
 import com.assignments.ecomerce.model.Product;
 import com.assignments.ecomerce.model.User;
 import com.assignments.ecomerce.service.CategoryService;
+import com.assignments.ecomerce.service.CustomerService;
 import com.assignments.ecomerce.service.ProductService;
 import com.assignments.ecomerce.service.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -15,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.List;
@@ -25,6 +28,9 @@ public class UserController {
     UserDetailsService userDetailsService;
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private CustomerService customerService;
     @Autowired
     private ProductService productService;
     @Autowired
@@ -45,6 +51,16 @@ public class UserController {
         }
 
         userService.save(userDto);
+
+        Customer customer = new Customer();
+        customer.setUser(userDto);  
+        customer.setFullname(userDto.getFullname());
+        customer.setAddress(userDto.getAddress());
+        customer.setPhone(userDto.getPhone());
+        customer.setEmail(userDto.getEmail());
+        customer.setStatusCustomer(1);
+        customerService.save(customer);
+
         model.addAttribute("message", "Registered successfully");
         return "login";
     }
@@ -122,5 +138,29 @@ public class UserController {
     @GetMapping("/permission")
     public String permission() {
         return "permission";
+    }
+
+    @RequestMapping(value = "/block-account", method = {RequestMethod.PUT, RequestMethod.GET})
+    public String blockCustomer(Integer id, RedirectAttributes redirectAttributes, Principal principal) {
+        try {
+            userService.blockAccount(id);
+            redirectAttributes.addFlashAttribute("success", "Enabled successfully!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Enabled failed!");
+        }
+        return "redirect:/search-user/0?keyword=";
+    }
+
+    @RequestMapping(value = "/unlock-account", method = {RequestMethod.PUT, RequestMethod.GET})
+    public String unlockCustomer(Integer id, RedirectAttributes redirectAttributes, Principal principal) {
+        try {
+            userService.unlockAccount(id);
+            redirectAttributes.addFlashAttribute("success", "Enabled successfully!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Enabled failed!");
+        }
+        return "redirect:/search-user/0?keyword=";
     }
 }

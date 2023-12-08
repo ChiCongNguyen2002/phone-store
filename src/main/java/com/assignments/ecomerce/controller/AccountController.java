@@ -21,19 +21,17 @@ import java.util.List;
 public class AccountController {
     @Autowired
     private OrderService orderService;
-
     @Autowired
     private UserDetailsService userDetailsService;
-
     @Autowired
     private UserService userService;
-
     @Autowired
     private CustomerService customerService;
 
     @Autowired
+    private EmployeeService employeeService;
+    @Autowired
     private OrderDetailService orderDetailService;
-
     @Autowired
     private CategoryService categoryService;
 
@@ -41,6 +39,7 @@ public class AccountController {
     public String showAccountUser(@PathVariable("pageNo") int pageNo, Model model, Principal principal) {
         User user = userService.findByEmailUser(principal.getName());
         Customer customer = customerService.findByEmailCustomer(principal.getName());
+
         Page<Orders> listOrder = orderService.pageOrdersById(pageNo, customer.getId());
         List<Category> categories = categoryService.getAllCategory();
         UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
@@ -118,6 +117,20 @@ public class AccountController {
         }
         try {
             userService.saveAdmin(userDto);
+            System.out.println(userDto.getRole());
+
+            if ("EMPLOYEE".equals(userDto.getRole())) {
+                Employee employee = new Employee();
+                employee.setUser(userDto);
+                employee.setFullname(userDto.getFullname());
+                employee.setAddress(userDto.getAddress());
+                employee.setPhone(userDto.getPhone());
+                employee.setEmail(userDto.getEmail());
+                employee.setSalary(3500000);
+                employee.setStatus(1);
+                employeeService.save(employee);
+            }
+
             model.addAttribute("accountNew", userDto);
             attributes.addFlashAttribute("success", "Added successfully");
         } catch (DataIntegrityViolationException e1) {

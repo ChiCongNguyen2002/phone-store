@@ -60,17 +60,62 @@
 
 <h1>Trang so sánh sản phẩm</h1>
 
-<ul class="compare-list">
-    <li class="compare-list-item">
-        <h2>Tên sản phẩm 1</h2>
-        <p>Chi tiết sản phẩm 1</p>
-    </li>
-    <li class="compare-list-item">
-        <h2>Tên sản phẩm 2</h2>
-        <p>Chi tiết sản phẩm 2</p>
-        <button class="add-product-button">Thêm sản phẩm</button>
-    </li>
-</ul>
+<div class="container mt-5">
+    <h1 class="text-center">So sánh 2 sản phẩm điện thoại</h1>
+
+    <div class="row mt-4">
+        <!-- Phần chọn sản phẩm -->
+        <div class="col-md-6">
+            <h2>Chọn sản phẩm 1</h2>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#productModal1">
+                Chọn sản phẩm
+            </button>
+        </div>
+
+        <div class="col-md-6">
+            <h2>Chọn sản phẩm 2</h2>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#productModal2">
+                Chọn sản phẩm
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap Modal 1 -->
+<div class="modal fade" id="productModal1" tabindex="-1" role="dialog" aria-labelledby="productModalLabel1" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="productModalLabel1">Danh sách sản phẩm</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="productModalBody1">
+                <!-- Nội dung danh sách sản phẩm sẽ được cập nhật ở đây -->
+                <p>Product list for modal 1</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap Modal 2 -->
+<div class="modal fade" id="productModal2" tabindex="-1" role="dialog" aria-labelledby="productModalLabel2" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="productModalLabel2">Danh sách sản phẩm</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="productModalBody2">
+                <!-- Nội dung danh sách sản phẩm sẽ được cập nhật ở đây -->
+                <p>Product list for modal 2</p>
+            </div>
+        </div>
+    </div>
+</div>
 
 <footer th:replace="~{indexUser::footer}"></footer>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

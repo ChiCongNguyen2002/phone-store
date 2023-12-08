@@ -30,7 +30,7 @@ public class CustomerController {
                                 @RequestParam("keyword") String keyword,
                                 Model model, Principal principal, HttpSession session) {
 
-        Page<User> listCustomer = customerService.findByKeyword(pageNo, keyword);
+        Page<Customer> listCustomer = customerService.findByKeyword(pageNo, keyword);
         session.setAttribute("keyword", keyword);
         model.addAttribute("keyword", keyword);
         UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
@@ -47,7 +47,7 @@ public class CustomerController {
     public String searchCustomerByEmployee(@PathVariable("pageNo") int pageNo,
                                  @RequestParam("keyword") String keyword,
                                  Model model, Principal principal, HttpSession session) {
-        Page<User> listCustomer = customerService.findByKeyword(pageNo, keyword);
+        Page<Customer> listCustomer = customerService.findByKeyword(pageNo, keyword);
         session.setAttribute("keyword", keyword);
         model.addAttribute("keyword", keyword);
         model.addAttribute("size", listCustomer.getSize());

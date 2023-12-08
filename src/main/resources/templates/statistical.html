@@ -255,11 +255,11 @@
          var sumTotal = parseInt(row.cells[2].innerText); // Lấy giá trị từ cột thứ hai
 
          // Thêm giá trị month và sumTotal vào mảng data_chart
-         data_chartCustomer.push({
+         data_chartEmployee.push({
              y: sumTotal,
              label: fullname
          });
-         console.log(data_chartCustomer);
+         console.log(data_chartEmployee);
      });
 
     tableRowCustomer.forEach(function(row) {

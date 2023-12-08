@@ -97,10 +97,8 @@ public class OrderServiceImpl implements OrderService {
                     String fullname = (String) result[0];
                     Double total = (Double) result[1];
                     Long sumQuantity = (Long) result[2];
-                    System.out.println(fullname + " == "  + total  + "==" + sumQuantity);
                     Top5Employee topEmployee = new Top5Employee(fullname, total, sumQuantity);
                     top5Employee.add(topEmployee);
-                    System.out.println("service" + top5Employee.size());
                 }
                 return new ArrayList<>(top5Employee);
             case "top5Users":

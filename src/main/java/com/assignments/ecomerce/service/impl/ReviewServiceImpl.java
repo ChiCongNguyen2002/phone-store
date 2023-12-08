@@ -13,7 +13,6 @@ import java.util.List;
 public class ReviewServiceImpl implements ReviewService{
     @Autowired
     private ReviewRepository reviewRepository;
-
     public List<Review> getAllReview() {
         return reviewRepository.findAll();
     }
@@ -34,8 +33,7 @@ public class ReviewServiceImpl implements ReviewService{
         return reviewRepository.calculateAverageRating(product);
     }
 
-    public boolean existsByCustomerIdAndProductId(Integer customerId, Integer productId) {
+    public Review existsByCustomerIdAndProductId(Integer customerId, Integer productId) {
         return reviewRepository.existsByCustomerIdAndProductId(customerId,productId);
     }
-
 }

@@ -17,7 +17,7 @@ public class Employee {
     private String address;
     private String phone;
     private String email;
-    private Double salary;
+    private Integer salary;
     private Integer status;
 
     public void setId(Integer id) {
@@ -44,7 +44,7 @@ public class Employee {
         this.email = email;
     }
 
-    public void setSalary(Double salary) {
+    public void setSalary(Integer salary) {
         this.salary = salary;
     }
 

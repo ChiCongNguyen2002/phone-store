@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public interface CustomerService {
     Page<Customer> pageCustomer(int pageNo);
 
-    Page<User> findByKeyword(int pageNo, String keyword);
+    Page<Customer> findByKeyword(int pageNo, String keyword);
     void blockCustomer(Integer id);
     void unlockCustomer(Integer id);
     Customer findByPhoneAndEmail(String phone, String email);

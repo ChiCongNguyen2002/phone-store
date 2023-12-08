@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface UserService {
+    void blockAccount(Integer id);
+    void unlockAccount(Integer id);
     User findByPhone(String phone);
     User findByEmail(String email);
     User saveAdmin(User user);

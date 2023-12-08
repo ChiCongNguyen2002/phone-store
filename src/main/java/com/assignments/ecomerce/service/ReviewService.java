@@ -20,6 +20,6 @@ public interface ReviewService {
      int countReviews(Product product);
 
      Double calculateAverageRating(Product product);
-     boolean existsByCustomerIdAndProductId(Integer customerId, Integer productId);
+     Review existsByCustomerIdAndProductId(Integer customerId, Integer productId);
 
 }

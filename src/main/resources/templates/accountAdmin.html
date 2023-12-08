@@ -78,6 +78,7 @@
                             <th>Địa Chỉ</th>
                             <th>Email</th>
                             <th>Vai Trò</th>
+                            <th>Hành động</th>
                         </tr>
 
                         <tr th:each="user : ${listUser}">
@@ -87,6 +88,14 @@
                             <td th:text="${user.address}"></td>
                             <td th:text="${user.email}"></td>
                             <td th:text="${user.role}"></td>
+                            <td>
+                                <a th:if="${user.status} == 1"
+                                   th:href="@{/block-account(id = ${user.id})}"
+                                   class="btn btn-primary">Block</a>
+                                <a th:if="${user.status} == 0"
+                                   th:href="@{/unlock-account(id = ${user.id})}"
+                                   class=" btn btn-danger">UnLock</a>
+                            </td>
                         </tr>
                     </table>
 

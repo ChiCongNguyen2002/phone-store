@@ -42,11 +42,13 @@ public class ProductController {
     @PostMapping("/add-review")
     public String add(@ModelAttribute("reviewNew") Review review, Model model, RedirectAttributes attributes) {
         try {
-            boolean exists = reviewService.existsByCustomerIdAndProductId(review.getCustomer().getId(), review.getProduct().getId());
-            if (exists) {
+            Review exists = reviewService.existsByCustomerIdAndProductId(review.getCustomer().getId(), review.getProduct().getId());
+            System.out.println(exists + "");
+            if (exists == null) {
                 attributes.addFlashAttribute("error", "Duplicate name of user and productId, please check again!");
                 return "redirect:/product-details/" + review.getProduct().getId();
             }
+
             reviewService.save(review);
             model.addAttribute("reviewNew", review);
             attributes.addFlashAttribute("success", "Added successfully");

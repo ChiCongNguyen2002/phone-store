@@ -23,10 +23,10 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Page<User> findByKeyword(int pageNo, String keyword) {
+    public Page<Customer> findByKeyword(int pageNo, String keyword) {
         Pageable pageable = PageRequest.of(pageNo, 5);
-        List<User> customners = transfer(customerRepository.findByKeyword(keyword.trim()));
-        Page<User> customnersPages = toPage(customners, pageable);
+        List<Customer> customners = transfer(customerRepository.findByKeyword(keyword.trim()));
+        Page<Customer> customnersPages = toPage(customners, pageable);
         return customnersPages;
     }
 
@@ -72,7 +72,7 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository.findByEmailCustomer(email);
     }
 
-    private Page toPage(List<User> list, Pageable pageable) {
+    private Page toPage(List<Customer> list, Pageable pageable) {
         if (pageable.getOffset() >= list.size()) {
             return Page.empty();
         }
@@ -83,10 +83,10 @@ public class CustomerServiceImpl implements CustomerService {
         return new PageImpl(subList, pageable, list.size());
     }
 
-    private List<User> transfer(List<User> users) {
-        List<User> customerList = new ArrayList<>();
-        for (User customer : users) {
-            User newCustomer = new User();
+    private List<Customer> transfer(List<Customer> users) {
+        List<Customer> customerList = new ArrayList<>();
+        for (Customer customer : users) {
+            Customer newCustomer = new Customer();
             newCustomer.setId(customer.getId());
             newCustomer.setFullname(customer.getFullname());
             newCustomer.setAddress(customer.getAddress());

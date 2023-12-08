@@ -1,6 +1,7 @@
 package com.assignments.ecomerce.service.impl;
 
 import com.assignments.ecomerce.dto.UserDTO;
+import com.assignments.ecomerce.model.Customer;
 import com.assignments.ecomerce.model.User;
 import com.assignments.ecomerce.repository.UserRepository;
 import com.assignments.ecomerce.service.UserService;
@@ -21,6 +22,20 @@ public class UserServiceImpl implements UserService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private UserRepository userRepository;
+
+    @Override
+    public void blockAccount(Integer id) {
+        User user = userRepository.getById(id);
+        user.setStatus(0);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void unlockAccount(Integer id) {
+        User user = userRepository.getById(id);
+        user.setStatus(1);
+        userRepository.save(user);
+    }
 
     @Override
     public User findByPhone(String phone) {
