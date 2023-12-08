@@ -14,10 +14,10 @@ import java.util.List;
 @Repository
 public interface OrderRepository extends JpaRepository<Orders, Integer> {
 
-    @Query(value = "SELECT * FROM orders o " +
-            "JOIN customer c ON c.id = o.customerId " +
-            "JOIN user u ON u.email = c.email " +
-            "WHERE o.Status = 4 AND u.email = :email", nativeQuery = true)
+    @Query("SELECT o FROM Orders o " +
+            "JOIN o.customer c " +
+            "JOIN c.user u " +
+            "WHERE o.status = 4 AND u.email = :email")
     List<Orders> findDeliveredOrdersByUserEmail(@Param("email") String userEmail);
 
     @Query(value = "SELECT COUNT(*) FROM orders", nativeQuery = true)
