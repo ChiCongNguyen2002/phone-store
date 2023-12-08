@@ -35,23 +35,29 @@ public class CompareController {
     @Autowired
     UserDetailsService userDetailsService;
 
-    @GetMapping("/compare/{productId}/{pageNo}")
-    public String compareProducts(@PathVariable("pageNo") int pageNo, @PathVariable("productId") Integer productId, Model model, Principal principal) {
-        Product product = productService.getProductById(productId);
-        User user = userService.findByEmail(principal.getName());
-        UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
-        Page<Coupon> listCoupon = couponService.pageCoupon(pageNo);
-        List<Product> listProducts = productService.getAllProducts();
-        List<Category> categories = categoryService.getAllCategory();
-        model.addAttribute("name", userDetails);
-        model.addAttribute("userId", user.getId());
-        model.addAttribute("product", product);
-        model.addAttribute("currentPage", pageNo);
-        model.addAttribute("totalPages", listCoupon.getTotalPages());
-        model.addAttribute("listCoupon", listCoupon);
-        model.addAttribute("listProducts", listProducts);
-        model.addAttribute("categories", categories);
-        model.addAttribute("userDetails", userDetails);
-        return "compareProductUser";
+    @GetMapping("/compare/{productId}")
+    public String compareProducts(@PathVariable("productId") Integer productId, Model model, Principal principal) {
+        if(principal == null){
+            Product product = productService.getProductById(productId);
+            List<Product> listProducts = productService.getAllProducts();
+            List<Category> categories = categoryService.getAllCategory();
+            model.addAttribute("product", product);
+            model.addAttribute("listProducts", listProducts);
+            model.addAttribute("categories", categories);
+            return "compareProductUser";
+        }else{
+            Product product = productService.getProductById(productId);
+            User user = userService.findByEmail(principal.getName());
+            UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
+            List<Product> listProducts = productService.getAllProducts();
+            List<Category> categories = categoryService.getAllCategory();
+            model.addAttribute("name", userDetails);
+            model.addAttribute("userId", user.getId());
+            model.addAttribute("product", product);
+            model.addAttribute("listProducts", listProducts);
+            model.addAttribute("categories", categories);
+            model.addAttribute("userDetails", userDetails);
+            return "compareProductUser";
+        }
     }
 }
