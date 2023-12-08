@@ -20,6 +20,7 @@ public class Review {
     @ManyToOne
     @JoinColumn(name = "productId")
     private Product product;
+
     private Integer rating;
     private LocalDateTime DateReview;
     private String comments;

@@ -229,15 +229,19 @@
                                         Bạn phải đăng nhập và mua hàng mới được đánh giá sản phẩm
                                     </button>
 
+                                    <button th:if="${orders.size() <= 0}" class="add-to-cart-link">
+                                        Bạn phải mua hàng mới được đánh giá sản phẩm
+                                    </button>
+
                                     <form id="reviewForm" th:if="${name != null && orders.size() > 0}" th:action="@{/add-review}" method="post"
                                           th:object="${reviewNew}">
                                         <div class="form-group">
-                                            <input type="hidden" class="form-control" id="customer" name="customer"
+                                            <input type="text" class="form-control" id="customer" name="customer"
                                                    th:value="${customer != null ? customer.id : ''}" required>
                                         </div>
 
                                         <div class="form-group">
-                                            <input type="hidden" class="form-control" id="product" name="product"
+                                            <input type="text" class="form-control" id="product" name="product"
                                                    th:value="${product != null ? product.id : ''}" required>
                                         </div>
 

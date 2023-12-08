@@ -34,6 +34,9 @@ public class ProductController {
     private UserService userService;
 
     @Autowired
+    private CustomerService customerService;
+
+    @Autowired
     private OrderService orderService;
 
     @PostMapping("/add-review")
@@ -70,7 +73,6 @@ public class ProductController {
 
        /* Product getProductByColorAndName = productService.getProductByColorAndName(product.getName(), product.getColor());
         model.addAttribute("getProductByColorAndName", getProductByColorAndName);*/
-
                 model.addAttribute("countReview", countReview);
                 model.addAttribute("calculateAverageRating", calculateAverageRating);
                 model.addAttribute("reviewNew", new Review());
@@ -96,6 +98,8 @@ public class ProductController {
        /* Product getProductByColorAndName = productService.getProductByColorAndName(product.getName(), product.getColor());
         model.addAttribute("getProductByColorAndName", getProductByColorAndName);*/
                 List<Orders> completedOrders = orderService.findDeliveredOrdersByUserEmail(principal.getName());
+                Customer customer = customerService.findByEmailCustomer(principal.getName());
+                model.addAttribute("customer", customer);
                 model.addAttribute("orders", completedOrders);
                 model.addAttribute("user", userDetails);
                 model.addAttribute("name", userDetails);
