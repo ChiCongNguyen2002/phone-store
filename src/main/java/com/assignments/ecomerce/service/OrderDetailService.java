@@ -13,4 +13,6 @@ public interface OrderDetailService {
     List<OrderDetail> getAllOrderDetail();
 
     List<OrderDetail> findAllByOrderId(Integer orderId) ;
+
+    List<OrderDetail> findListProductByOrderId(Integer orderId);
 }

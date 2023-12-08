@@ -91,10 +91,9 @@
 var button = document.querySelector('.add-to-cart-link');
 var iconElement = document.querySelector('.fa.fa-user-o.userID');
 var uid = iconElement.getAttribute('data-user-id');
-var productId = button.getAttribute('data-product-id');
-
 
 button.addEventListener('click', function(event) {
+   var productId = button.getAttribute('data-product-id');
    var quantityInput = document.getElementById('quantity-input');
    var quantityValue = quantityInput.value;
    addProduct(uid, productId, quantityValue);
@@ -157,7 +156,6 @@ function deleteItem(userId, productId) {
                     userId: userId
                 },
                 success: function(response) {
-                    showToast(response);
                     fetchDataOnModalShow(); // Update modal content after successful deletion
                 },
                 error: function(error) {

@@ -5,20 +5,21 @@ import com.assignments.ecomerce.service.CartDetailService;
 import com.assignments.ecomerce.service.CouponService;
 import com.assignments.ecomerce.service.ProductService;
 import com.assignments.ecomerce.service.UserService;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 @RestController
 @RequestMapping("/api")
 
@@ -31,6 +32,7 @@ public class CartDetailController {
     private ProductService productService;
     @Autowired
     private UserService userService;
+
     @GetMapping(value = "/index", produces = "application/json")
     public String index(Model model, Principal principal, @RequestParam("userId") int userId) {
         if (principal != null && principal.getName() != null) {
@@ -40,9 +42,7 @@ public class CartDetailController {
                 List<Product> listProduct = new ArrayList<>();
                 double multi = 0;
                 double quantity = 0;
-
                 JsonArray jsonArray = new JsonArray();
-
                 for (CartDetail cartDetail : list) {
                     Product product = productService.findById(cartDetail.getProductId());
                     if (product != null) {
@@ -68,6 +68,7 @@ public class CartDetailController {
             return "error: Unauthorized";
         }
     }
+
     @PostMapping("/delete")
     public String delete(HttpServletRequest request, Model model, Principal principal) {
         int userId = Integer.parseInt(request.getParameter("userId"));
@@ -117,25 +118,79 @@ public class CartDetailController {
     }
 
     @PostMapping("/Coupon/ApplyCoupon")
-    public int ApplyCoupon(@RequestParam("code") String code, Model model, Principal principal) {
+    @ResponseBody
+    public String ApplyCoupon(@RequestParam("code") String code, Model model, Principal principal) {
         Coupon coupon = couponService.findByCode(code);
         if (coupon == null) {
-            return -2;
+            return "-2";
         } else if (coupon.getCount() <= 0) {
-            return -1;
+            return "-1";
         }
-        return coupon.getPromotion();
+        int sum = 0;
+        String jsonResult = "";
+        if (principal != null && principal.getName() != null) {
+            User user = userService.findByEmail(principal.getName());
+            List<CartDetail> list = cartDetailService.findByUserId(user.getId());
+            List<Product> listProduct = new ArrayList<>();
+            int multi = 0;
+            int quantity = 0;
+
+            JsonArray jsonArray = new JsonArray();
+
+            for (CartDetail cartDetail : list) {
+                Product product = productService.findById(cartDetail.getProductId());
+                if (product != null) {
+                    multi += cartDetail.getQuantity() * product.getPrice();
+
+                    quantity = cartDetail.getQuantity();
+                    listProduct.add(product);
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("product", product.toString());
+                    jsonObject.addProperty("multi", multi);
+                    jsonObject.addProperty("quantity", quantity);
+                    jsonArray.add(jsonObject);
+                }
+            }
+            int maGiamGia = coupon.getPromotion();
+            sum = multi - (multi * maGiamGia / 100);
+            int tongTienSauKhiGiam = multi - sum;
+
+            Map<String, Integer> result = new HashMap<>();
+            result.put("tongTienSauKhiGiam", tongTienSauKhiGiam);
+            result.put("sum", sum);
+
+            Gson gson = new Gson();
+            jsonResult = gson.toJson(result);
+        }
+        return jsonResult;
     }
 
     @PostMapping("/Cart/UpdateCart")
-    public int updateCart(@RequestParam("code") String code, Model model, Principal principal) {
-        Coupon coupon = couponService.findByCode(code);
-        if (coupon == null) {
-            return -2;
-        } else if (coupon.getCount() <= 0) {
-            return -1;
+    public String updateCart(@RequestParam("id") Integer id, Integer quantity, Principal principal) {
+        JsonArray jsonArray = new JsonArray();
+        if (principal != null && principal.getName() != null) {
+            User user = userService.findByEmail(principal.getName());
+            List<CartDetail> list = cartDetailService.findByUserId(user.getId());
+            List<Product> listProduct = new ArrayList<>();
+            int multi = 0;
+            String message = "";
+            for (CartDetail cartDetail : list) {
+                Product product = productService.findById(cartDetail.getProductId());
+                if (product != null) {
+                    if (product.getId().equals(id)) {
+                        if (quantity > product.getQuantity()) {
+                            message = "quantity is greater than stock";
+                        }else if(quantity == 0){
+                            cartDetailService.deleteCart(user.getId(), product.getId());
+                        }else{
+                            cartDetailService.updateCart(user.getId(), product.getId(),quantity,product.getPrice());
+                        }
+                    }
+                }
+            }
         }
 
-        return coupon.getPromotion();
+        Gson gson = new Gson();
+        return gson.toJson(jsonArray);
     }
 }

@@ -60,17 +60,48 @@ public class CartDetailServiceImpl implements CartDetailService {
         }
     }
 
+    @Override
+    public boolean updateCart(Integer userId, Integer productId, Integer quantity, Integer unitPrice) {
+        try {
+            // Kiểm tra sự tồn tại của bản ghi với userId và productId
+            CartDetail existingCartDetail = cartDetailRepository.findByUserIdAndProductId(userId, productId);
+            if (existingCartDetail != null) {
+
+                existingCartDetail.setQuantity(quantity);
+                cartDetailRepository.save(existingCartDetail);
+            } else {
+                // Nếu bản ghi không tồn tại, tạo mới CartDetail và lưu vào cơ sở dữ liệu
+                int oldQuantity = 0;
+                CartDetail cartDetail = new CartDetail();
+                cartDetail.setUserId(userId);
+                cartDetail.setProductId(productId);
+                cartDetail.setQuantity(quantity);
+                cartDetail.setUnitPrice(unitPrice);
+                cartDetailRepository.saveCartDetail(cartDetail.getUserId(), cartDetail.getProductId(), cartDetail.getQuantity(), cartDetail.getUnitPrice());
+                CartDetail updatedCartDetail = cartDetailRepository.findByUserIdAndProductId(userId, productId);
+                if (updatedCartDetail.getQuantity() - oldQuantity == quantity) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            return true;
+        } catch (Exception e) {
+            System.out.println("Lỗi ở đây " + e.toString());
+            return false;
+        }
+    }
+
     @Transactional
     public boolean deleteCart(Integer userId, Integer productId) {
         try {
             // Kiểm tra sự tồn tại của bản ghi với userId và productId
             CartDetail existingCartDetail = cartDetailRepository.findByUserIdAndProductId(userId, productId);
-
             if (existingCartDetail != null) {
                 cartDetailRepository.delete(existingCartDetail);
                 return true;
             } else {
-                return false; // Không tìm thấy bản ghi để xóa
+                return false;
             }
         } catch (Exception e) {
             return false;

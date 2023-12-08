@@ -6,7 +6,23 @@ function updateSelectedColor(radio) {
      var displayedImageTwo = document.getElementById('displayedImageTwo');
      var imageSrc = radio.parentNode.querySelector('img').getAttribute('src');
      displayedImageTwo.setAttribute('src', imageSrc);
+
+    var productId = radio.parentNode.querySelector('p').textContent;
+
+     var addToCartButton = document.getElementById("addToCartButton");
+          console.log(addToCartButton.getAttribute("data-product-id"));
+
+     var newProductId = productId; // Giá trị mới
+     addToCartButton.setAttribute("value", newProductId);
+
+     // Thay đổi giá trị của thuộc tính "data-product-id"
+     addToCartButton.setAttribute("data-product-id", newProductId);
+     console.log(addToCartButton.getAttribute("data-product-id"));
+
+     var compare = document.getElementById('productCompare');
+     compare.innerHTML = '<a href="/compare/'+productId + '" class="compare-button"> + So sánh </a> |'
   }
+
 
   document.addEventListener("DOMContentLoaded", function() {
     var tabNav = document.querySelectorAll("#product-tab .tab-nav li");

@@ -57,9 +57,12 @@
                 <div class="product-details">
                     <h2 class="product-name">
                         <span th:text="${productDetail.name}"></span>
-                        <a th:href="@{/compare/{productId}(productId=${productDetail.id})}" class="compare-button">
-                            + So sánh
-                        </a>|
+                        <div id="productCompare">
+                            <a th:href="@{/compare/{productId}(productId=${productDetail.id})}" class="compare-button">
+                                + So sánh
+                            </a>|
+                        </div>
+
                     </h2>
                     <div class="contain">
                         <div>
@@ -84,11 +87,16 @@
                     <p>Màu sắc: <span id="selectedColor"></span></p>
                     <div id="colorList">
                         <label th:each="product : ${productColor}" class="image-radio-label">
-                            <input type="radio" name="color" class="image-radio-input"
+
+                            <input  type="radio" name="color" class="image-radio-input"
                                    onclick="updateSelectedColor(this)">
+
+
                             <img class="product-image" style="height: 50px; width: 50px;"
                                  th:src="@{'/img/' + ${product.image}}">
+
                             <span class="color-span" th:text="${product.color}"></span>
+                            <p style="display:none" id="productId" name="productId" th:text="${product.id}" th:value="${product.id}" data-id=${product.id}></p>
                         </label>
                     </div>
 
@@ -115,7 +123,7 @@
                             <button th:if="${name == null}" onclick="redirectToLogin()" class="add-to-cart-link">
                                 <i class="fa fa-shopping-cart"></i> Thêm vào giỏ hàng
                             </button>
-                            <button th:if="${name != null}" class="add-to-cart-link" th:value="${productDetail.id}"
+                            <button id="addToCartButton" th:if="${name != null}" class="add-to-cart-link" th:value="${productDetail.id}"
                                     th:data-product-id="${productDetail.id}">
                                 <i class="fa fa-shopping-cart"></i> Thêm vào giỏ hàng
                             </button>
@@ -229,7 +237,7 @@
                                         Bạn phải đăng nhập và mua hàng mới được đánh giá sản phẩm
                                     </button>
 
-                                    <p th:if="${orders.size() <= 0}" class="add-to-cart-link">
+                                    <p th:if="${name != null}" class="add-to-cart-link">
                                         Bạn phải mua hàng mới được đánh giá sản phẩm
                                     </p>
 

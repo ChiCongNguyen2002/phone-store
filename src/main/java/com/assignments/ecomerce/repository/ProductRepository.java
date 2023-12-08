@@ -44,8 +44,6 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             "AND CONCAT(p.name, p.price, p.quantity, p.color,p.category.name) LIKE %:keyword%")
     List<Product> findProductByAdmin(@Param("keyword") String keyword);
 
-
-
     @Query("SELECT DISTINCT p FROM Product p JOIN p.category c " +
             "WHERE p.status = 1 AND c.status = 1 " +
             "AND c.name LIKE %:category% " +

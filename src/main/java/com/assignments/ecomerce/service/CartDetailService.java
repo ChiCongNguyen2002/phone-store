@@ -15,5 +15,7 @@ public interface CartDetailService {
 
     boolean saveCart(Integer userId, Integer productId, Integer quantity, Integer unitPrice);
 
+    boolean updateCart(Integer userId, Integer productId, Integer quantity, Integer unitPrice);
+
     boolean deleteCart(Integer userId, Integer productId);
 }

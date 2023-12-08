@@ -57,7 +57,7 @@
                                 <th></th>
                                 <th></th>
                                 <th class="action">
-                                    <i class="fa fa-trash"></i>
+                                   <button><i class="fa fa-trash"></i></button>
                                 </th>
                             </tr>
                             </tbody>
@@ -80,13 +80,13 @@
                                 </th>
                                 <th class="row">
                                     <div class="col">
-                                        <div id="lbl_total" class="p-3 sumPrice">Row column 1</div>
+                                        <div id="lbl_total" class="p-3 sumPrice">0</div>
                                     </div>
                                     <div class="col">
-                                        <div id="lbl_discount_amount" class="p-3 discountedPrice">Row column 2</div>
+                                        <div id="lbl_discount_amount" class="p-3 discountedPrice">0</div>
                                     </div>
                                     <div class="col">
-                                        <div id="lbl_total_discounted" class="p-3 sumTotalDiscPrice">Row column 3</div>
+                                        <div id="lbl_total_discounted" class="p-3 sumTotalDiscPrice">0</div>
                                     </div>
                                 </th>
                             </tr>
@@ -103,10 +103,11 @@
                             </span>
                         </div>
                     </div>
+
                     <div class="cart_navigation">
                         <a class="continue-btn" href="/indexCustomer">
                             <i class="fa fa-arrow-left"></i>&nbsp; Tiếp tục mua hàng </a>
-                        <a class="checkout-btn" th:href="@{/Cart/checkout}">
+                        <a id="checkoutt" class="checkout-btn" th:href="@{/Cart/checkout/0}">
                             <i class="fa fa-check"></i> Tiến hành thanh toán </a>
                     </div>
                 </div>
@@ -145,8 +146,6 @@
             console.log(responseLength);
             var sumQuantity = document.querySelector(".sumQuantity");
             sumQuantity.innerHTML = responseLength;
-            var promotion = response.promotion;
-
         }).fail(function(error) {
             console.error(error);
         });
@@ -184,65 +183,97 @@
     $('body').on('click', '#btn-apply-coupon', function(e) {
         e.preventDefault();
         var code = $("#coupon-input-control").val();
-        console.log("Mã Code là: " + code);
         applyCoupon(code);
     });
+
+        $('body').on('click', '.btn-plus', function (e) {
+            e.preventDefault(); // line này để khi bấm ok (alert) thì không bị nhảy lên top website
+            const id = $(this).data('id');
+            const quantity = parseInt($('#txt_quantity_' + id).val()) + 1;
+            console.log(quantity);
+            updateCart(id, quantity);
+        });
+
+        $('body').on('click', '.btn-minus', function (e) {
+            e.preventDefault(); // line này để khi bấm ok (alert) thì không bị nhảy lên top website
+            const id = $(this).data('id');
+            const quantity = parseInt($('#txt_quantity_' + id).val()) - 1;
+            updateCart(id, quantity);
+        });
+
+        // chức năng xóa sản phẩm
+        $('body').on('click', '.delete-button', function (e) {
+             e.preventDefault();
+            const id = $(this).data('product-id');
+            console.log(id);
+            updateCart(id, 0);
+        });
 });
 
-function applyCoupon(code) {
-    $.ajax({
-        type: "POST",
-        url: "/api/Coupon/ApplyCoupon",
-        data: {
-            code: code
-        },
-        success: function(res) {
-            if (res === 0) {
-                Swal.fire({
-                    position: 'top-end',
-                    icon: 'error',
-                    title: 'Một mã coupon chỉ được áp dụng cho 1 đơn hàng',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-                return;
-            } else if (res === -1) {
-                Swal.fire({
-                    position: 'top-end',
-                    icon: 'error',
-                    title: 'Mã coupon này đã hết lượt sử dụng',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-                return;
-            } else if (res === -2) {
-                Swal.fire({
-                    position: 'top-end',
-                    icon: 'error',
-                    title: 'Mã coupon không tồn tại',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-                return;
-            }
+    function applyCoupon(code) {
+        $.ajax({
+            type: "POST",
+            url: "/api/Coupon/ApplyCoupon",
+            data: {
+                code: code
+            },
+            success: function(res) {
+                if (res === "0") {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'error',
+                        title: 'Một mã coupon chỉ được áp dụng cho 1 đơn hàng',
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                    return;
+                } else if (res === "-1") {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'error',
+                        title: 'Mã coupon này đã hết lượt sử dụng',
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                    return;
+                } else if (res === "-2") {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'error',
+                        title: 'Mã coupon không tồn tại',
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                    return;
+                }
 
-            Swal.fire({
-                position: 'top-end',
-                icon: 'success',
-                title: 'Áp dụng coupon thành công',
-                showConfirmButton: false,
-                timer: 1500,
-            });
-        },
-        error: function(err) {
-            console.log(err);
-        }
-    });
-}
+                var element = document.getElementById("lbl_discount_amount");
+                var element2 = document.getElementById("lbl_total_discounted");
+
+                var result = JSON.parse(res);
+
+                element.innerHTML = result.tongTienSauKhiGiam;
+                element2.innerHTML = result.sum;
+                var element = document.getElementById('checkoutt');
+                element.setAttribute('href', '/Cart/checkout/' + code);
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'Áp dụng coupon thành công',
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+            },
+            error: function(err) {
+                console.log(err);
+            }
+        });
+    }
+
+
 
     var iconElement = document.querySelector('.fa.fa-user-o.userID');
     var uid = iconElement.getAttribute('data-user-id');
-    console.log(uid)
     function fetchDataOnModalShow() {
         $.ajax({
             url: "/api/index",
@@ -266,41 +297,66 @@ function applyCoupon(code) {
         fetchDataOnModalShow();
     };
 
+    function updateCart(id, quantity) {
+            $.ajax({
+                type: "POST",
+                url: "/api/Cart/UpdateCart",
+                data: {
+                    id: id,
+                    quantity: quantity
+                },
+                success: function (res) {
+                    if (res == "quantity is greater than stock") {
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'error',
+                            title: 'Số lượng mua đã lớn hơn số lượng trong kho của sản phẩm',
+                            showConfirmButton: false,
+                            timer: 1500,
+                        })
+                    }
+                    console.log(res);
+                    fetchDataOnModalShow();
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+    }
+
     function updateModalContent(response) {
         // Clear the existing content in the modal body
         var cartBody = $('.cart_body');
         cartBody.empty();
-
         var sum = 0;
         response.forEach(function(item) {
             var product = JSON.parse(item.product);
             var quantity = item.quantity;
             var itemTotalPrice = product.price * quantity;
             sum += itemTotalPrice;
-
             // Create the HTML structure for each item
             var itemHTML = `
                 <tr>
                     <td><img src="/img/${product.image}" alt="${product.name}" width="64" height="64"></td>
                     <td>${product.name}</td>
                     <td>${product.price}</td>
-                    <td>${quantity}</td>
+                    <td>
+                        <div class="input-append">
+                            <input disabled class="span1" style="max-width: 34px" placeholder="1" id="txt_quantity_${product.id}" value="${item.quantity}" size="16" type="text">
+                            <button class="btn-minus" data-id="${product.id}" type="button"><i class="fa fa-minus"></i></button>
+                            <button class="btn-plus" data-id="${product.id}" type="button"><i class="fa fa-plus"></i></button>
+                        </div>
+                    </td>
                     <td>${itemTotalPrice}</td>
-                    <td class="action"><i class="fa fa-trash"></i></td>
+                    <td class="delete-button" data-user-id="1" data-product-id="${product.id}" style="width: 10%;">
+                        <button><i class="fa fa-trash"></i></button>
+                    </td>
                 </tr>`;
-
-            // Append the item HTML to the modal body
             cartBody.append(itemHTML);
         });
 
         var totalPriceTable = $('.sumPrice');
-        var discountedPriceTable = $('.discountedPrice');
-        var sumTotalDiscPriceTable = $('.sumTotalDiscPrice');
-        var discountedTotalPrice = sum - discountAmount;
-
         totalPriceTable.html(sum);
-        discountedPriceTable.html(discountAmount);
-        sumTotalDiscPriceTable.html(discountedTotalPrice);
 }
 </script>
 </body>

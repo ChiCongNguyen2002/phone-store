@@ -64,4 +64,6 @@ public interface ProductService {
      public double getMinPrice(Page<Product> productList);
 
      public double getMaxPrice(Page<Product> productList);
+
+     public  Product updateQuantity(Product product);
 }

@@ -1,38 +1,39 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org/">
 <head th:replace="~{indexUser::header}">
-    <style>
-        .compare-list {
-            display: flex;
-            list-style-type: none;
-            padding: 0;
-        }
+<!--    <style>-->
+<!--        .compare-list {-->
+<!--            display: flex;-->
+<!--            list-style-type: none;-->
+<!--            padding: 0;-->
+<!--        }-->
 
-        .compare-list-item {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid #ccc;
-            margin-right: 10px;
-        }
+<!--        .compare-list-item {-->
+<!--            flex: 1;-->
+<!--            padding: 10px;-->
+<!--            border: 1px solid #ccc;-->
+<!--            margin-right: 10px;-->
+<!--        }-->
 
-        .add-product-button {
-            margin-top: 10px;
-        }
+<!--        .add-product-button {-->
+<!--            margin-top: 10px;-->
+<!--        }-->
 
-        .selected-products {
-            margin-top: 20px;
-            display: flex;
-            list-style-type: none;
-            padding: 0;
-        }
+<!--        .selected-products {-->
+<!--            margin-top: 20px;-->
+<!--            display: flex;-->
+<!--            list-style-type: none;-->
+<!--            padding: 0;-->
+<!--        }-->
 
-        .selected-product-item {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid #ccc;
-            margin-right: 10px;
-        }
-    </style>
+<!--        .selected-product-item {-->
+<!--            flex: 1;-->
+<!--            padding: 10px;-->
+<!--            border: 1px solid #ccc;-->
+<!--            margin-right: 10px;-->
+<!--        }-->
+<!--    </style>-->
+
 </head>
 <body>
 <div th:replace="~{ajax_fragment::navbar}"></div>
@@ -52,73 +53,209 @@
             </div>
         </div>
         <!-- /row -->
+
+        <div class="container mt-5" >
+            <h2 class="text-center">So sánh 2 sản phẩm điện thoại</h2>
+
+            <div class="row mt-4" style="margin-left:20%">
+                <!-- Phần chọn sản phẩm -->
+                <div class="col-md-6" >
+                    <h3>Chọn sản phẩm 1</h3>
+                    <select class="form-control" id="product1" onchange="selectedProduct('product1')">
+                        <option th:each="product : ${listProducts}" th:value="${product.id}"
+                                th:text="${product.name + ' - ' + product.color}"></option>
+                    </select>
+                    <div  id="product1-image" style="display: flex; justify-content: center"></div>
+
+                </div>
+
+                <div class="col-md-6">
+                    <h3>Chọn sản phẩm 2</h3>
+                    <select class="form-control" id="product2" onchange="selectedProduct('product2')">
+                        <option th:each="product : ${listProducts}" th:value="${product.id}"
+                                th:text="${product.name + ' - ' + product.color}"></option>
+                    </select>
+                    <div  id="product2-image" style="display: flex; justify-content: center"></div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <h3>Thông tin cơ bản</h3>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="col-md-4"></th>
+                                <th class="col-md-4" id="productName1"></th>
+                                <th class="col-md-4" id="productName2"></th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td><strong>Giá</strong></td>
+                                <td id="product1-price"></td>
+                                <td id="product2-price"></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Kích thước màn hình</strong></td>
+                                <td id="product1-screen"></td>
+                                <td id="product2-screen"></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Camera phía trước</strong></td>
+                                <td id="product1-camera"></td>
+                                <td id="product2-camera"></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Bộ Chip</strong></td>
+                                <td id="product1-chip"></td>
+                                <td id="product2-chip"></td>
+                            </tr>
+                            <tr>
+                                <td><strong>RAM</strong></td>
+                                <td id="product1-ram"></td>
+                                <td id="product2-ram"></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Bộ nhớ lưu trữ</strong></td>
+                                <td id="product1-storage"></td>
+                                <td id="product2-storage"></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Pin</strong></td>
+                                <td id="product1-pin"></td>
+                                <td id="product2-pin"></td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bootstrap Modal 1 -->
+        <div class="modal fade" id="productModal1" tabindex="-1" role="dialog" aria-labelledby="productModalLabel1" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="productModalLabel1">Danh sách sản phẩm</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="productModalBody1">
+                        <!-- Nội dung danh sách sản phẩm sẽ được cập nhật ở đây -->
+                        <p>Product list for modal 1</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bootstrap Modal 2 -->
+        <div class="modal fade" id="productModal2" tabindex="-1" role="dialog" aria-labelledby="productModalLabel2" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="productModalLabel2">Danh sách sản phẩm</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="productModalBody2">
+                        <!-- Nội dung danh sách sản phẩm sẽ được cập nhật ở đây -->
+                        <p>Product list for modal 2</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <!-- /container -->
 </div>
 <!-- /BREADCRUMB -->
 
 
-<h1>Trang so sánh sản phẩm</h1>
 
-<div class="container mt-5">
-    <h1 class="text-center">So sánh 2 sản phẩm điện thoại</h1>
-
-    <div class="row mt-4">
-        <!-- Phần chọn sản phẩm -->
-        <div class="col-md-6">
-            <h2>Chọn sản phẩm 1</h2>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#productModal1">
-                Chọn sản phẩm
-            </button>
-        </div>
-
-        <div class="col-md-6">
-            <h2>Chọn sản phẩm 2</h2>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#productModal2">
-                Chọn sản phẩm
-            </button>
-        </div>
-    </div>
-</div>
-
-<!-- Bootstrap Modal 1 -->
-<div class="modal fade" id="productModal1" tabindex="-1" role="dialog" aria-labelledby="productModalLabel1" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="productModalLabel1">Danh sách sản phẩm</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body" id="productModalBody1">
-                <!-- Nội dung danh sách sản phẩm sẽ được cập nhật ở đây -->
-                <p>Product list for modal 1</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Bootstrap Modal 2 -->
-<div class="modal fade" id="productModal2" tabindex="-1" role="dialog" aria-labelledby="productModalLabel2" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="productModalLabel2">Danh sách sản phẩm</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body" id="productModalBody2">
-                <!-- Nội dung danh sách sản phẩm sẽ được cập nhật ở đây -->
-                <p>Product list for modal 2</p>
-            </div>
-        </div>
-    </div>
-</div>
 
 <footer th:replace="~{indexUser::footer}"></footer>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<!-- noUiSlider -->
+<script src="//cdn.bootcss.com/noUiSlider/8.5.1/nouislider.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function fetchProductOptions() {
+        $.ajax({
+            type: "GET",
+            url: "/getProductOptions",  // Replace with your Spring Boot endpoint
+            success: function (data) {
+
+                for (var i = 0; i < data.length; i++) {
+<!--                       $("#product1").append('<option value="' + data[i].id + '">' + data[i].name + ' - ' +data[i].color + '</option>');-->
+                       $("#product2").append('<option value="' + data[i].id + '">' + data[i].name + ' - ' +data[i].color + '</option>')
+                       var imagePath = "../../img/" + data[0].image;
+                       $("#productImage1").empty().append('<img class="product-image" style="width:50%" src="' + imagePath + '" alt="Product Image">');
+                       $("#productImage2").empty().append('<img class="product-image" style="width:50%" src="' + imagePath + '" alt="Product Image">');
+                   }
+            },
+            error: function () {
+                alert("Đã xảy ra lỗi khi tải danh sách sản phẩm.");
+            }
+        });
+    }
+
+    function firstProduct(){
+        var product = /*[[${product}]]*/ '';
+         if(product != null){
+            console.log(product);
+         }
+    }
+
+    function selectedProduct(product) {
+        console.log(product);
+        var productId = $("#" + product).val();
+        console.log(productId);
+        $.ajax({
+            type: "GET",
+            url: "/getProductInfo",
+            data: { productId: productId },
+            success: function (data) {
+                console.log(data);
+                $("#"+product+"-price").empty().append(data.price + " VND");
+                $("#"+product+"-screen").empty().append(data.screenSize);
+                $("#"+product+"-camera").empty().append(data.frontCamera);
+                $("#"+product+"-chip").empty().append(data.chipset);
+                $("#"+product+"-ram").empty().append(data.ram);
+                $("#"+product+"-storage").empty().append(data.internalStorage);
+                $("#"+product+"-pin").empty().append(data.battery);
+
+                var imagePath = "../../img/" +data.image;
+                $("#"+product+"-image").empty().append('<img class="product-image" style="width:50%" src="' + imagePath + '" alt="Product Image">');
+
+            },
+            error: function () {
+                alert("Đã xảy ra lỗi khi lấy thông tin sản phẩm.");
+            }
+        });
+    }
+
+<!--    $(document).ready(function () {-->
+<!--        fetchProductOptions();-->
+<!--        firstProduct();-->
+<!--    });-->
+
+</script>
+<script th:inline="javascript">
+    var product = /*[[${product}]]*/ '';
+         if(product != null){
+            console.log(product);
+    }
+    var data =  product.id;
+    var selectElement = document.getElementById("product1");
+    selectElement.value = data;
+    selectedProduct('product1');
+</script>
+
 <script th:fragment="ajax_script">
     var iconElement = document.querySelector('.fa.fa-user-o.userID');
     var uid = iconElement.getAttribute('data-user-id');
@@ -144,6 +281,9 @@
     window.onload = function() {
       fetchDataOnModalShow();
     };
+
+
 </script>
+
 </body>
 </html>

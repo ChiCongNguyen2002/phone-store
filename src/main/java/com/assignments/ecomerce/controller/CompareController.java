@@ -16,6 +16,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.security.Principal;
 import java.util.List;
@@ -59,5 +61,20 @@ public class CompareController {
             model.addAttribute("userDetails", userDetails);
             return "compareProductUser";
         }
+    }
+
+    @GetMapping("/getProductOptions")
+    @ResponseBody
+    public List<Product> getProductOptions(){
+        List<Product> productList = productService.getAllProducts();
+        return productList;
+    }
+
+    @GetMapping("/getProductInfo")
+    @ResponseBody
+    public Product getProductInfo(@RequestParam("productId") Integer productId){
+//        Product product = productService.findById(productId);
+        Product product = productService.findById(productId);
+        return product;
     }
 }

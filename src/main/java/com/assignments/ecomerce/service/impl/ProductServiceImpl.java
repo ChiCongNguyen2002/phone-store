@@ -296,4 +296,15 @@ public class ProductServiceImpl implements ProductService {
         }
         return maxPrice;
     }
+
+    @Override
+    public Product updateQuantity(Product product) {
+        try {
+            productRepository.save(product);
+            return product;
+        }catch (Exception e){
+
+        }
+        return null;
+    }
 }
