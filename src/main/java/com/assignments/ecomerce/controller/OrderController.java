@@ -1,7 +1,6 @@
 package com.assignments.ecomerce.controller;
 
 import com.assignments.ecomerce.model.*;
-import com.assignments.ecomerce.repository.OrderDetailRepository;
 import com.assignments.ecomerce.service.*;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -250,8 +249,8 @@ public class OrderController {
         }
     }
 
-    @GetMapping("/Cart/checkout/{coupon}")
-    public String pageCheckOut(@PathVariable("coupon")String Coupon, Model model, Principal principal) {
+    @PostMapping("/checkout")
+    public String pageCheckOut(@RequestParam(value = "coupon", required = false) String coupon, Model model, Principal principal) {
         if (principal == null) {
             return "redirect:/login";
         } else {
@@ -259,7 +258,7 @@ public class OrderController {
             userDetails = userDetailsService.loadUserByUsername(principal.getName());
             User user = userService.findByEmail(principal.getName());
             List<Category> categories = categoryService.getAllCategory();
-            model.addAttribute("coupon", Coupon);
+            model.addAttribute("coupon", coupon);
             model.addAttribute("categories", categories);
             model.addAttribute("userId", user.getId());
             model.addAttribute("userDetails", userDetails);
@@ -270,7 +269,7 @@ public class OrderController {
         }
     }
 
-    @GetMapping("/checkoutSuccess")
+    /*@PostMapping("/checkoutSuccess")
     public String pageCheckOut(Model model, Principal principal) {
         if (principal == null) {
             return "redirect:/login";
@@ -287,5 +286,5 @@ public class OrderController {
             model.addAttribute("user", user);
             return "checkoutSuccess";
         }
-    }
+    }*/
 }

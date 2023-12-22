@@ -142,4 +142,28 @@ public class AccountController {
         }
         return "redirect:/search-user/0?keyword=";
     }
+
+    @RequestMapping(value = "/block-account", method = {RequestMethod.PUT, RequestMethod.GET})
+    public String blockCustomer(Integer id, RedirectAttributes redirectAttributes, Principal principal) {
+        try {
+            userService.blockAccount(id);
+            redirectAttributes.addFlashAttribute("success", "Enabled successfully!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Enabled failed!");
+        }
+        return "redirect:/search-user/0?keyword=";
+    }
+
+    @RequestMapping(value = "/unlock-account", method = {RequestMethod.PUT, RequestMethod.GET})
+    public String unlockCustomer(Integer id, RedirectAttributes redirectAttributes, Principal principal) {
+        try {
+            userService.unlockAccount(id);
+            redirectAttributes.addFlashAttribute("success", "Enabled successfully!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Enabled failed!");
+        }
+        return "redirect:/search-user/0?keyword=";
+    }
 }

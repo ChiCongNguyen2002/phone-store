@@ -1,3 +1,8 @@
+#discount_amount_row,
+#total_discounted_row {
+    display: none;
+}
+
 .dropdown-menu {
     display: none;
     position: absolute;

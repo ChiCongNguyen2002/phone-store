@@ -71,7 +71,7 @@
                             <a th:href="@{/cart}">
                                 <i class="fa fa-shopping-cart"></i>
                                 <span>Giỏ hàng</span>
-                                <div class="qty sumQuantity" id="lbl_number_of_items_header">0</div>
+                                <div class="qty" id="lbl_number_of_items_header">0</div>
                             </a>
                         </div>
                     </div>
@@ -102,15 +102,13 @@ button.addEventListener('click', function(event) {
 
 function fetchDataOnModalShow() {
     $.ajax({
-        url: "/api/index",
+        url: "/api/GetListItems",
         type: "GET",
         data: {
             userId: uid
         },
     }).done(function(response) {
-        var responseLength = response.length;
-        var sumQuantity = document.querySelector(".sumQuantity");
-        sumQuantity.innerHTML = responseLength;
+        $('#lbl_number_of_items_header').text(response.length);
 
     }).fail(function(error) {
         console.error(error);
@@ -122,7 +120,7 @@ function addProduct(userId, productId, quantity) {
     console.log(productId);
     console.log(quantity);
     $.ajax({
-        url: "/api/add",
+        url: "/api/AddToCart",
         type: "POST",
         data: {
             userId: userId,
@@ -156,11 +154,10 @@ function deleteItem(userId, productId) {
                     userId: userId
                 },
                 success: function(response) {
-                    fetchDataOnModalShow(); // Update modal content after successful deletion
+                    fetchDataOnModalShow();
                 },
                 error: function(error) {
                     fetchDataOnModalShow();
-                    console.log("Error deleting item:", error);
                 }
             });
 }

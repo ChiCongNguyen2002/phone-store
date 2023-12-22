@@ -47,15 +47,10 @@ public class CartDetailServiceImpl implements CartDetailService {
                 cartDetail.setUnitPrice(unitPrice);
                 cartDetailRepository.saveCartDetail(cartDetail.getUserId(), cartDetail.getProductId(), cartDetail.getQuantity(), cartDetail.getUnitPrice());
                 CartDetail updatedCartDetail = cartDetailRepository.findByUserIdAndProductId(userId, productId);
-                if (updatedCartDetail.getQuantity() - oldQuantity == quantity) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return updatedCartDetail.getQuantity() - oldQuantity == quantity;
             }
             return true;
         } catch (Exception e) {
-            System.out.println("Lỗi ở đây " + e.toString());
             return false;
         }
     }

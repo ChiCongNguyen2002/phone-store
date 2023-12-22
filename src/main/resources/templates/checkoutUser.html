@@ -44,46 +44,25 @@
                                     <th>Đơn giá</th>
                                     <th>Số lượng mua</th>
                                     <th>Tổng cộng</th>
-                                    <th></th>
+                                    <th>Thao tác</th>
                                 </tr>
                                 </thead>
+
                                 <tbody class="cart_body">
-                                <tr>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                </tr>
                                 </tbody>
+
                                 <tfoot>
                                 <tr>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th class="row">
-                                        <div class="col">
-                                            <div class="p-3">Tổng đơn hàng</div>
-                                        </div>
-                                        <div class="col">
-                                            <div class="p-3">Số tiền giảm</div>
-                                        </div>
-                                        <div class="col">
-                                            <div class="p-3">Tổng giá đơn hàng đã giảm</div>
-                                        </div>
-                                    </th>
-                                    <th class="row">
-                                        <div class="col">
-                                            <div id="lbl_total" class="p-3 sumPrice">0</div>
-                                        </div>
-                                        <div class="col">
-                                            <div id="lbl_discount_amount" class="p-3 discountedPrice">0</div>
-                                        </div>
-                                        <div class="col">
-                                            <div id="lbl_total_discounted" class="p-3 sumTotalDiscPrice">0</div>
-                                        </div>
-                                    </th>
+                                    <td colspan="4"><strong>Tổng giá đơn hàng</strong></td>
+                                    <td colspan="2"><strong><span id="lbl_total"></span><span>&#8363;</span> </strong></td>
+                                </tr>
+                                <tr id="discount_amount_row">
+                                    <td colspan="4"><strong>Số tiền giảm</strong></td>
+                                    <td colspan="2"><strong><span id="lbl_discount_amount"></span> <span>&#8363;</span> </strong></td>
+                                </tr>
+                                <tr id="total_discounted_row">
+                                    <td colspan="4"><strong>Tổng giá đơn hàng đã giảm</strong></td>
+                                    <td colspan="2"><strong><span id="lbl_total_discounted"></span> <span>&#8363;</span> </strong></td>
                                 </tr>
                                 </tfoot>
                             </table>
@@ -97,14 +76,14 @@
                         </div>
                     </div>
 
-                    <form th:action="@{/checkoutSuccess}" method="GET">
+                    <form th:action="@{/checkoutSuccess}" method="POST">
                         <h4 class="checkout-sep">3. Thông tin giao hàng</h4>
                         <div class="box-border">
                             <ul>
                                 <li class="row">
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-12">
                                         <label for="Name" class="required">Tên</label>
-                                        <input th:value="${user.fullname}" class="input form-control" id="Name" value="">
+                                        <input th:value="${user.fullname}" class="input form-control" id="Name" type="text" value="">
                                         <span class="text-danger"></span>
                                     </div>
                                 </li>
@@ -118,7 +97,7 @@
                                 </li>
 
                                 <li class="row">
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-12">
                                         <label for="PhoneNumber" class="required">Số điện thoại</label>
                                         <input th:value="${user.phone}" class="input form-control" id="PhoneNumber" type="text" value="">
                                         <span class="text-danger"></span>
@@ -136,71 +115,9 @@
 
 <footer th:replace="~{indexUser::footer}"></footer>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script th:fragment="ajax_script">
-    var iconElement = document.querySelector('.fa.fa-user-o.userID');
-    var uid = iconElement.getAttribute('data-user-id');
-    var discountAmount = 0;
-    var discountedTotalPrice = 0;
-
-     function fetchDataOnModalShow() {
-         $.ajax({
-             url: "/api/index",
-             type: "GET",
-             data: {
-                 userId: uid
-             },
-         }).done(function(response) {
-             updateModalContent(response);
-             var responseLength = response.length;
-             console.log(response);
-             var sumQuantity = document.querySelector(".sumQuantity");
-             sumQuantity.innerHTML = responseLength;
-
-         }).fail(function(error) {
-             console.error(error);
-         });
-     }
-
-     window.onload = function() {
-         fetchDataOnModalShow();
-     };
-
-    function updateModalContent(response) {
-        // Clear the existing content in the modal body
-        var cartBody = $('.cart_body');
-        cartBody.empty();
-        var sum = 0;
-        response.forEach(function(item) {
-            var product = JSON.parse(item.product);
-            var quantity = item.quantity;
-            var itemTotalPrice = product.price * quantity;
-            sum += itemTotalPrice;
-            // Create the HTML structure for each item
-            var itemHTML = `
-                <tr>
-                    <td><img src="/img/${product.image}" alt="${product.name}" width="64" height="64"></td>
-                    <td>${product.name}</td>
-                    <td>${product.price}</td>
-                    <td>
-                        <div class="input-append">
-                            <input disabled class="span1" style="max-width: 34px" placeholder="1" id="txt_quantity_${product.id}" value="${item.quantity}" size="16" type="text">
-                        </div>
-                    </td>
-                    <td>${itemTotalPrice}</td>
-                    <td></td>
-
-                </tr>`;
-            cartBody.append(itemHTML);
-        });
-
-        var totalPriceTable = $('.sumPrice');
-        totalPriceTable.html(sum);
-}
-</script>
-
+<script th:src="@{/js/cart.js}"></script>
 <script th:inline="javascript">
     let total= 0;
-
     var coupon = [[${coupon}]];
     function applyCoupon(code) {
         $.ajax({
@@ -212,13 +129,21 @@
             success: function(res) {
                 var element = document.getElementById("lbl_discount_amount");
                 var element2 = document.getElementById("lbl_total_discounted");
-
                 var result = JSON.parse(res);
-
-                element.innerHTML = result.tongTienSauKhiGiam;
-                element2.innerHTML = result.sum;
-                console.log(result.sum)
+                var promotion = result.promotion;
+                element.innerHTML = numberWithCommas(result.totalAmountAfterReduction);
+                element2.innerHTML = numberWithCommas(result.sum);
                 total = result.sum;
+                 if (promotion !== 0) {
+                    var discountAmount = result.sum - (result.sum * ((100 - promotion) / 100));
+                    $('#discount_amount_row').show();
+                    $('#total_discounted_row').show();
+                    $('#lbl_discount_amount').text(numberWithCommas(discountAmount));
+                    $('#lbl_total_discounted').text(numberWithCommas(result.sum * ((100 - promotion) / 100)));
+                } else {
+                    $('#discount_amount_row').hide();
+                    $('#total_discounted_row').hide();
+                }
             },
             error: function(err) {
                 console.log(err);
@@ -227,10 +152,11 @@
     }
     if(coupon != 0) {
         applyCoupon(coupon);
-        console.log(total);
+    }
+
+    function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 </script>
-
-
 </body>
 </html>

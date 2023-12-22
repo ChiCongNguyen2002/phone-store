@@ -10,7 +10,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,38 +33,30 @@ public class CartDetailController {
     @Autowired
     private UserService userService;
 
-    @GetMapping(value = "/index", produces = "application/json")
+    @GetMapping(value = "/GetListItems", produces = "application/json")
     public String index(Model model, Principal principal, @RequestParam("userId") int userId) {
         if (principal != null && principal.getName() != null) {
             User user = userService.findByEmail(principal.getName());
             if (user != null && user.getId() == userId) {
                 List<CartDetail> list = cartDetailService.findByUserId(userId);
-                List<Product> listProduct = new ArrayList<>();
-                double multi = 0;
                 double quantity = 0;
                 JsonArray jsonArray = new JsonArray();
                 for (CartDetail cartDetail : list) {
                     Product product = productService.findById(cartDetail.getProductId());
                     if (product != null) {
-                        multi += cartDetail.getQuantity() * product.getPrice();
                         quantity = cartDetail.getQuantity();
-                        listProduct.add(product);
                         JsonObject jsonObject = new JsonObject();
                         jsonObject.addProperty("product", product.toString());
-                        jsonObject.addProperty("multi", multi);
                         jsonObject.addProperty("quantity", quantity);
                         jsonArray.add(jsonObject);
                     }
                 }
                 Gson gson = new Gson();
-                String json = gson.toJson(jsonArray);
-                return json;
+                return gson.toJson(jsonArray);
             } else {
-                // Người dùng không tồn tại, trả về lỗi hoặc thông báo không tìm thấy
                 return "error: User not found";
             }
         } else {
-            // Principal rỗng, trả về lỗi hoặc thông báo không có xác thực
             return "error: Unauthorized";
         }
     }
@@ -89,31 +81,33 @@ public class CartDetailController {
         }
     }
 
-    @PostMapping("/add")
-    public String add(HttpServletRequest request, Model model, Principal principal) {
+    @PostMapping("/AddToCart")
+    public ResponseEntity<CartViewModel> addToCart(HttpServletRequest request, Principal principal) {
         int userId = Integer.parseInt(request.getParameter("userId"));
+        var currentCart = new CartViewModel();
+        currentCart.setCartItems(new ArrayList<>());
         if (principal != null && principal.getName() != null) {
             User user = userService.findByEmail(principal.getName());
             if (user != null && user.getId() == userId) {
                 int productId = Integer.parseInt(request.getParameter("productId"));
                 int quantity = Integer.parseInt(request.getParameter("quantity"));
                 Product product = productService.findById(productId);
-                String message = "Thêm thất bại";
+
                 if (product != null) {
-                    if (cartDetailService.saveCart(user.getId(), productId, quantity, product.getPrice())) {
-                        message = "Thêm thành công mã sản phẩm " + product.getId() + " vào giỏ hàng";
-                    }
-                } else {
-                    message = "Sản phẩm không tồn tại";
+                    cartDetailService.saveCart(user.getId(), productId, quantity, product.getPrice());
+                    CartDetail cartItem = new CartDetail();
+                    cartItem.setProductId(productId);
+                    cartItem.setUserId(userId);
+                    cartItem.setQuantity(quantity);
+                    cartItem.setUnitPrice(product.getPrice());
+                    currentCart.CartItems.add(cartItem);
                 }
-                return message;
+                return ResponseEntity.ok(currentCart);
             } else {
-                // Người dùng không tồn tại, trả về lỗi hoặc thông báo không tìm thấy
-                return "error: User not found";
+                return ResponseEntity.ok(currentCart);
             }
         } else {
-            // Principal rỗng, trả về lỗi hoặc thông báo không có xác thực
-            return "error: Unauthorized";
+            return ResponseEntity.ok(currentCart);
         }
     }
 
@@ -127,23 +121,19 @@ public class CartDetailController {
             return "-1";
         }
         int sum = 0;
+        int multi = 0;
+        int quantity = 0;
         String jsonResult = "";
         if (principal != null && principal.getName() != null) {
             User user = userService.findByEmail(principal.getName());
             List<CartDetail> list = cartDetailService.findByUserId(user.getId());
-            List<Product> listProduct = new ArrayList<>();
-            int multi = 0;
-            int quantity = 0;
-
             JsonArray jsonArray = new JsonArray();
 
             for (CartDetail cartDetail : list) {
                 Product product = productService.findById(cartDetail.getProductId());
                 if (product != null) {
                     multi += cartDetail.getQuantity() * product.getPrice();
-
                     quantity = cartDetail.getQuantity();
-                    listProduct.add(product);
                     JsonObject jsonObject = new JsonObject();
                     jsonObject.addProperty("product", product.toString());
                     jsonObject.addProperty("multi", multi);
@@ -151,14 +141,15 @@ public class CartDetailController {
                     jsonArray.add(jsonObject);
                 }
             }
+
             int maGiamGia = coupon.getPromotion();
             sum = multi - (multi * maGiamGia / 100);
-            int tongTienSauKhiGiam = multi - sum;
+            int totalAmountAfterReduction = multi - sum;
 
             Map<String, Integer> result = new HashMap<>();
-            result.put("tongTienSauKhiGiam", tongTienSauKhiGiam);
+            result.put("totalAmountAfterReduction", totalAmountAfterReduction);
             result.put("sum", sum);
-
+            result.put("promotion", maGiamGia);
             Gson gson = new Gson();
             jsonResult = gson.toJson(result);
         }
@@ -168,29 +159,28 @@ public class CartDetailController {
     @PostMapping("/Cart/UpdateCart")
     public String updateCart(@RequestParam("id") Integer id, Integer quantity, Principal principal) {
         JsonArray jsonArray = new JsonArray();
+        Gson gson = new Gson();
         if (principal != null && principal.getName() != null) {
+            Product product1 = productService.getProductById(id);
             User user = userService.findByEmail(principal.getName());
             List<CartDetail> list = cartDetailService.findByUserId(user.getId());
-            List<Product> listProduct = new ArrayList<>();
-            int multi = 0;
             String message = "";
             for (CartDetail cartDetail : list) {
                 Product product = productService.findById(cartDetail.getProductId());
                 if (product != null) {
                     if (product.getId().equals(id)) {
-                        if (quantity > product.getQuantity()) {
+                        if (quantity > product1.getQuantity()) {
                             message = "quantity is greater than stock";
-                        }else if(quantity == 0){
+                            return gson.toJson(message);
+                        } else if (quantity == 0) {
                             cartDetailService.deleteCart(user.getId(), product.getId());
-                        }else{
-                            cartDetailService.updateCart(user.getId(), product.getId(),quantity,product.getPrice());
+                        } else {
+                            cartDetailService.updateCart(user.getId(), product.getId(), quantity, product.getPrice());
                         }
                     }
                 }
             }
         }
-
-        Gson gson = new Gson();
         return gson.toJson(jsonArray);
     }
 }

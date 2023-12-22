@@ -1,22 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:fragment="header">
-    <!-- favicon -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <!-- Google font -->
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
-
-    <!-- Bootstrap -->
     <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css"/>
-
-    <!-- Slick -->
     <link type="text/css" rel="stylesheet" href="/css/slick.css"/>
     <link type="text/css" rel="stylesheet" href="/css/slick-theme.css"/>
-
-    <!-- nouislider -->
     <link type="text/css" rel="stylesheet" href="/css/nouislider.min.css"/>
     <link rel="stylesheet" href="/css/font-awesome.min.css">
     <link type="text/css" rel="stylesheet" href="/css/style.css"/>
@@ -60,7 +50,7 @@
             <ul class="header-links pull-right">
                 <li><a th:href="@{/login}" th:if="${userDetails == null}">Đăng nhập</a></li>
                 <li><a th:href="@{/registration}" th:if="${userDetails == null}">Đăng ký</a></li>
-                <li><a th:href="@{/account/0}" th:if="${userDetails != null}" ><i class="fa fa-user-o userID"></i>[[${name.getFullname()}]]</a></li>
+                <li><a th:href="@{/account/0}" th:if="${userDetails != null}" ><i class="fa fa-user-o userID" th:data-user-id="${userId}"></i>[[${name.getFullname()}]]</a></li>
                 <li><a th:href="@{/logout}" th:if="${userDetails != null}">Đăng xuất</a></li>
             </ul>
 
@@ -97,7 +87,7 @@
                             <a th:href="@{/cart}">
                                 <i class="fa fa-shopping-cart"></i>
                                 <span>Giỏ hàng</span>
-                                <div class="qty sumQuantity" id="lbl_number_of_items_header">0</div>
+                                <div class="qty" id="lbl_number_of_items_header">0</div>
                             </a>
                         </div>
                     </div>
@@ -458,10 +448,10 @@
         <!-- /top footer -->
     </footer>
 
-    <!-- Messenger Plugin chat Code -->
+<!--    &lt;!&ndash; Messenger Plugin chat Code &ndash;&gt;
     <div id="fb-root"></div>
 
-    <!-- Your Plugin chat code -->
+    &lt;!&ndash; Your Plugin chat code &ndash;&gt;
     <div id="fb-customer-chat" class="fb-customerchat">
     </div>
 
@@ -471,7 +461,7 @@
         chatbox.setAttribute("attribution", "biz_inbox");
     </script>
 
-    <!-- Your SDK code -->
+    &lt;!&ndash; Your SDK code &ndash;&gt;
     <script>
         window.fbAsyncInit = function() {
           FB.init({
@@ -487,9 +477,8 @@
           js.src = 'https://connect.facebook.net/vi_VN/sdk/xfbml.customerchat.js';
           fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));
-    </script>
+    </script>-->
 </div>
-<!-- /SECTION -->
 
 <script src="/js/jquery.min.js"></script>
 <script src="/js/bootstrap.min.js"></script>
@@ -499,30 +488,29 @@
 <script src="/js/main.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script th:fragment="ajax_script">
-    var iconElement = document.querySelector('.fa.fa-user-o.userID');
-    var uid = iconElement.getAttribute('data-user-id');
-    console.log(uid)
-    function fetchDataOnModalShow() {
+    window.onload = function() {
+        var iconElement = document.querySelector('.fa.fa-user-o.userID');
+        if (iconElement) {
+            var uid = iconElement.getAttribute('data-user-id');
+            fetchDataOnModalShow(uid);
+        }
+    };
+
+    function fetchDataOnModalShow(uid) {
         $.ajax({
-            url: "/api/index",
+            url: "/api/GetListItems",
             type: "GET",
             data: {
                 userId: uid
             },
-        }).done(function(response) {
-            var responseLength = response.length;
-            console.log(responseLength);
-            var sumQuantity = document.querySelector(".sumQuantity");
-            sumQuantity.innerHTML = responseLength;
-
-        }).fail(function(error) {
-            console.error(error);
+            success: function(response) {
+                $('#lbl_number_of_items_header').text(response.length);
+            },
+            error: function(error) {
+                console.log(error);
+            }
         });
     }
-
-    window.onload = function() {
-      fetchDataOnModalShow();
-    };
 </script>
 </body>
 </html>

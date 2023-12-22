@@ -4,7 +4,7 @@
 </head>
 <body>
 
-<div th:replace="~{ajax_fragment::navbar}"></div>
+<div th:replace="~{indexUser::navbar}"></div>
 <nav th:replace="~{indexUser::navigation}"></nav>+
 
 <!-- BREADCRUMB -->
@@ -134,31 +134,6 @@
 
 <footer th:replace="~{indexUser::footer}"></footer>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script th:fragment="ajax_script">
-    var iconElement = document.querySelector('.fa.fa-user-o.userID');
-    var uid = iconElement.getAttribute('data-user-id');
-    console.log(uid)
-    function fetchDataOnModalShow() {
-        $.ajax({
-            url: "/api/index",
-            type: "GET",
-            data: {
-                userId: uid
-            },
-        }).done(function(response) {
-            var responseLength = response.length;
-            console.log(responseLength);
-            var sumQuantity = document.querySelector(".sumQuantity");
-            sumQuantity.innerHTML = responseLength;
-
-        }).fail(function(error) {
-            console.error(error);
-        });
-    }
-
-    window.onload = function() {
-      fetchDataOnModalShow();
-    };
-</script>
+<script th:replace="~{indexUser::ajax_script}"></script>
 </body>
 </html>

@@ -1,38 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org/">
 <head th:replace="~{indexUser::header}">
-<!--    <style>-->
-<!--        .compare-list {-->
-<!--            display: flex;-->
-<!--            list-style-type: none;-->
-<!--            padding: 0;-->
-<!--        }-->
-
-<!--        .compare-list-item {-->
-<!--            flex: 1;-->
-<!--            padding: 10px;-->
-<!--            border: 1px solid #ccc;-->
-<!--            margin-right: 10px;-->
-<!--        }-->
-
-<!--        .add-product-button {-->
-<!--            margin-top: 10px;-->
-<!--        }-->
-
-<!--        .selected-products {-->
-<!--            margin-top: 20px;-->
-<!--            display: flex;-->
-<!--            list-style-type: none;-->
-<!--            padding: 0;-->
-<!--        }-->
-
-<!--        .selected-product-item {-->
-<!--            flex: 1;-->
-<!--            padding: 10px;-->
-<!--            border: 1px solid #ccc;-->
-<!--            margin-right: 10px;-->
-<!--        }-->
-<!--    </style>-->
 
 </head>
 <body>
@@ -239,11 +207,6 @@
         });
     }
 
-<!--    $(document).ready(function () {-->
-<!--        fetchProductOptions();-->
-<!--        firstProduct();-->
-<!--    });-->
-
 </script>
 <script th:inline="javascript">
     var product = /*[[${product}]]*/ '';
@@ -262,7 +225,7 @@
     console.log(uid)
     function fetchDataOnModalShow() {
         $.ajax({
-            url: "/api/index",
+            url: "/api/GetListItems",
             type: "GET",
             data: {
                 userId: uid
@@ -281,9 +244,6 @@
     window.onload = function() {
       fetchDataOnModalShow();
     };
-
-
 </script>
-
 </body>
 </html>
