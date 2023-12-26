@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 08, 2023 at 10:46 AM
+-- Generation Time: Dec 26, 2023 at 07:57 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -39,9 +39,9 @@ CREATE TABLE `cartdetail` (
 --
 
 INSERT INTO `cartdetail` (`userId`, `productId`, `quantity`, `unitPrice`) VALUES
-(7, 132, 5, 34290000),
-(7, 142, 2, 40333332),
-(7, 145, 2, 25900000);
+(7, 142, 1, 25590000),
+(35, 142, 1, 1100000),
+(35, 150, 2, 8690000);
 
 -- --------------------------------------------------------
 
@@ -88,7 +88,7 @@ CREATE TABLE `coupon` (
 INSERT INTO `coupon` (`id`, `code`, `count`, `promotion`, `description`, `status`) VALUES
 (1, 'CM3', 40, '3', 'Khuyến mãi 3%', 1),
 (2, 'CM4', 30, '10', 'Khuyến mãi 10%', 1),
-(3, 'CM5', 5, '5', 'Khuyến mãi 5%', 1),
+(3, 'CM5', 1, '5', 'Khuyến mãi 5%', 1),
 (14, 'CM6', 0, '1', 'Không khuyến mãi ', 1);
 
 -- --------------------------------------------------------
@@ -113,7 +113,9 @@ CREATE TABLE `customer` (
 
 INSERT INTO `customer` (`id`, `fullname`, `address`, `phone`, `email`, `userId`, `statusCustomer`) VALUES
 (1, 'Nguyen Chi Cong', 'Cà Mau', '0948399484', 'congkhpro291002@gmail.com', 7, 1),
-(2, 'Nguyen Van Tien Dụng', 'Binh Chanh', '0948399484', 'tiendung2209@gmail.com', 8, 1);
+(2, 'Nguyen Van Tien Dụng', 'Binh Chanh', '0948399484', 'tiendung2209@gmail.com', 8, 1),
+(3, 'Nguyen Thanh Trung', 'Ha Noi', '0912314500', 'thanhtrung2203@gmail.com', 33, 1),
+(4, 'Nguyen Trung Thanh', 'Dak Lak', '0862222110', 'thanhtrung22022004@gmail.com', 35, 1);
 
 -- --------------------------------------------------------
 
@@ -128,7 +130,7 @@ CREATE TABLE `employee` (
   `address` varchar(200) NOT NULL,
   `phone` varchar(10) NOT NULL,
   `email` varchar(100) NOT NULL,
-  `salary` double NOT NULL,
+  `salary` int(11) NOT NULL,
   `status` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -138,7 +140,8 @@ CREATE TABLE `employee` (
 
 INSERT INTO `employee` (`id`, `userId`, `fullname`, `address`, `phone`, `email`, `salary`, `status`) VALUES
 (2, 11, 'Nguyen Van Tien Dung', 'Ha Noi', '0867453290', 'chicong123@gmail.com', 2500000, 1),
-(3, 26, 'Lai Quang Vinh', 'Long An', '0346457860', 'tuongtanduy2004@gmail.com', 3000000, 1);
+(3, 26, 'Lai Quang Vinh', 'Long An', '0346457860', 'tuongtanduy2004@gmail.com', 3000000, 1),
+(4, 34, 'Nguyen Dinh Thinh', 'Dong Nai', '0948399484', 'dinhthinh12345@gmail.com', 100000, 1);
 
 -- --------------------------------------------------------
 
@@ -153,6 +156,13 @@ CREATE TABLE `forgot_password_token` (
   `expireTime` datetime NOT NULL,
   `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `forgot_password_token`
+--
+
+INSERT INTO `forgot_password_token` (`id`, `token`, `isuUsed`, `expireTime`, `user_id`) VALUES
+(4, 'dad34529-e3c4-48ca-b51a-23a3df6430b5', 0, '2023-12-08 21:10:55', 7);
 
 -- --------------------------------------------------------
 
@@ -183,7 +193,8 @@ INSERT INTO `importbill` (`id`, `supplierId`, `importDate`, `Status`, `total`) V
 (32, 1, '2023-12-07', 1, 11000000),
 (33, 1, '2023-12-07', 1, 0),
 (34, 1, '2023-12-07', 1, 11000000),
-(35, 1, '2023-12-07', 1, 110000000);
+(35, 1, '2023-12-07', 1, 110000000),
+(36, 1, '2023-12-09', 1, 3000000);
 
 -- --------------------------------------------------------
 
@@ -211,7 +222,8 @@ INSERT INTO `importbilldetail` (`id`, `importId`, `productId`, `quantity`, `unit
 (25, 28, 142, 10, 30000000),
 (26, 29, 142, 4, 33750000),
 (27, 30, 149, 5, 20000000),
-(28, 35, 142, 3, 36666666.666666664);
+(28, 35, 142, 3, 36666666.666666664),
+(29, 36, 142, 3, 1000000);
 
 -- --------------------------------------------------------
 
@@ -231,8 +243,11 @@ CREATE TABLE `orderdetail` (
 --
 
 INSERT INTO `orderdetail` (`orderId`, `productId`, `quantity`, `unitPrice`) VALUES
-(12, 142, 4, 13000000),
-(12, 150, 2, 230000);
+(19, 144, 1, 25590000),
+(19, 146, 1, 25590000),
+(20, 150, 2, 8690000),
+(22, 146, 1, 25590000),
+(35, 142, 1, 25590000);
 
 -- --------------------------------------------------------
 
@@ -243,10 +258,11 @@ INSERT INTO `orderdetail` (`orderId`, `productId`, `quantity`, `unitPrice`) VALU
 CREATE TABLE `orders` (
   `id` int(11) NOT NULL,
   `customerId` int(11) NOT NULL,
-  `employeeId` int(11) NOT NULL,
+  `employeeId` int(11) DEFAULT NULL,
+  `adminName` varchar(50) NOT NULL,
   `orderDate` date NOT NULL,
   `Status` int(11) NOT NULL,
-  `couponId` int(11) NOT NULL,
+  `couponId` int(11) DEFAULT NULL,
   `paymentMethod` varchar(50) NOT NULL,
   `total` double NOT NULL,
   `ShipName` varchar(50) NOT NULL,
@@ -258,9 +274,11 @@ CREATE TABLE `orders` (
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`id`, `customerId`, `employeeId`, `orderDate`, `Status`, `couponId`, `paymentMethod`, `total`, `ShipName`, `ShipAddress`, `ShipPhoneNumber`) VALUES
-(12, 1, 2, '2023-12-07', 4, 1, 'COD', 1500000, 'Dinh Thinh', 'Ca Mau', '0129293493'),
-(13, 2, 3, '2023-12-08', 4, 2, 'COD', 35000000, 'Khac Tiep', 'Ha Noi', '0896656120');
+INSERT INTO `orders` (`id`, `customerId`, `employeeId`, `adminName`, `orderDate`, `Status`, `couponId`, `paymentMethod`, `total`, `ShipName`, `ShipAddress`, `ShipPhoneNumber`) VALUES
+(19, 1, NULL, 'Mai Ngoc Canh', '2023-12-22', 4, 1, 'COD', 49644600, 'Nguyen Chi Cong', 'Cà Mau', '0948399484'),
+(20, 4, 3, '', '2023-12-23', 4, 1, 'COD', 16858600, 'Nguyen Trung Thanh', 'Dak Lak', '0862222110'),
+(22, 1, NULL, 'Mai Ngoc Canh', '2023-12-24', 4, 1, 'COD', 24822300, 'Nguyen Chi Cong', 'Cà Mau', '0948399484'),
+(35, 1, NULL, 'Mai Ngoc Canh', '2023-12-26', 4, 1, 'COD', 24822300, 'Nguyen Chi Cong', 'Cà Mau', '0948399484');
 
 -- --------------------------------------------------------
 
@@ -292,16 +310,16 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`id`, `name`, `price`, `Image`, `description`, `categoryId`, `quantity`, `color`, `status`, `ScreenSize`, `FrontCamera`, `Chipset`, `RAM`, `InternalStorage`, `Battery`, `importPrice`) VALUES
-(131, 'iPhone 15 Pro Max 256GB', 34920000, 'IPhone_1.jpeg', 'iPhone 15 Pro Max đem lại một diện mạo hoàn toàn mới và sở hữu nhiều tính năng ưu việt cùng công nghệ tiên tiến. Hãy khám phá các đánh giá chi tiết về sản phẩm về khía cạnh thiết kế, màn hình, hiệu năng, thời lượng pin và bộ camera độc đáo qua các thông tin dưới đây!', 30, 100, 'đen', 0, NULL, NULL, NULL, '8 GB\n', NULL, NULL, NULL),
-(132, 'iPhone 15 Pro Max 256GB', 34290000, 'IPhone_2.png', 'Đẹp Xứng Đáng với chất lượng', 30, 100, 'xanh', 1, '6.7 inches', '12MP, ƒ/1.9', 'A17 Pro', '8 GB', '256 GB', '4422 mAh', NULL),
-(142, 'iPhone 15 Plus VN/a', 40333332, 'iphone-15-plus-black-thumbtz-650x650.png.png', 'iPhone 15 Plus VN/a', 30, 148, 'đen', 1, '6.7 inches', '12MP, ƒ/1.9', 'Apple A16 Bionic', '6 GB', '512 GB', '4383 mAh', 36666666),
-(143, 'iPhone 15 Plus VN/a', 25590000, 'iphone-15-plus yellow.png', 'iPhone 15 Plus VN/a', 30, 100, 'Vàng', 1, '6.7 inches', '12MP, ƒ/1.9', 'Apple A16 Bionic', '6 GB', '512 GB', '4383 mAh', NULL),
-(144, 'iPhone 15 Plus VN/a', 25590000, 'iphone15pink.jpg', 'iPhone 15 Plus VN/a', 30, 100, 'hồng', 1, '6.7 inches', '12MP, ƒ/1.9', 'Apple A16 Bionic', '6 GB', '512 GB', '4383 mAh', NULL),
+(131, 'iPhone 15 Pro Max 256GB', 34920000, 'IPhone_1.jpeg', 'iPhone 15 Pro Max đem lại một diện mạo hoàn toàn mới và sở hữu nhiều tính năng ưu việt cùng công nghệ tiên tiến. Hãy khám phá các đánh giá chi tiết về sản phẩm về khía cạnh thiết kế, màn hình, hiệu năng, thời lượng pin và bộ camera độc đáo qua các thông tin dưới đây!', 30, 100, 'đen', 1, NULL, NULL, NULL, '8 GB\n', NULL, NULL, NULL),
+(132, 'iPhone 15 Pro Max 256GB', 34290000, 'IPhone_2.png', 'Đẹp Xứng Đáng với chất lượng', 30, 100, 'xanh', 1, NULL, NULL, NULL, '8 GB', NULL, NULL, NULL),
+(142, 'iPhone 15 Plus VN/a', 25590000, 'iphone-15-plus-black-thumbtz-650x650.png.png', 'iPhone 15 Plus VN/a', 30, 28, 'đen', 1, NULL, NULL, NULL, '6 GB', NULL, NULL, 1000000),
+(143, 'iPhone 15 Plus VN/a', 25590000, 'iphone-15-plus yellow.png', 'iPhone 15 Plus VN/a', 30, 99, 'Vàng', 1, '6.7 inches', '12MP, ƒ/1.9', 'Apple A16 Bionic', '6 GB', '512 GB', '4383 mAh', NULL),
+(144, 'iPhone 15 Plus VN/a', 25590000, 'iphone15pink.jpg', 'iPhone 15 Plus VN/a', 30, 95, 'hồng', 1, '6.7 inches', '12MP, ƒ/1.9', 'Apple A16 Bionic', '6 GB', '512 GB', '4383 mAh', NULL),
 (145, 'Samsung Galaxy S23 Ultra 8/256GB', 25900000, 'SamsungGalaxyS23_BLACK.png', 'Samsung Galaxy S23 Ultra 8/256GB', 31, 100, 'Đen', 1, '6.8 inches', '12MP F2.2 (Dual Pixel AF)', 'Snapdragon 8 Gen 2 (4 nm)', '8 GB', '256 GB', '5,000mAh', NULL),
-(146, 'Samsung Galaxy S23 Ultra 8/256GB', 25590000, 'SamsungGalaxyS23_WHITE.png', 'Samsung Galaxy S23 Ultra 8/256GB', 31, 100, 'Trắng', 1, '6.8 inches', '12MP F2.2 (Dual Pixel AF)', 'Snapdragon 8 Gen 2 (4 nm)', '8 GB', '256 GB', '5,000mAh', NULL),
+(146, 'Samsung Galaxy S23 Ultra 8/256GB', 25590000, 'SamsungGalaxyS23_WHITE.png', 'Samsung Galaxy S23 Ultra 8/256GB', 31, 91, 'Trắng', 1, '6.8 inches', '12MP F2.2 (Dual Pixel AF)', 'Snapdragon 8 Gen 2 (4 nm)', '8 GB', '256 GB', '5,000mAh', NULL),
 (147, 'Samsung Galaxy S23 Ultra 8/256GB', 25590000, 'SamsungGalaxyS23_GREEN.png', 'Samsung Galaxy S23 Ultra 8/256GB', 31, 100, 'xanh lá', 1, '6.8 inches', '12MP F2.2 (Dual Pixel AF)', 'Snapdragon 8 Gen 2 (4 nm)', '8 GB', '256 GB', '5,000mAh', NULL),
 (149, 'Samsung Galaxy A54 5G 8/128GB', 22000000, 'SamsungGalaxyA5_BLACK.png', 'Samsung Galaxy A54 5G 8/128GB', 31, 105, 'đen', 1, '6.4 inches', 'Camera góc rộng: 32 MP, f/2.2, 26mm, 1/2.8\", 0.8µm', 'Exynos 1380 (5 nm)', '8 GB', '128 GB', '5000 mAh', 20000000),
-(150, 'Samsung Galaxy A54 5G 8/128GB', 8690000, 'SamsungGalaxyA5_TIM.png', 'Samsung Galaxy A54 5G 8/128GB', 31, 110, 'Tím', 1, '6.4 inches', 'Camera góc rộng: 32 MP, f/2.2, 26mm, 1/2.8\", 0.8µm', 'Exynos 1380 (5 nm)', '8 GB', '128 GB', '5000 mAh', NULL),
+(150, 'Samsung Galaxy A54 5G 8/128GB', 8690000, 'SamsungGalaxyA5_TIM.png', 'Samsung Galaxy A54 5G 8/128GB', 31, 96, 'Tím', 1, '6.4 inches', 'Camera góc rộng: 32 MP, f/2.2, 26mm, 1/2.8\", 0.8µm', 'Exynos 1380 (5 nm)', '8 GB', '128 GB', '5000 mAh', NULL),
 (151, 'Vivo V29e 8GB-256GB', 8690000, 'Vivo_V29e.png', 'Vivo V29e 8GB-256GB', 32, 100, 'xanh', 1, '6.67 inches', '50 MP, f/2.0, AF', 'Qualcomm Snapdragon 695', '8 GB', '256 GB', '4800 mAh', NULL),
 (152, 'Vivo Y17s 4/128GB', 3890000, 'Vivo_Y17s.png', 'Vivo Y17s 4/128GB', 32, 100, 'Tím', 1, '6.56 inches', '8 MP, f/2.0', 'MediaTek Helio G85', '4 GB', '128 GB', '5000 mAh', NULL),
 (153, 'Vivo Y36 8-128GB', 5490000, 'Vivo_Y36.png', 'Vivo Y36 8-128GB', 32, 100, 'xanh', 1, '6.64 inches', '16 MP, f/2.45', 'Snapdragon 680 8 nhân', '8 GB', '128 GB', '5,000 mAh', NULL);
@@ -326,9 +344,14 @@ CREATE TABLE `review` (
 --
 
 INSERT INTO `review` (`id`, `customerId`, `productId`, `rating`, `DateReview`, `comments`) VALUES
-(31, 11, 131, 5, '2023-11-26 12:16:34', 'Tốt'),
-(32, 9, 142, 5, '2023-12-05 08:58:12', 'san pham tot'),
-(33, 7, 142, 2, '2023-12-05 08:59:13', 'san pham binh thuong');
+(38, 1, 142, 5, '2023-12-08 23:52:23', 'Sản phẩm tốt'),
+(39, 3, 142, 5, '2023-12-08 23:52:23', 'Sản phẩm tốt'),
+(40, 1, 142, 5, '2023-12-08 22:59:58', 'sản phẩm tốt'),
+(41, 1, 143, 5, '2023-12-25 18:36:17', 'sản phẩm tốt chất lượng nên mua'),
+(42, 1, 143, 4, '2023-12-25 18:36:56', 'đánh giá sản phẩm lần 2'),
+(43, 1, 146, 5, '2023-12-26 04:58:54', 'Sản phẩm tốt chất lượng cao '),
+(44, 1, 144, 4, '2023-12-26 04:59:31', 'Sản phẩm tốt chất lượng tạm được '),
+(45, 1, 142, 4, '2023-12-26 06:50:54', 'Sản phẩm chất lượng tốt đáng tin cậy');
 
 -- --------------------------------------------------------
 
@@ -381,7 +404,11 @@ INSERT INTO `user` (`id`, `email`, `password`, `fullname`, `address`, `phone`, `
 (11, 'chicong123@gmail.com', '$2a$10$fvULYA6JnR2wssmuqEE.rOdXJ0/yK1poTTI2NqfB.qmizyWiWxPNS', 'Nguyen Van Tien Dung', 'Ha Noi', '0867453290', 'EMPLOYEE', 1),
 (26, 'tuongtanduy2004@gmail.com', '$2a$10$JCkdXm7DaACyfkRxuAnQHOL46eQ31qrBLgGX2KoUxfBHweZK82Hv6', 'Lai Quang Vinh', 'Long An', '0346457860', 'EMPLOYEE', 1),
 (27, 'congkhpro231@gmail.com', '$2a$10$LS26b9.S3kp9j/lDu9K88OPe0wr9/9aQmRfbjfRDfONVYI4daHGw2', 'Pham Dang Khoa', 'Dak Lak', '0756590412', 'EMPLOYEE', 1),
-(28, 'kitout306@gmail.com', '$2a$10$Gdtw4H4ekZDeZVqBaqtxouULsWWx/TxOQBQ8jCfD72suwAn8l5m4G', 'Nguyen Dinh Thinh', 'Dong Nai', '0128754100', 'ADMIN', 1);
+(28, 'kitout306@gmail.com', '$2a$10$Gdtw4H4ekZDeZVqBaqtxouULsWWx/TxOQBQ8jCfD72suwAn8l5m4G', 'Nguyen Dinh Thinh', 'Dong Nai', '0128754100', 'ADMIN', 1),
+(32, 'thanhtrung2202@gmail.com', '$2a$10$yqaEDfPfi/stQYKbOf/xf.mte9VB0uiIvlDmdPIKfZNl5vXf3Ugk.', 'Nguyen Thanh Trung', 'Ha Noi', '0915113300', 'USER', 1),
+(33, 'thanhtrung2203@gmail.com', '$2a$10$9WWJsJ6ShJLpQR971s6zjepW7Y.kP2ntKzB62ew3./RNcnXOJAbmC', 'Nguyen Thanh Trung', 'Ha Noi', '0912314500', 'USER', 1),
+(34, 'dinhthinh12345@gmail.com', '$2a$10$YWHJTIjD5KD0T0.YPKSRbe70goQHX2d2HFk53Hvmt3IPp5NFZKhYG', 'Nguyen Dinh Thinh', 'Dong Nai', '0948399484', 'EMPLOYEE', 1),
+(35, 'thanhtrung22022004@gmail.com', '$2a$10$jdvMIgm4ZgIdwJTSwJ3JDeG/nMdvHPDwa3uF2YvJfDY98h5yujV9W', 'Nguyen Trung Thanh', 'Dak Lak', '0862222110', 'USER', 1);
 
 --
 -- Indexes for dumped tables
@@ -456,8 +483,7 @@ ALTER TABLE `orderdetail`
 ALTER TABLE `orders`
   ADD PRIMARY KEY (`id`),
   ADD KEY `coupon_fk` (`couponId`),
-  ADD KEY `FK_customer_1` (`customerId`),
-  ADD KEY `fk_employee_1` (`employeeId`);
+  ADD KEY `FK_customer_1` (`customerId`);
 
 --
 -- Indexes for table `product`
@@ -472,7 +498,7 @@ ALTER TABLE `product`
 ALTER TABLE `review`
   ADD PRIMARY KEY (`id`),
   ADD KEY `product_fk_2` (`productId`),
-  ADD KEY `fk_userId` (`customerId`);
+  ADD KEY `fk_customer` (`customerId`);
 
 --
 -- Indexes for table `supplier`
@@ -506,37 +532,37 @@ ALTER TABLE `coupon`
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `employee`
 --
 ALTER TABLE `employee`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `forgot_password_token`
 --
 ALTER TABLE `forgot_password_token`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `importbill`
 --
 ALTER TABLE `importbill`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `importbilldetail`
 --
 ALTER TABLE `importbilldetail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `product`
@@ -548,7 +574,7 @@ ALTER TABLE `product`
 -- AUTO_INCREMENT for table `review`
 --
 ALTER TABLE `review`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT for table `supplier`
@@ -560,7 +586,7 @@ ALTER TABLE `supplier`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- Constraints for dumped tables
@@ -622,8 +648,7 @@ ALTER TABLE `orderdetail`
 --
 ALTER TABLE `orders`
   ADD CONSTRAINT `FK_customer_1` FOREIGN KEY (`customerId`) REFERENCES `customer` (`id`),
-  ADD CONSTRAINT `coupon_fk` FOREIGN KEY (`couponId`) REFERENCES `coupon` (`id`),
-  ADD CONSTRAINT `fk_employee_1` FOREIGN KEY (`employeeId`) REFERENCES `employee` (`id`);
+  ADD CONSTRAINT `coupon_fk` FOREIGN KEY (`couponId`) REFERENCES `coupon` (`id`);
 
 --
 -- Constraints for table `product`
@@ -635,7 +660,7 @@ ALTER TABLE `product`
 -- Constraints for table `review`
 --
 ALTER TABLE `review`
-  ADD CONSTRAINT `fk_userId` FOREIGN KEY (`customerId`) REFERENCES `user` (`id`),
+  ADD CONSTRAINT `fk_customer` FOREIGN KEY (`customerId`) REFERENCES `customer` (`id`),
   ADD CONSTRAINT `product_fk_2` FOREIGN KEY (`productId`) REFERENCES `product` (`id`);
 COMMIT;
 
