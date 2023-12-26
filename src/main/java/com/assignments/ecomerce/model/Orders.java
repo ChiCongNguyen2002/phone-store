@@ -21,7 +21,6 @@ public class Orders {
     @ManyToOne
     @JoinColumn(name = "employeeId")
     private Employee employee;
-
     private Date orderDate;
     private Integer status;
     private Integer couponId;
@@ -30,6 +29,7 @@ public class Orders {
     private String ShipName;
     private String ShipAddress;
     private String ShipPhoneNumber;
+    private String adminName;
 
     @OneToMany(mappedBy = "order")
     private List<OrderDetail> orderDetails;
@@ -79,6 +79,26 @@ public class Orders {
     }
 
     public void setOrderDetails(List<OrderDetail> orderDetails) {
+        this.orderDetails = orderDetails;
+    }
+
+    public void setAdminName(String adminName) {
+        this.adminName = adminName;
+    }
+
+    public Orders(Integer id, Customer customer, Employee employee, Date orderDate, Integer status, Integer couponId, String paymentMethod, Double total, String shipName, String shipAddress, String shipPhoneNumber, String adminName, List<OrderDetail> orderDetails) {
+        this.id = id;
+        this.customer = customer;
+        this.employee = employee;
+        this.orderDate = orderDate;
+        this.status = status;
+        this.couponId = couponId;
+        this.paymentMethod = paymentMethod;
+        this.total = total;
+        ShipName = shipName;
+        ShipAddress = shipAddress;
+        ShipPhoneNumber = shipPhoneNumber;
+        this.adminName = adminName;
         this.orderDetails = orderDetails;
     }
 

@@ -111,7 +111,7 @@ public class CartDetailController {
         }
     }
 
-    @PostMapping("/Coupon/ApplyCoupon")
+    @PostMapping(value ="/Coupon/ApplyCoupon", produces = "application/json")
     @ResponseBody
     public String ApplyCoupon(@RequestParam("code") String code, Model model, Principal principal) {
         Coupon coupon = couponService.findByCode(code);
@@ -132,32 +132,23 @@ public class CartDetailController {
             for (CartDetail cartDetail : list) {
                 Product product = productService.findById(cartDetail.getProductId());
                 if (product != null) {
-                    multi += cartDetail.getQuantity() * product.getPrice();
                     quantity = cartDetail.getQuantity();
                     JsonObject jsonObject = new JsonObject();
                     jsonObject.addProperty("product", product.toString());
-                    jsonObject.addProperty("multi", multi);
+                    jsonObject.addProperty("promotion", coupon.getPromotion());
                     jsonObject.addProperty("quantity", quantity);
                     jsonArray.add(jsonObject);
                 }
             }
-
-            int maGiamGia = coupon.getPromotion();
-            sum = multi - (multi * maGiamGia / 100);
-            int totalAmountAfterReduction = multi - sum;
-
-            Map<String, Integer> result = new HashMap<>();
-            result.put("totalAmountAfterReduction", totalAmountAfterReduction);
-            result.put("sum", sum);
-            result.put("promotion", maGiamGia);
             Gson gson = new Gson();
-            jsonResult = gson.toJson(result);
+            return gson.toJson(jsonArray);
         }
         return jsonResult;
     }
 
     @PostMapping("/Cart/UpdateCart")
     public String updateCart(@RequestParam("id") Integer id, Integer quantity, Principal principal) {
+        System.out.println("quantity:" + quantity);
         JsonArray jsonArray = new JsonArray();
         Gson gson = new Gson();
         if (principal != null && principal.getName() != null) {

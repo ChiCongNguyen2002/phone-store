@@ -16,9 +16,11 @@ public interface OrderRepository extends JpaRepository<Orders, Integer> {
 
     @Query("SELECT o FROM Orders o " +
             "JOIN o.customer c " +
+            "JOIN o.orderDetails od " +
             "JOIN c.user u " +
-            "WHERE o.status = 4 AND u.email = :email")
-    List<Orders> findDeliveredOrdersByUserEmail(@Param("email") String userEmail);
+            "JOIN od.product p " +
+            "WHERE o.status = 4 AND u.email = ?1 AND p.id = ?2")
+    List<Orders> findOrderByStatusAndEmailAndProductId(String email, Integer productId);
 
     @Query(value = "SELECT COUNT(*) FROM orders", nativeQuery = true)
     int countOrders();

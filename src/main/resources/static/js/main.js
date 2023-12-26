@@ -10,8 +10,6 @@ function updateSelectedColor(radio) {
     var productId = radio.parentNode.querySelector('p').textContent;
 
      var addToCartButton = document.getElementById("addToCartButton");
-          console.log(addToCartButton.getAttribute("data-product-id"));
-
      var newProductId = productId; // Giá trị mới
      addToCartButton.setAttribute("value", newProductId);
 

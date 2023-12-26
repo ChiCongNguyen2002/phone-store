@@ -24,6 +24,17 @@ public class CartDetail {
     @Column(name = "unitPrice")
     private Integer unitPrice;
 
+    @OneToOne
+    @JoinColumn(name = "productId")
+    private Product product;
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
     public void setUserId(Integer userId) {
         this.userId = userId;
     }
@@ -42,6 +53,13 @@ public class CartDetail {
 
     public CartDetail() {
 
+    }
+    public CartDetail(Integer userId, Integer productId, Integer quantity, Integer unitPrice, Product product) {
+        this.userId = userId;
+        this.productId = productId;
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
+        this.product = product;
     }
 
     public static class CartDetailId implements Serializable {

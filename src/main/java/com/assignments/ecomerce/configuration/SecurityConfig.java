@@ -27,7 +27,6 @@ public class SecurityConfig {
         http.csrf(c -> c.disable())
                 .authorizeHttpRequests(request -> request.requestMatchers("/index")
                         .hasAuthority("ADMIN")
-/*                        .requestMatchers("/indexUser").hasAuthority("USER")*/
                         .requestMatchers("/search-customer-ByEmployee/0?keyword=").hasAuthority("EMPLOYEE")
                         .requestMatchers("/*","/search-productByKeyword/**",
                                 "/search-productByOption/**","/ViewByCategory/0",

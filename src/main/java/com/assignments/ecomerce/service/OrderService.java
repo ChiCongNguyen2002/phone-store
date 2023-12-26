@@ -33,5 +33,7 @@ public interface OrderService {
      Orders getById(Integer id);
      Orders getEmployeeById(Integer id);
 
-     List<Orders> findDeliveredOrdersByUserEmail(String userEmail);
+     List<Orders> findOrderByStatusAndEmailAndProductId(String userEmail,Integer id);
+
+    Integer saveOrderPay(Orders order);
 }

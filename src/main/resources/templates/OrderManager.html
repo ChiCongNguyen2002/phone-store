@@ -62,6 +62,8 @@
                 <tr>
                     <th>ID</th>
                     <th>Khách hàng</th>
+                    <th>Nhân Viên Xác Nhận</th>
+                    <th>Quản Lý Xác Nhận</th>
                     <th>Ngày đặt</th>
                     <th>Trạng thái</th>
                     <th>Giá trị đơn hàng</th>
@@ -69,50 +71,58 @@
                     <th>Thao tác</th>
                 </tr>
 
-                <tr th:each="orders,index : ${listOrder}">
-                    <form id="orderDetailForm" th:action="@{/orderdetailByEmployee}" method="post">
+                <tr th:each="orders : ${listOrder}">
+                    <form id="orderDetailForm" th:action="@{/orderdetail}" method="post">
                         <input type="hidden" name="orderId" th:value="${orders.Id}">
                         <td th:text="${orders.Id}"></td>
                         <td th:text="${orders.customer.getFullname()}"></td>
+                        <td th:text="${orders.employee !=null ? orders.employee.getFullname() : ''}"></td>
+                        <td th:text="${orders.adminName != '-1' ? orders.adminName : ''}"></td>
                         <td th:text="${orders.orderDate}"></td>
                         <td>
-                             <span th:switch="${orders.Status}">
-                                    <span th:case="1">Xác nhận</span>
-                                    <span th:case="2">Đã duyệt</span>
-                                    <span th:case="3">Đang giao</span>
-                                    <span th:case="4">Đã giao</span>
-                                    <span th:case="5">Đã huỷ</span>
-                             </span>
+                                    <span th:switch="${orders.Status}">
+                                        <span th:case="1">Đang chờ duyệt</span>
+                                        <span th:case="2">Đã duyệt</span>
+                                        <span th:case="3">Đang giao</span>
+                                        <span th:case="4">Đã giao</span>
+                                        <span th:case="5">Đã huỷ</span>
+                                    </span>
                         </td>
-                        <td th:text="${#numbers.formatDecimal(orders.total, 0, 'COMMA', 0, 'POINT') + 'VND'}"></td>
+                        <td th:text="${#numbers.formatDecimal(orders.total, 0, 'COMMA', 0, 'POINT') + ' VNĐ'}"></td>
                         <td>
-                            <span th:switch="${orders.status}">
-                                <span th:case="1">
-                                    <button class="btn btn-success btn-update-status">
-                                        <a th:href="@{'/UpdateOrderStatusByEmployee/0/' + ${orders.Id}}">Xác Nhận</a>
-                                    </button>
-                                </span>
+                                    <span th:switch="${orders.status}">
+                                        <span th:case="1">
+                                            <button class="btn btn-success btn-update-status">
+                                                <a th:href="@{'/UpdateOrderStatusByEmployee/0/' + ${orders.Id} + '?idEmployee=' + ${user1}}">Xác Nhận</a>
+                                            </button>
+                                            <button class="btn btn-danger btn-cancel">
+                                                <a th:href="@{'/CancelOrderStatus/0/' + ${orders.Id}}">Hủy đơn</a>
+                                            </button>
+                                        </span>
 
-                                <span th:case="2">
-                                    <button class="btn btn-success btn-update-status">
-                                        <a th:href="@{'/UpdateOrderStatusByEmployee/0/' + ${orders.Id}}">Giao hàng</a>
-                                    </button>
-                                </span>
+                                        <span th:case="2">
+                                            <button class="btn btn-success btn-update-status">
+                                                <a th:href="@{'/UpdateOrderStatusByEmployee/0/' + ${orders.Id}+ '?idEmployee=' + ${user1}}">Giao hàng</a>
+                                            </button>
+                                            <button class="btn btn-danger btn-cancel">
+                                                <a th:href="@{'/CancelOrderStatus/0/' + ${orders.Id}}">Hủy đơn</a>
+                                            </button>
+                                        </span>
 
-                                <span th:case="3">
-                                    <button class="btn btn-success btn-update-status">
-                                        <a th:href="@{'/UpdateOrderStatusByEmployee/0/' + ${orders.Id}}">Xác nhận đã giao hàng</a>
-                                    </button>
-                                </span>
+                                        <span th:case="3">
+                                            <button class="btn btn-success btn-update-status">
+                                                <a th:href="@{'/UpdateOrderStatusByEmployee/0/' + ${orders.Id}+ '?idEmployee=' + ${user1}}">Xác nhận đã giao hàng</a>
+                                            </button>
+                                        </span>
 
-                                <span th:case="4">
-                                    <span>Đã Giao Hàng thành công</span>
-                                </span>
+                                        <span th:case="4">
+                                            <span>Đã Giao Hàng thành công</span>
+                                        </span>
 
-                                <span th:case="5">
-                                    <span>Đơn Hàng đã bị hủy</span>
-                                </span>
-                            </span>
+                                        <span th:case="5">
+                                            <span>Đơn Hàng đã bị hủy</span>
+                                        </span>
+                                    </span>
                         </td>
                         <td>
                             <button type="submit">Xem Chi Tiết</button>
@@ -120,6 +130,7 @@
                     </form>
                 </tr>
             </table>
+
 
 
             <!--Pagination  -->

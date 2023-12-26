@@ -51,7 +51,7 @@ public class OrderDetailController {
         if (order != null) {
             listOrder.add(order);
         }
-        model.addAttribute("nameEmployee",order.getEmployee().getFullname());
+        model.addAttribute("nameEmployee",order.getCustomer().getFullname());
         model.addAttribute("listOrder", listOrder);
         List<OrderDetail> listOrderDetail = orderDetailService.findAllByOrderId(orderId);
         UserDetails userDetails  = userDetailsService.loadUserByUsername(principal.getName());

@@ -19,4 +19,6 @@ public interface UserService {
     User getById(Integer id);
     User update(User user);
     Page<User> searchUser(int pageNo, String keyword);
+
+    User findByIdAdmin(Integer id);
 }

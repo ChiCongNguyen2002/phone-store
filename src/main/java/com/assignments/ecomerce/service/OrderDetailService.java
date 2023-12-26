@@ -15,4 +15,6 @@ public interface OrderDetailService {
     List<OrderDetail> findAllByOrderId(Integer orderId) ;
 
     List<OrderDetail> findListProductByOrderId(Integer orderId);
+
+    void saveOrderDetail(Integer idOfOrder, Integer productId, Integer quantity, Integer unitPrice);
 }

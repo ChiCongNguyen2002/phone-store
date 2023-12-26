@@ -83,6 +83,7 @@ public class UserServiceImpl implements UserService {
         newUser.setPhone(user.getPhone());
         newUser.setEmail(user.getEmail());
         newUser.setFullname(user.getFullname());
+        newUser.setStatus(1);
         return newUser;
     }
 
@@ -110,6 +111,11 @@ public class UserServiceImpl implements UserService {
         return categoryPages;
     }
 
+    @Override
+    public User findByIdAdmin(Integer id) {
+        return userRepository.findByIdAdmin(id);
+    }
+
     private Page toPage(List<User> list, Pageable pageable) {
         if (pageable.getOffset() >= list.size()) {
             return Page.empty();
@@ -131,6 +137,7 @@ public class UserServiceImpl implements UserService {
             newUser.setPhone(customer.getPhone());
             newUser.setEmail(customer.getEmail());
             newUser.setRole(customer.getRole());
+            newUser.setStatus(customer.getStatus());
             customerList.add(newUser);
         }
         return customerList;

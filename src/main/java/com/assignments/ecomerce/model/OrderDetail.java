@@ -37,11 +37,11 @@ public class OrderDetail {
         return quantity;
     }
 
-    public Double getUnitPrice() {
+    public Integer getUnitPrice() {
         return unitPrice;
     }
 
-    public OrderDetail(OrderDetailId id, Orders order, Product product, Integer quantity, Double unitPrice) {
+    public OrderDetail(OrderDetailId id, Orders order, Product product, Integer quantity, Integer unitPrice) {
         this.id = id;
         this.order = order;
         this.product = product;
@@ -49,7 +49,7 @@ public class OrderDetail {
         this.unitPrice = unitPrice;
     }
     private Integer quantity;
-    private Double unitPrice;
+    private Integer unitPrice;
 
     public OrderDetail(){}
 
@@ -66,11 +66,11 @@ public class OrderDetail {
         this.quantity = quantity;
     }
 
-    public void setUnitPrice(Double unitPrice) {
+    public void setUnitPrice(Integer unitPrice) {
         this.unitPrice = unitPrice;
     }
 
-    public OrderDetail(Orders order, Product product, Integer quantity, Double unitPrice) {
+    public OrderDetail(Orders order, Product product, Integer quantity, Integer unitPrice) {
         this.order = order;
         this.product = product;
         this.quantity = quantity;

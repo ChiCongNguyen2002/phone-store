@@ -33,6 +33,7 @@
                 <div class="col-main col-sm-12 col-xs-12">
                     <div class="welcome-msg">
                     </div>
+
                     <div class="recent-orders">
                         <div class="table-responsive">
                             <div class="page-title">
@@ -56,7 +57,7 @@
                                         <input type="hidden" name="orderId" th:value="${orders.Id}">
                                         <td class="text-center" th:text="${orders.customer.getFullname()}"></td>
                                         <td class="text-center" th:text="${orders.orderDate}"></td>
-                                        <td>
+                                        <td class="text-center">
                                          <span class="text-center" th:switch="${orders.Status}">
                                                 <span class="text-center" th:case="1">Đang chờ duyệt</span>
                                                 <span class="text-center" th:case="2">Đã duyệt</span>
@@ -65,7 +66,7 @@
                                                 <span class="text-center" th:case="5">Đã huỷ</span>
                                          </span>
                                             </td>
-                                        <td class="text-center" th:text="${#numbers.formatDecimal(orders.total, 0, 'COMMA', 0, 'POINT') + 'VND'}"></td>
+                                        <td class="text-center" th:text="${#numbers.formatDecimal(orders.total, 0, 'COMMA', 0, 'POINT') + ' VNĐ'}"></td>
                                         <td class="text-center">
                                             <span th:switch="${orders.Status}">
                                             <span th:case="1">
@@ -92,7 +93,7 @@
                                             </span>
                                         </span>
                                         </td>
-                                            <td>
+                                            <td class="text-center">
                                                 <button class="text-center">Xem Chi Tiết</button>
                                             </td>
                                     </form>
@@ -100,8 +101,32 @@
                                 </tbody>
                             </table>
 
+                            <nav class="text-center" aria-label="...">
+                                <ul class="pagination">
+                                    <li th:if="${currentPage != 0}" class="page-item">
+                                        <a th:href="@{/account/{pageNo}(pageNo=${currentPage - 1})}"
+                                           class="page-link" onclick="event.preventDefault(); reloadPage(this.getAttribute('href'));">Trước</a>
+                                    </li>
+
+                                    <th:block th:if="${totalPages > 1}">
+                                        <li th:each="i : ${#numbers.sequence(0, totalPages-1)}"
+                                            th:classappend="${currentPage == i ? 'active' : ''}" class="page-item">
+                                            <a th:href="@{/account/{pageNo}(pageNo=${i})}"
+                                               class="page-link" onclick="event.preventDefault(); reloadPage(this.getAttribute('href'));">
+                                                <span th:text="${i + 1}"></span>
+                                            </a>
+                                        </li>
+                                    </th:block>
+
+                                    <li th:if="${currentPage + 1 != totalPages}" class="page-item">
+                                        <a th:href="@{/account/{pageNo}(pageNo=${currentPage + 1})}" class="page-link" onclick="event.preventDefault(); reloadPage(this.getAttribute('href'));">Tiếp Theo</a>
+                                    </li>
+                                </ul>
+                            </nav>
+
                         </div>
                     </div>
+
                     <div class="box-account">
                         <div class="page-title">
                             <h2>Thông tin tài khoản</h2>
@@ -139,5 +164,11 @@
 <footer th:replace="~{indexUser::footer}"></footer>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script th:replace="~{indexUser::ajax_script}"></script>
+<script>
+    function reloadPage(url) {
+        // Thực hiện tải lại trang bằng JavaScript
+        window.location.href = url;
+    }
+</script>
 </body>
 </html>

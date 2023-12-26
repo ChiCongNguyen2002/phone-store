@@ -23,4 +23,6 @@ public interface EmployeeService {
     Employee save(Employee employee);
 
     Employee updateStatus(Integer id);
+
+    Employee findIdByUser(Integer userId);
 }

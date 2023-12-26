@@ -80,6 +80,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeRepository.save(employee);
     }
 
+    @Override
+    public Employee findIdByUser(Integer userId) {
+        return employeeRepository.getIdByUser(userId);
+    }
+
     private Page toPage(List<Employee> list, Pageable pageable) {
         if (pageable.getOffset() >= list.size()) {
             return Page.empty();

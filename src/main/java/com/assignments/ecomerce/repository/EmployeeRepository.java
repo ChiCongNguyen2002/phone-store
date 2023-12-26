@@ -1,12 +1,9 @@
 package com.assignments.ecomerce.repository;
 
-import com.assignments.ecomerce.model.Category;
-import com.assignments.ecomerce.model.Product;
-import com.assignments.ecomerce.model.Supplier;
+import com.assignments.ecomerce.model.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.assignments.ecomerce.model.Employee;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -21,4 +18,7 @@ public interface EmployeeRepository extends JpaRepository<Employee,Integer> {
 
     @Query(value = "SELECT e from Employee e where e.status = 1 and e.phone = ?1 OR e.email = ?2")
     Employee findByPhoneAndEmail(String phone, String email);
+
+    @Query(value = "SELECT * FROM Employee e WHERE e.userId = :userId", nativeQuery = true)
+    Employee getIdByUser(Integer userId);
 }

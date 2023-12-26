@@ -61,7 +61,6 @@ public class CartDetailServiceImpl implements CartDetailService {
             // Kiểm tra sự tồn tại của bản ghi với userId và productId
             CartDetail existingCartDetail = cartDetailRepository.findByUserIdAndProductId(userId, productId);
             if (existingCartDetail != null) {
-
                 existingCartDetail.setQuantity(quantity);
                 cartDetailRepository.save(existingCartDetail);
             } else {

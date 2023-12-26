@@ -79,6 +79,7 @@ public class OrderServiceImpl implements OrderService {
             newOrder.setCustomer(order.getCustomer());
             newOrder.setEmployee(order.getEmployee());
             newOrder.setOrderDate(order.getOrderDate());
+            newOrder.setAdminName(order.getAdminName());
             newOrder.setStatus(order.getStatus());
             newOrder.setCouponId(order.getCouponId());
             newOrder.setPaymentMethod(order.getPaymentMethod());
@@ -195,6 +196,7 @@ public class OrderServiceImpl implements OrderService {
         newOrder.setShipAddress(order.getShipAddress());
         newOrder.setShipPhoneNumber(order.getShipPhoneNumber());
         newOrder.setShipName(order.getShipName());
+        newOrder.setAdminName(order.getAdminName());
         return newOrder;
     }
 
@@ -204,7 +206,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Orders> findDeliveredOrdersByUserEmail(String userEmail) {
-        return orderRepository.findDeliveredOrdersByUserEmail(userEmail);
+    public List<Orders> findOrderByStatusAndEmailAndProductId(String userEmail,Integer id) {
+        return orderRepository.findOrderByStatusAndEmailAndProductId(userEmail,id);
+    }
+
+    @Override
+    public Integer saveOrderPay(Orders order) {
+        Orders savedOrder = orderRepository.save(order);
+        return savedOrder.getId();
     }
 }

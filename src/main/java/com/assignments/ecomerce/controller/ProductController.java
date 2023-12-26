@@ -42,12 +42,11 @@ public class ProductController {
     @PostMapping("/add-review")
     public String add(@ModelAttribute("reviewNew") Review review, Model model, RedirectAttributes attributes) {
         try {
-            /*Review exists = reviewService.existsByCustomerIdAndProductId(review.getCustomer().getId(), review.getProduct().getId());
-            System.out.println(exists + "");
-            if (exists == null) {
-                attributes.addFlashAttribute("error", "Duplicate name of user and productId, please check again!");
+            Review exists = reviewService.existsByCustomerIdAndProductId(review.getCustomer().getId(), review.getProduct().getId());
+            if (exists != null) {
+                attributes.addFlashAttribute("error", "Người dùng đã đánh giá không thể đánh giá sản phẩm nữa!");
                 return "redirect:/product-details/" + review.getProduct().getId();
-            }*/
+            }
 
             reviewService.save(review);
             model.addAttribute("reviewNew", review);
@@ -72,9 +71,6 @@ public class ProductController {
                 List<Product> productColor = productService.getListColorByNameProduct(product.getName());
                 int countReview = reviewService.countReviews(product);
                 Double calculateAverageRating = reviewService.calculateAverageRating(product);
-
-       /* Product getProductByColorAndName = productService.getProductByColorAndName(product.getName(), product.getColor());
-        model.addAttribute("getProductByColorAndName", getProductByColorAndName);*/
                 model.addAttribute("countReview", countReview);
                 model.addAttribute("calculateAverageRating", calculateAverageRating);
                 model.addAttribute("reviewNew", new Review());
@@ -95,12 +91,9 @@ public class ProductController {
                 List<Product> productColor = productService.getListColorByNameProduct(product.getName());
                 int countReview = reviewService.countReviews(product);
                 Double calculateAverageRating = reviewService.calculateAverageRating(product);
-
-
-       /* Product getProductByColorAndName = productService.getProductByColorAndName(product.getName(), product.getColor());
-        model.addAttribute("getProductByColorAndName", getProductByColorAndName);*/
-                List<Orders> completedOrders = orderService.findDeliveredOrdersByUserEmail(principal.getName());
+                List<Orders> completedOrders = orderService.findOrderByStatusAndEmailAndProductId(principal.getName(),product.getId());
                 Customer customer = customerService.findByEmailCustomer(principal.getName());
+
                 model.addAttribute("customer", customer);
                 model.addAttribute("orders", completedOrders);
                 model.addAttribute("user", userDetails);

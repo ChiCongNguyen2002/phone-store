@@ -63,7 +63,7 @@
                             </tr>
                             <tr>
                                 <td class="order-number">Giá trị đơn hàng</td>
-                                <td th:text="${order.total + ' VNĐ'}"></td>
+                                <td th:text="${#numbers.formatDecimal(order.total, 0, 'COMMA', 0, 'POINT') + ' VNĐ'}"></td>
                             </tr>
                         </table>
                     </div>
@@ -117,10 +117,10 @@
                             <tbody>
                             <tr th:each="orderdetail : ${listOrderDetail}">
                                 <td class="text-center">
-                                    <img class="product-image" th:src="@{'../../img/' + ${orderdetail.product.image}}" alt="Product Image">
+                                    <img class="product-image " th:src="@{'../../img/' + ${orderdetail.product.image}}" alt="Product Image">
                                 </td>
                                 <td class="text-center" th:text="${orderdetail.product.name}"></td>
-                                <td class="text-center" th:text="${orderdetail.unitPrice + ' VNĐ'}"></td>
+                                <td class="text-center" th:text="${#numbers.formatDecimal(orderdetail.unitPrice, 0, 'COMMA', 0, 'POINT') + ' VNĐ'}"></td>
                                 <td class="text-center" th:text="${orderdetail.quantity}"></td>
                             </tr>
                             </tbody>

@@ -93,10 +93,12 @@ var iconElement = document.querySelector('.fa.fa-user-o.userID');
 var uid = iconElement.getAttribute('data-user-id');
 
 button.addEventListener('click', function(event) {
+   var spanElement = document.querySelector('.product-available');
+   var quantityRemaining = parseInt(spanElement.getAttribute('data-product-quantity'));
    var productId = button.getAttribute('data-product-id');
    var quantityInput = document.getElementById('quantity-input');
    var quantityValue = quantityInput.value;
-   addProduct(uid, productId, quantityValue);
+   addProduct(uid, productId, quantityValue, quantityRemaining);
    event.preventDefault();
 });
 
@@ -115,10 +117,11 @@ function fetchDataOnModalShow() {
     });
 }
 
-function addProduct(userId, productId, quantity) {
+function addProduct(userId, productId, quantity,quantityRemaining) {
     console.log(userId);
     console.log(productId);
     console.log(quantity);
+    console.log(quantityRemaining);
     $.ajax({
         url: "/api/AddToCart",
         type: "POST",
@@ -130,13 +133,24 @@ function addProduct(userId, productId, quantity) {
         success: function(response) {
             totalQuantity = 0;
             fetchDataOnModalShow();
-            Swal.fire({
-                position: 'top-end',
-                icon: 'success',
-                title: 'Đã thêm vào giỏ hàng',
-                showConfirmButton: false,
-                timer: 1500
-            })
+
+            if (quantityRemaining <= 0) {
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'info',
+                    title: 'Sản phẩm đã hết hàng',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            } else {
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'Đã thêm vào giỏ hàng',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }
 
         },
         error: function(xhr, status, error) {

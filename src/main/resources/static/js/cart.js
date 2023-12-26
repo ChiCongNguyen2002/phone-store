@@ -39,7 +39,7 @@ $(document).ready(function() {
     });
 
     $('body').on('click', '.btn-plus', function(e) {
-        e.preventDefault(); // line này để khi bấm ok (alert) thì không bị nhảy lên top website
+        e.preventDefault();
         const id = $(this).data('id');
         const quantity = parseInt($('#txt_quantity_' + id).val()) + 1;
         updateCart(id, quantity);
@@ -59,7 +59,6 @@ $(document).ready(function() {
                 cancelButtonText: 'Hủy',
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Xử lý khi người dùng xác nhận xóa
                     updateCart(id, quantity);
                 }
             });
@@ -80,7 +79,6 @@ $(document).ready(function() {
             cancelButtonText: 'Hủy',
         }).then((result) => {
             if (result.isConfirmed) {
-                // Xử lý khi người dùng xác nhận xóa
                 updateCart(id, 0);
             }
         });
@@ -137,13 +135,13 @@ function applyCoupon(code) {
                 });
                 return;
             }
-
+            var sum = 0;
             var element = document.getElementById("lbl_discount_amount");
             var element2 = document.getElementById("lbl_total_discounted");
-            var result = JSON.parse(res);
-            var promotion = result.promotion;
-            element.innerHTML = numberWithCommas(result.totalAmountAfterReduction);
-            element2.innerHTML = numberWithCommas(result.sum);
+            var quantity = 0;
+            var promotion = 0;
+            var discountAmount = 0;
+            var totalAmountAfterDiscount = 0;
             Swal.fire({
                 position: 'top-end',
                 icon: 'success',
@@ -154,12 +152,21 @@ function applyCoupon(code) {
 
             isCouponApplied = true;
 
-            if (promotion !== 0) {
-                var discountAmount = result.sum - (result.sum * ((100 - promotion) / 100));
+            res.forEach(function(item) {
+                var product = JSON.parse(item.product);
+                quantity = item.quantity;
+                promotion = item.promotion;
+                var itemTotalPrice = product.price * quantity;
+                sum += itemTotalPrice;
+            });
+
+            if (promotion != "undefined") {
+                discountAmount = sum * (promotion / 100);
+                totalAmountAfterDiscount = sum - discountAmount;
                 $('#discount_amount_row').show();
                 $('#total_discounted_row').show();
                 $('#lbl_discount_amount').text(numberWithCommas(discountAmount));
-                $('#lbl_total_discounted').text(numberWithCommas(result.sum * ((100 - promotion) / 100)));
+                $('#lbl_total_discounted').text(numberWithCommas(totalAmountAfterDiscount));
             } else {
                 $('#discount_amount_row').hide();
                 $('#total_discounted_row').hide();
@@ -194,22 +201,22 @@ function loadData() {
                 var itemTotalPrice = product.price * quantity;
                 sum += itemTotalPrice;
                 var itemHTML = `
-                            <tr>
-                                <td><img src="/img/${product.image}" alt="${product.name}" width="64" height="64"></td>
-                                <td>${product.name}</td>
-                                <td>${numberWithCommas(product.price)} <span>&#8363;</span></td>
-                                <td>
-                                    <div class="input-append">
-                                        <button class="btn-minus" data-id="${product.id}" type="button"><i class="fa fa-minus"></i></button>
-                                         <input disabled class="span1" style="text-align: center;max-width: 34px" placeholder="1" id="txt_quantity_${product.id}" value="${item.quantity}" size="16" type="text">
-                                        <button class="btn-plus" data-id="${product.id}" type="button"><i class="fa fa-plus"></i></button>
-                                    </div>
-                                </td>
-                                <td>${numberWithCommas(itemTotalPrice)} <span>&#8363;</span></td>
-                                <td class="delete-button" data-user-id="1" data-product-id="${product.id}" style="width: 10%;">
-                                    <button><i class="fa fa-trash"></i></button>
-                                </td>
-                            </tr>`;
+                <tr>
+                    <td class="text-center"><img src="/img/${product.image}" alt="${product.name}" width="64" height="64"></td>
+                    <td class="text-center">${product.name}</td>
+                    <td class="text-center">${numberWithCommas(product.price)} <span>&#8363;</span></td>
+                    <td class="text-center">
+                        <div class="input-append">
+                            <button class="btn-minus" data-id="${product.id}" type="button"><i class="fa fa-minus"></i></button>
+                            <input disabled class="span1" style="text-align: center;max-width: 34px" placeholder="1" id="txt_quantity_${product.id}" value="${item.quantity}" size="16" type="text">
+                            <button class="btn-plus" data-id="${product.id}" type="button"><i class="fa fa-plus"></i></button>
+                        </div>
+                    </td>
+                    <td class="text-center">${numberWithCommas(itemTotalPrice)} <span>&#8363;</span></td>
+                    <td class="text-center delete-button" data-user-id="1" data-product-id="${product.id}" style="width: 10%;">
+                        <button><i class="fa fa-trash"></i></button>
+                    </td>
+                </tr>`;
                 cartBody.append(itemHTML);
             });
 

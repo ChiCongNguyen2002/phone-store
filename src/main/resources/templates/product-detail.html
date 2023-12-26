@@ -91,7 +91,6 @@
                             <input  type="radio" name="color" class="image-radio-input"
                                    onclick="updateSelectedColor(this)">
 
-
                             <img class="product-image" style="height: 50px; width: 50px;"
                                  th:src="@{'/img/' + ${product.image}}">
 
@@ -103,7 +102,7 @@
                     <div>
                         <h3 th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + 'VNĐ'}"
                             class="product-price"></h3>
-                        <span th:if="${productDetail.quantity <= 0}" class="product-available">Hết hàng</span>
+                        <span th:data-product-quantity="${productDetail.quantity}" th:if="${productDetail.quantity <= 0}" class="product-available"></span>
                         <div class="quantity">
                             <button class="minus-btn" onclick="decreaseQuantity()">-</button>
                             <input type="text" id="quantity-input" class="quantity-input" value="1">
@@ -226,9 +225,6 @@
                                 </div>
 
                                 <div>
-                                    <p th:if="${name != null}">Bình luận</p>
-                                    <!-- <a href="/indexCustomer">Mua hàng mới được đánh giá sản phẩm</a>-->
-                                    <!-- Form to add a new review -->
                                     <div th:if="${error}" class="text-center alert alert-danger">
                                         <p th:text="${error}"></p>
                                     </div>
@@ -237,10 +233,11 @@
                                         Bạn phải đăng nhập và mua hàng mới được đánh giá sản phẩm
                                     </button>
 
-                                    <p th:if="${name != null}" class="add-to-cart-link">
+                                    <p th:if="${name != null && orders.size() <= 0}" class="add-to-cart-link">
                                         Bạn phải mua hàng mới được đánh giá sản phẩm
                                     </p>
 
+                                    <!--th:if="${name != null && orders.size() > 0}"-->
                                     <form id="reviewForm" th:if="${name != null && orders.size() > 0}" th:action="@{/add-review}" method="post"
                                           th:object="${reviewNew}">
                                         <div class="form-group">
