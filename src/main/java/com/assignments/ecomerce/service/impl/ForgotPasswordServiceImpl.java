@@ -20,12 +20,13 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService {
 
     @Autowired
     JavaMailSender javaMailSender;
-    private final int MINUTES = 10;
+
     public String generateToken(){
         return UUID.randomUUID().toString();
     }
 
     public LocalDateTime expireTimeRange(){
+        int MINUTES = 10;
         return LocalDateTime.now().plusMinutes(MINUTES);
     }
 

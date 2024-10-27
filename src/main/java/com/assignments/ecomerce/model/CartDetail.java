@@ -10,13 +10,13 @@ import lombok.Getter;
 @IdClass(CartDetail.CartDetailId.class)
 public class CartDetail {
 
-    @Id
-    @Column(name = "userId")
-    private Integer userId;
+        @Id
+        @Column(name = "userId")
+        private Integer userId;
 
-    @Id
-    @Column(name = "productId")
-    private Integer productId;
+        @Id
+        @Column(name = "productId")
+        private Integer productId;
 
     @Column(name = "quantity")
     private Integer quantity;

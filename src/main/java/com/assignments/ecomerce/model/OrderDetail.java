@@ -9,11 +9,9 @@ public class OrderDetail {
 
     @EmbeddedId
     private OrderDetailId id;
-
     public void setId(OrderDetailId id) {
         this.id = id;
     }
-
     @ManyToOne
     @JoinColumn(name = "orderId")
     private Orders order;

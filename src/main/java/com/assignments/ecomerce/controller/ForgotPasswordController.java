@@ -16,7 +16,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import java.io.UnsupportedEncodingException;
 
 @Controller
@@ -69,13 +68,9 @@ public class ForgotPasswordController {
 
     @GetMapping("/reset-password")
     public String resetPassword(@Param(value="token") String token, Model model, HttpSession session) {
-
         session.setAttribute("token", token);
-        System.out.println("token : "+token);
         ForgotPasswordToken forgotPasswordToken = forgotPasswordRepository.findByToken(token);
-        System.out.println("forgotPasswordToken : "+forgotPasswordToken);
         return forgotPasswordService.checkValidity(forgotPasswordToken, model);
-
     }
 
     @PostMapping("/reset-password")
@@ -86,12 +81,11 @@ public class ForgotPasswordController {
         ForgotPasswordToken forgotPasswordToken = forgotPasswordRepository.findByToken(token);
         User user = forgotPasswordToken.getUser();
         user.setPassword(passwordEncoder.encode(password));
+        //user.setPassword(password);
         forgotPasswordToken.setIsuUsed(true);
         userService.save(user);
         forgotPasswordRepository.save(forgotPasswordToken);
-
-        model.addAttribute("message", "You have successfuly reset your password");
-
+        model.addAttribute("message", "You have successfully reset your password");
         return "reset-password";
     }
 }
