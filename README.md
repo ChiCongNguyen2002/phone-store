@@ -1,9 +1,9 @@
 # PhoneStore
 ## How to run the Project
 To begin, clone the code from GitHub by using the command: 
-git clone [https://github.com/chicong291002/SmartPhoneStore](https://github.com/ChiCongNguyen2002/phone-stor)
+git clone [https://github.com/chicong291002/SmartPhoneStore](https://github.com/ChiCongNguyen2002/phone-store)
 
-Before initiating the project, ensure that XAMPP is turned on and create a database named `smartphonedb`, then import my database [https://github.com/chicong291002/PhoneStore](https://github.com/ChiCongNguyen2002/phone-stor)/tree/main/DATABASE
+Before initiating the project, ensure that XAMPP is turned on and create a database named `smartphonedb`, then import my database https://github.com/ChiCongNguyen2002/phone-store/tree/main/DATABASE
 
 Next, turn on IntelliJ and open the project just cloned and opened that project. Click on "m" (maven) as indicated in the provided image:
 
