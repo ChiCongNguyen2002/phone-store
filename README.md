@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # PhoneStore
 ## How to run the Project
 To begin, clone the code from GitHub by using the command: 
@@ -12,3 +13,6 @@ Next, turn on IntelliJ and open the project just cloned and opened that project.
 After that, click on "install" and wait for the process to be successful, then proceed to click on "compile" and wait for success.
 
 Finally, click on "PhoneStoreApplication" and press Run.
+=======
+# phone-store
+>>>>>>> 56a8ed4a0056f9f14e6b7916669ae67ea497b458
